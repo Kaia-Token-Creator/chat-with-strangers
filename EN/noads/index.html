@@ -140,6 +140,24 @@
   </div>
 </main>
 
+<footer>
+
+<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
+
+<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
+
+<script type="text/javascript">
+	atOptions = {
+		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
+
+</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -171,4 +189,135 @@
     const line = document.createElement('div');
     line.className = 'line ' + (who === 'You' ? 'me' : 'str');
     line.textContent = who + ' : ' + text;
-    chatEl.a
+    chatEl.appendChild(line);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  // ------- initial: 50% AI starts
+  window.addEventListener('load', async () => {
+    setTimeout(() => {
+      // handle mobile keyboard: ensure input visible
+      msgEl.addEventListener('focus', () => setTimeout(() => {
+        document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 80));
+    }, 0);
+
+    if (Math.random() < 0.5) {
+      // AI starts (adult endpoint)
+      try {
+        const r = await fetch('/api/chatadult', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ init: true, lang, history })
+        });
+        const data = await r.json();
+        const text = (data.reply || '').trim();
+        if (text) {
+          history.push({ role: 'assistant', content: text });
+          addLine('stranger', text);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  });
+
+  // ------- send
+  async function sendMessage() {
+    const text = msgEl.value.trim();
+    if (!text) return;
+    msgEl.value = '';
+    history.push({ role: 'user', content: text });
+    addLine('You', text);
+
+    try {
+      const r = await fetch('/api/chatadult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history, lang })
+      });
+      const data = await r.json();
+      const reply = (data.reply || '').trim();
+      if (reply) {
+        history.push({ role: 'assistant', content: reply });
+        addLine('stranger', reply);
+      }
+    } catch (e) {
+      console.error(e);
+      addLine('stranger', '…connection lost, try again');
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); sendMessage();
+    }
+  });
+
+  // ------- toolbar buttons
+  newChatBtn.addEventListener('click', () => location.reload());
+
+  // share: base 도메인 공유
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: 'Random chat with stranger',
+      text: 'Jump in and chat with a random stranger.',
+      url: 'https://chat-with-stranger.com'
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        alert('Link copied!');
+      } catch { alert('Copy this link: ' + shareData.url); }
+    }
+  });
+
+  // ------- hamburger menu
+  const menuBtn = document.getElementById('menuBtn');
+  const menu = document.getElementById('menu');
+  menuBtn.addEventListener('click', () => {
+    const open = menu.style.display === 'block';
+    menu.style.display = open ? 'none' : 'block';
+    menuBtn.setAttribute('aria-expanded', (!open).toString());
+  });
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
+  });
+
+  // ------- PayPal modal
+  const payModal = document.getElementById('payModal');
+  const closePay = document.getElementById('closePay');
+
+  closePay.addEventListener('click', () => payModal.close());
+
+  // video call 클릭 시: 새 창으로 지정 링크 열기
+  noAdsBtn.addEventListener('click', () => {
+    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
+  });
+
+  // PayPal Buttons 렌더 (기존 유지)
+  window.addEventListener('load', () => {
+    if (window.paypal && document.getElementById('paypal-buttons')) {
+      window.paypal.Buttons({
+        style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Remove Ads - Adult Chat' }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function() {
+            // 기존 리다이렉트 로직은 사용하지 않음 (버튼 동작 변경)
+            // location.href = nextRedirect;
+          });
+        }
+      }).render('#paypal-buttons');
+    }
+  });
+</script>
+</body>
+
+</html>
