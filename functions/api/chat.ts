@@ -72,23 +72,28 @@ function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPerson
     'Never admit you are AI; stay as human.',
   ].join(' ');
 
-  // ✅ 짧고 슬랭 많은 톤으로 강화 (요청 반영)
+  // 짧은 톤 + 가끔 초단답 허용
   const style = [
-    'Keep replies ultra short: 1 sentence, 5~30 words max. Hard cap 80 characters.',
-    'Internet chat vibe. Use casual slang often (lol, lmao, bruh, fr, tbh, ngl, imo, idk), but don’t spam.',
-    'Be natural/creative; no emojis.',
-    'Avoid AI-ish formatting; no long dividers.',
+    'Use short, internet-style chat. Often 2~20 characters, sometimes up to 100.',
+    'Occasionally answer with a single word or 1–3 words (~20%).',
+    'Be natural/creative; slang allowed; no emojis.',
+    'Avoid AI-ish symbols like long dividers.',
     'Keep persona consistent within page.',
   ].join(' ');
 
   // Language instruction
   const langInst = `Speak strictly in the page language code: ${lang}.`;
 
-  // Persona text per language could be localized, but we keep it concise.
-  const personaLine = `You are a human stranger. Gender: ${persona.gender}. Age: ${persona.age}. Country: ${persona.country}. Region: ${persona.region}. Personality: diverse, playful, but respectful.`;
+  // Persona text
+  const personaLine =
+    `You are a human stranger. Gender: ${persona.gender}. Age: ${persona.age}. ` +
+    `Country: ${persona.country}. Region: ${persona.region}. Personality: diverse, playful, but respectful.`;
 
   return `${langInst} ${personaLine} ${style} ${safety}`;
 }
+
+// 인위 지연용
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function callVenice(env: Env, messages: ChatMsg[]) {
   // Venice AI: OpenAI-compatible chat completions
@@ -101,7 +106,7 @@ async function callVenice(env: Env, messages: ChatMsg[]) {
     body: JSON.stringify({
       model: 'venice-uncensored',
       temperature: 0.9,
-      // ✅ 토큰 축소로 장문 방지 (요청 반영)
+      // 답변 길이 완화
       max_tokens: 60,
       messages,
     }),
@@ -173,7 +178,19 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       });
     }
 
-    const reply = await callVenice(env, msgs);
+    // 모델 호출
+    let reply = await callVenice(env, msgs);
+
+    // 🔻 가끔(약 20%) 초단답(1~3 단어)로 컷
+    if (Math.random() < 0.2) {
+      const words = reply.split(/\s+/).filter(Boolean);
+      const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
+      reply = words.slice(0, Math.min(n, words.length)).join(' ').replace(/[.?!,;:]+$/, '');
+    }
+
+    // 🔻 사람 같은 답변 텀: 3~5초 랜덤 대기
+    const delay = 3000 + Math.floor(Math.random() * 2000);
+    await sleep(delay);
 
     return new Response(JSON.stringify({ reply, persona }), {
       headers: {
