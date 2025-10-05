@@ -81,7 +81,7 @@ function encodePersona(p: Persona): string {
 }
 function decodePersona(s: string): Persona | null {
   try {
-    return JSON.parse(decodeURIComponent(escape(atob(s))));
+    return JSON.parse(decodeURIComponent(escape(atob(s)));
   } catch {
     return null;
   }
@@ -111,28 +111,28 @@ function buildSystemPrompt(lang: string, persona: Persona) {
     'Never use LaTeX or math fences: no $$, \\( \\), \\[ \\], or \\text{}; use $ only for currency like $0.99.';
 
   // Language instruction
-const LANG_INST: Record<string, string> = {
-  EN: 'Speak English only.',
-  CN: '用简体中文回答。不要用英文。',
-  ES: 'Responde solo en español.',
-  KO: '한국어로만 답해.',
-  JA: '日本語だけで答えてください。',
-  FR: 'Réponds uniquement en français.',
-  IT: 'Rispondi solo in italiano.',
-  NL: 'Antwoord alleen in het Nederlands.',
-  PT: 'Responda apenas em português.',
-  HI: 'केवल हिन्दी में जवाब दो।',
-  AR: 'أجب باللغة العربية فقط.',
-  BN: 'শুধুমাত্র বাংলায় উত্তর দিন।',
-  RU: 'Отвечай только на русском.',
-  VI: 'Chỉ trả lời bằng tiếng Việt.',
-  ID: 'Jawab hanya dalam bahasa Indonesia.',
-  TH: 'ตอบเป็นภาษาไทยเท่านั้น',
-  MY: 'မြန်မာဘာသာဖြင့်သာ ဖြေပါ။',
-};
+  const LANG_INST: Record<string, string> = {
+    EN: 'Speak English only.',
+    CN: '用简体中文回答。不要用英文。',
+    ES: 'Responde solo en español.',
+    KO: '한국어로만 답해.',
+    JA: '日本語だけで答えてください。',
+    FR: 'Réponds uniquement en français.',
+    IT: 'Rispondi solo in italiano.',
+    NL: 'Antwoord alleen in het Nederlands.',
+    PT: 'Responda apenas em português.',
+    HI: 'केवल हिन्दी में जवाब दो।',
+    AR: 'أجب باللغة العربية فقط.',
+    BN: 'শুধুমাত্র বাংলায় উত্তর দিন।',
+    RU: 'Отвечай только на русском.',
+    VI: 'Chỉ trả lời bằng tiếng Việt.',
+    ID: 'Jawab hanya dalam bahasa Indonesia.',
+    TH: 'ตอบเป็นภาษาไทยเท่านั้น',
+    MY: 'မြန်မာဘာသာဖြင့်သာ ဖြေပါ။',
+  };
 
-const code = (lang || 'EN').toUpperCase();
-const langInst = LANG_INST[code] ?? `Speak strictly in the page language code: ${lang}.`;
+  const code = (lang || 'EN').toUpperCase();
+  const langInst = LANG_INST[code] ?? `Speak strictly in the page language code: ${lang}.`;
 
   // 국가/지역을 내부 페르소나로만 유지(문장에 노출하지 않음)
   const personaLine =
@@ -147,9 +147,9 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 // Venice 응답 후 LaTeX 계열 제거
 function stripMathish(s: string) {
   return s
-    .replace(/\$\$+/g, '')                 // $$, $$$ … 제거 (통화 $는 보존)
-    .replace(/(?:\\|\/)text\{([^}]*)\}/gi, '$1') // \text{...} 또는 /text{...} 내용만 남김
-    .replace(/\\\(|\\\)|\\\[|\\\]/g, '');  // \( \) \[ \] 제거
+    .replace(/\$\$+/g, '')
+    .replace(/(?:\\|\/)text\{([^}]*)\}/gi, '$1')
+    .replace(/\\\(|\\\)|\\\[|\\\]/g, '');
 }
 
 async function callVenice(env: Env, messages: ChatMsg[]) {
@@ -219,15 +219,39 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       }
     }
 
-    // init handling
+    // 🔁 init 처리 블록 교체 시작
+    // 언어별 오프너(아주 짧고 로맨틱 톤)
+    const OPENERS: Record<string, string> = {
+      EN: 'Start with a flirty one-liner.',
+      CN: '用暧昧的短句开场，越短越好。',
+      ES: 'Empieza con una frase coqueta y corta.',
+      KO: '아주 짧게 은근하게 시작해줘.',
+      JA: '色っぽく短く始めて。',
+      FR: 'Commence par une phrase courte et coquine.',
+      IT: 'Inizia con una frase breve e civettuola.',
+      NL: 'Begin met een flirterige oneliner.',
+      PT: 'Comece com uma frase curta e ousada.',
+      HI: 'छोटी, छेड़खानी भरी लाइन से शुरू करो।',
+      AR: 'ابدأ بجملة قصيرة وغزلية.',
+      BN: 'একটা ছোট ফ্লার্টি লাইনে শুরু করো।',
+      RU: 'Начни с короткой кокетливой фразы.',
+      VI: 'Mở đầu bằng câu tán tỉnh thật ngắn.',
+      ID: 'Mulai dengan kalimat genit yang singkat.',
+      TH: 'เริ่มด้วยประโยคสั้นๆ แฝงความเจ้าชู้',
+      MY: 'အရမ်းချို့တဲ့ စကားတစ်ခုပဲ စတင်ပေး။',
+    };
+
     if (!init) {
       const userText = (message ?? '').toString().trim().slice(0, 500);
       if (userText) {
         msgs.push({ role: 'user', content: userText });
       }
     } else {
-      msgs.push({ role: 'user', content: 'Start the chat with a short opener in a romantic vibe.' });
+      // ✅ 시드를 언어별 문구로
+      const opener = OPENERS[langCode] ?? OPENERS.EN;
+      msgs.push({ role: 'user', content: opener });
     }
+    // 🔁 init 처리 블록 교체 끝
 
     // Steer away from explicit requests (pivot to suggestive/romantic)
     const last = msgs[msgs.length - 1]?.content?.toLowerCase() || '';
@@ -243,7 +267,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     // LaTeX/수식 잔여물 제거
     reply = stripMathish(reply);
 
-    // ★ 초단답 확률 상향 (0.2 → 0.4)
+    // ★ 초단답 확률 상향 (0.4)
     if (Math.random() < 0.4) {
       const words = reply.split(/\s+/).filter(Boolean);
       const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
@@ -277,4 +301,3 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
-
