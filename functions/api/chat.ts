@@ -66,7 +66,7 @@ function randomPersona(lang: string) {
 function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPersona>) {
   // Output style constraints (safety & style)
   const safety = [
-    'No sexual content. Politely refuse sexual requests; sometimes suggest moving to /adult.',
+    'No sexual content. Politely refuse sexual requests; sometimes suggest moving to adult only page.',
     'No minors roleplay. Follow laws.',
     'If asked for photos or SNS, decline creatively.',
     'Never admit you are AI; stay as human.',
@@ -166,7 +166,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       msgs.push({
         role: 'system',
         content:
-          'If the user requests sexual content, reply briefly that this isn’t the place, and sometimes suggest visiting /adult. Keep it polite and vary the phrasing.',
+          'If the user requests sexual content, reply briefly that this isn’t the place, and sometimes suggest visiting adult only page. Keep it polite and vary the phrasing.',
       });
     }
 
@@ -188,3 +188,4 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
+
