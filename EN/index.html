@@ -1,210 +1,310 @@
-// functions/api/chat.ts
-// Cloudflare Pages Functions (TypeScript)
-// - POST /api/chat
-// - Body: { message?: string, history?: Array<{role:'user'|'assistant'; content:string}>, lang: string, init?: boolean }
-// - Returns: { reply: string, persona?: {gender?: string; age?: number; country?: string; region?: string} }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Random chat with stranger</title>
+  <meta name="description" content="Random chat with stranger" />
 
-export interface Env {
-  VENICE_API_KEY: string; // Cloudflare Pages → Settings → Variables → Secrets 에 저장한 키 이름
-}
+  <!-- Favicon & Preview -->
+  <link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Random chat with stranger" />
+  <meta property="og:description" content="Random chat with stranger" />
+  <meta property="og:image" content="https://chat-with-stranger.com/preview.jpg" />
+  <meta property="og:url" content="https://chat-with-stranger.com/" />
+  <meta property="og:site_name" content="chat-with-stranger.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Random chat with stranger" />
+  <meta name="twitter:description" content="Random chat with stranger" />
+  <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
-type ChatMsg = { role: 'user' | 'assistant' | 'system'; content: string };
+  <!-- PayPal SDK (클라이언트 ID 입력 필수) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
 
-const COUNTRIES_BY_LANG: Record<string, {country: string; regions: string[]}[]> = {
-  EN: [
-    { country: 'USA', regions: ['NY', 'LA', 'Chicago', 'Seattle', 'Austin', 'Boston'] },
-    { country: 'UK', regions: ['London', 'Manchester', 'Bristol', 'Leeds'] },
-    { country: 'Canada', regions: ['Toronto', 'Vancouver', 'Montreal', 'Calgary'] },
-    { country: 'Australia', regions: ['Sydney', 'Melbourne', 'Perth', 'Brisbane'] },
-  ],
-  CN: [
-    { country: 'China', regions: ['北京', '上海', '广州', '深圳', '成都', '杭州'] },
-    { country: 'Taiwan', regions: ['台北', '台中', '高雄', '新竹'] },
-    { country: 'Singapore', regions: ['Singapore'] },
-  ],
-  ES: [
-    { country: 'España', regions: ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'] },
-    { country: 'México', regions: ['CDMX', 'Guadalajara', 'Monterrey', 'Puebla'] },
-    { country: 'Argentina', regions: ['Buenos Aires', 'Córdoba', 'Rosario'] },
-  ],
-  KO: [{ country: '대한민국', regions: ['서울', '부산', '대구', '인천', '대전', '광주'] }],
-  JA: [{ country: '日本', regions: ['東京', '大阪', '福岡', '札幌', '名古屋', '京都'] }],
-  FR: [
-    { country: 'France', regions: ['Paris', 'Lyon', 'Marseille', 'Toulouse'] },
-    { country: 'Belgique', regions: ['Bruxelles', 'Liège'] },
-  ],
-  IT: [{ country: 'Italia', regions: ['Roma', 'Milano', 'Napoli', 'Torino'] }],
-  NL: [{ country: 'Nederland', regions: ['Amsterdam', 'Rotterdam', 'Utrecht', 'Eindhoven'] }],
-  PT: [
-    { country: 'Brasil', regions: ['São Paulo', 'Rio', 'BH', 'Porto Alegre'] },
-    { country: 'Portugal', regions: ['Lisboa', 'Porto', 'Coimbra'] },
-  ],
-  HI: [{ country: 'भारत', regions: ['दिल्ली', 'मुंबई', 'बेंगलुरु', 'पुणे'] }],
-  AR: [{ country: 'المملكة العربية السعودية', regions: ['الرياض', 'جدة', 'الدمام'] }],
-  BN: [{ country: 'বাংলাদেশ', regions: ['ঢাকা', 'চট্টগ্রাম', 'সিলেট', 'রাজশাহী'] }],
-  RU: [{ country: 'Россия', regions: ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск'] }],
-  VI: [{ country: 'Việt Nam', regions: ['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ'] }],
-  ID: [{ country: 'Indonesia', regions: ['Jakarta', 'Bandung', 'Surabaya', 'Bali'] }],
-  TH: [{ country: 'ไทย', regions: ['กรุงเทพ', 'เชียงใหม่', 'ภูเก็ต'] }],
-  MY: [{ country: 'Myanmar', regions: ['Yangon', 'Mandalay', 'Naypyidaw'] }],
-};
+  <style>
+    :root { --fg:#000; --bg:#fff; --border:#111; --hotpink:#ff1493; }
+    * { box-sizing: border-box; }
+    html, body { height:100%; margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    header {
+      position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
+    }
+    /* 헤더 타이틀: 텍스트 링크 */
+    .site-title {
+      font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
+      padding:0; border:none; background:transparent; cursor:pointer;
+    }
+    .site-title:hover { text-decoration:underline; }
 
-function sample<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+    .hamburger { width:40px; height:36px; display:grid; place-items:center; border:1px solid var(--fg); border-radius:8px; background:#fff; cursor:pointer; }
+    .hamburger span { display:block; width:18px; height:2px; background:#000; position:relative; }
+    .hamburger span::before, .hamburger span::after { content:""; position:absolute; left:0; width:18px; height:2px; background:#000; }
+    .hamburger span::before { top:-6px; } .hamburger span::after { top:6px; }
+    .menu {
+      position:absolute; right:10px; top:54px; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,.08);
+      display:none; min-width:240px; overflow:hidden;
+    }
+    .menu a { display:block; padding:12px 14px; text-decoration:none; color:#000; border-bottom:1px solid #eee; font-size:14px; }
+    .menu a:last-child { border-bottom:none; }
+    .menu a:hover { background:#f4f4f4; }
 
-function randomPersona(lang: string) {
-  const genders = ['male', 'female', 'unspecified'];
-  const gender = sample(genders);
-  const age = 19 + Math.floor(Math.random() * (46 - 19 + 1));
-  const pools = COUNTRIES_BY_LANG[lang] || COUNTRIES_BY_LANG['EN'];
-  const loc = sample(pools);
-  const region = sample(loc.regions);
-  return { gender, age, country: loc.country, region };
-}
+    main { display:flex; flex-direction:column; height:calc(100svh - 0px); }
+    .toolbar {
+      display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
+      position:sticky; top:52px; z-index:10; background:#fff;
+    }
+    .btn {
+      padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+    }
+    .btn.secondary { background:#fff; color:#000; }
+    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
+    .btn.adult {
+      background: var(--hotpink);
+      color: #000;
+      border-color: var(--hotpink);
+    }
 
-function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPersona>) {
-  // Output style constraints (safety & style)
-  const safety = [
-    'No sexual content. Politely refuse sexual requests; sometimes suggest moving to adult only page.',
-    'No minors roleplay. Follow laws.',
-    'If asked for photos or SNS, decline creatively.',
-    'Never admit you are AI; stay as human.',
-  ].join(' ');
+    .chat {
+      flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
+    }
+    .line { margin:6px 0; }
+    .who { font-weight:700; }
+    .me { }
+    .str { }
 
-  // 짧은 톤 + 가끔 초단답 허용
-  const style = [
-    'Use short, internet-style chat. Often 2~20 characters, sometimes up to 100.',
-    'Occasionally answer with a single word or 1–3 words (~20%).',
-    'Be natural/creative; slang allowed; no emojis.',
-    'Avoid AI-ish symbols like long dividers.',
-    'Keep persona consistent within page.',
-  ].join(' ');
+    .input-wrap {
+      position:sticky; bottom:60px; /* banner 50 + padding */
+      background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
+    }
+    .input-wrap input {
+      flex:1; font-size:16px; padding:12px 12px; border:1px solid #000; border-radius:10px; background:#fff; color:#000;
+    }
+    .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
 
-  // Language instruction
-  const langInst = `Speak strictly in the page language code: ${lang}.`;
+    footer { position:sticky; bottom:0; border-top:1px solid #000; background:#fff; padding:6px 0; display:flex; justify-content:center; z-index:8; }
+    .ad-slot { min-height:50px; width:100%; display:flex; justify-content:center; align-items:center; }
 
-  // Persona text
-  const personaLine =
-    `You are a human stranger. Gender: ${persona.gender}. Age: ${persona.age}. ` +
-    `Country: ${persona.country}. Region: ${persona.region}. Personality: diverse, playful, but respectful.`;
+    /* PayPal modal */
+    dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+    .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
+    .modal-body { padding:14px; }
+    .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
+    .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
 
-  return `${langInst} ${personaLine} ${style} ${safety}`;
-}
+    @supports (height: 100svh) {
+      main { height: calc(100svh - 0px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- 1) 헤더 타이틀: 텍스트 링크(새창) -->
+    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">Random chat with stranger (free)</a>
+    <div style="position:relative">
+      <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
+      <nav id="menu" class="menu" role="menu" aria-label="Quick links">
+        <a href="https://2048global.com" target="_blank" rel="noopener">Play the game</a>
+        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Global friends TG group</a>
+        <a href="https://2048global.com/vpn" target="_blank" rel="noopener">explore globe anonymously</a>
+        <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Trading crypto</a>
+        <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">Meet new girls</a>
+      </nav>
+    </div>
+  </header>
 
-// 인위 지연용
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  <main>
+    <div class="toolbar">
+      <button class="btn" id="newChatBtn">new chat</button>
+      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
+      <button class="btn adult" id="adultBtn">adults only</button>
+      <button class="btn secondary" id="shareBtn">share</button>
+    </div>
 
-async function callVenice(env: Env, messages: ChatMsg[]) {
-  // Venice AI: OpenAI-compatible chat completions
-  const res = await fetch('https://api.venice.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${env.VENICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'venice-uncensored',
-      temperature: 0.9,
-      // 답변 길이 완화
-      max_tokens: 60,
-      messages,
-    }),
-  });
+    <div id="chat" class="chat" aria-live="polite" aria-label="Chat window">
+      <!-- lines appear here -->
+    </div>
 
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(`Venice API error ${res.status}: ${txt}`);
-  }
-  const data = await res.json() as {
-    choices: { message: { role: string; content: string } }[];
-  };
-  const content = data?.choices?.[0]?.message?.content ?? '';
-  return content.trim();
-}
+    <div class="input-wrap">
+      <input id="msg" type="text" placeholder="Type here..." enterkeyhint="send" />
+      <button id="sendBtn">Send</button>
+    </div>
+  </main>
 
-export const onRequestOptions: PagesFunction<Env> = async () => {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-};
+  <footer>
+    <div class="ad-slot" aria-label="sponsored banner">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
+    </div>
+  </footer>
 
-export const onRequestPost: PagesFunction<Env> = async (ctx) => {
-  const { request, env } = ctx;
-  try {
-    const { message, history, lang, init } = await request.json<any>();
-    const langCode = (typeof lang === 'string' && lang.toUpperCase()) || 'EN';
+  <!-- PayPal Modal -->
+  <dialog id="payModal">
+    <div class="modal-head">Support & Unlock (0.99 USD)</div>
+    <div class="modal-body">
+      <div id="paypal-buttons">Loading PayPal…</div>
+      <p style="font-size:12px;opacity:.7;margin-top:12px">
+        After successful payment, you’ll be redirected to chat-with-stranger.com
+      </p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closePay">Close</button>
+    </div>
+  </dialog>
 
-    // persona memoization per conversation could be done via cookie/session.
-    // For now we sample fresh per request unless client keeps it in history.
-    const persona = randomPersona(langCode);
-    const sys = buildSystemPrompt(langCode, persona);
+  <script>
+    // ------- helpers
+    const lang = 'EN';
+    const chatEl = document.getElementById('chat');
+    const msgEl = document.getElementById('msg');
+    const sendBtn = document.getElementById('sendBtn');
+    const newChatBtn = document.getElementById('newChatBtn');
+    const adultBtn = document.getElementById('adultBtn');
+    const shareBtn = document.getElementById('shareBtn');
 
-    const msgs: ChatMsg[] = [{ role: 'system', content: sys }];
+    const history = []; // {role:'user'|'assistant', content:string} list
 
-    // Rebuild convo
-    if (Array.isArray(history)) {
-      for (const m of history) {
-        if (m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string') {
-          msgs.push({ role: m.role, content: m.content.slice(0, 800) });
+    function addLine(who, text) {
+      const line = document.createElement('div');
+      line.className = 'line ' + (who === 'You' ? 'me' : 'str');
+      line.textContent = who + ' : ' + text;
+      chatEl.appendChild(line);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    // ------- initial: 50% AI starts
+    window.addEventListener('load', async () => {
+      setTimeout(() => {
+        // handle mobile keyboard: ensure input visible
+        msgEl.addEventListener('focus', () => setTimeout(() => {
+          document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 80));
+      }, 0);
+
+      if (Math.random() < 0.5) {
+        // AI starts
+        try {
+          const r = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ init: true, lang, history })
+          });
+          const data = await r.json();
+          const text = (data.reply || '').trim();
+          if (text) {
+            history.push({ role: 'assistant', content: text });
+            addLine('stranger', text);
+          }
+        } catch (e) {
+          console.error(e);
         }
       }
-    }
+    });
 
-    // init=true ⇒ opening line from stranger without user message
-    if (!init) {
-      // normal turn includes user message
-      const userText = (message ?? '').toString().trim().slice(0, 500);
-      if (userText) {
-        msgs.push({ role: 'user', content: userText });
+    // ------- send
+    async function sendMessage() {
+      const text = msgEl.value.trim();
+      if (!text) return;
+      msgEl.value = '';
+      history.push({ role: 'user', content: text });
+      addLine('You', text);
+
+      try {
+        const r = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, history, lang })
+        });
+        const data = await r.json();
+        const reply = (data.reply || '').trim();
+        if (reply) {
+          history.push({ role: 'assistant', content: reply });
+          addLine('stranger', reply);
+        }
+      } catch (e) {
+        console.error(e);
+        addLine('stranger', '…connection lost, try again');
       }
-    } else {
-      // seed a nudge so the model starts
-      msgs.push({ role: 'user', content: 'Start the chat with a short opener.' });
     }
 
-    // Final safety guard: if user asked sexual content, rewrite to refusal hint
-    const last = msgs[msgs.length - 1]?.content?.toLowerCase() || '';
-    const sexual = /nude|sex|horny|nsfw|오럴|섹스|야한|裸|エロ|成人|色情|🔞|hentai|18\+/.test(last);
-    if (sexual) {
-      msgs.push({
-        role: 'system',
-        content:
-          'If the user requests sexual content, reply briefly that this isn’t the place, and sometimes suggest visiting adult only page. Keep it polite and vary the phrasing.',
-      });
-    }
-
-    // 모델 호출
-    let reply = await callVenice(env, msgs);
-
-    // 🔻 가끔(약 20%) 초단답(1~3 단어)로 컷
-    if (Math.random() < 0.2) {
-      const words = reply.split(/\s+/).filter(Boolean);
-      const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
-      reply = words.slice(0, Math.min(n, words.length)).join(' ').replace(/[.?!,;:]+$/, '');
-    }
-
-    // 🔻 사람 같은 답변 텀: 3~5초 랜덤 대기
-    const delay = 3000 + Math.floor(Math.random() * 2000);
-    await sleep(delay);
-
-    return new Response(JSON.stringify({ reply, persona }), {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-      },
+    sendBtn.addEventListener('click', sendMessage);
+    msgEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); sendMessage();
+      }
     });
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err?.message || 'Unknown error' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-      },
+
+    // ------- toolbar buttons
+    newChatBtn.addEventListener('click', () => location.reload());
+
+    // 3) share: base 도메인 공유 + (EN) 제거
+    shareBtn.addEventListener('click', async () => {
+      const shareData = {
+        title: 'Random chat with stranger',
+        text: 'Jump in and chat with a random stranger.',
+        url: 'https://chat-with-stranger.com'
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+          alert('Link copied!');
+        } catch { alert('Copy this link: ' + shareData.url); }
+      }
     });
-  }
-};
+
+    // ------- hamburger menu
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu');
+    menuBtn.addEventListener('click', () => {
+      const open = menu.style.display === 'block';
+      menu.style.display = open ? 'none' : 'block';
+      menuBtn.setAttribute('aria-expanded', (!open).toString());
+    });
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
+    });
+
+    // ------- PayPal modal
+    const payModal = document.getElementById('payModal');
+    const closePay = document.getElementById('closePay');
+
+    closePay.addEventListener('click', () => payModal.close());
+
+    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /adult로 이동
+    let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
+    adultBtn.addEventListener('click', () => {
+      nextRedirect = 'https://chat-with-stranger.com/adult';
+      payModal.showModal();
+    });
+
+    // PayPal Buttons 렌더
+    window.addEventListener('load', () => {
+      if (window.paypal && document.getElementById('paypal-buttons')) {
+        window.paypal.Buttons({
+          style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Random chat support' }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+              location.href = nextRedirect;
+            });
+          }
+        }).render('#paypal-buttons');
+      }
+    });
+  </script>
+</body>
+</html>
