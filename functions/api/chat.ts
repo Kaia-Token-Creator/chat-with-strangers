@@ -81,8 +81,29 @@ function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPerson
     'Keep persona consistent within page.',
   ].join(' ');
 
-  // Language instruction
-  const langInst = `Speak strictly in the page language code: ${lang}.`;
+// Language instruction
+const LANG_INST: Record<string, string> = {
+  EN: 'Speak English only.',
+  CN: '用简体中文回答。不要用英文。',
+  ES: 'Responde solo en español.',
+  KO: '한국어로만 답해.',
+  JA: '日本語だけで答えてください。',
+  FR: 'Réponds uniquement en français.',
+  IT: 'Rispondi solo in italiano.',
+  NL: 'Antwoord alleen in het Nederlands.',
+  PT: 'Responda apenas em português.',
+  HI: 'केवल हिन्दी में जवाब दो।',
+  AR: 'أجب باللغة العربية فقط.',
+  BN: 'শুধুমাত্র বাংলায় উত্তর দিন।',
+  RU: 'Отвечай только на русском.',
+  VI: 'Chỉ trả lời bằng tiếng Việt.',
+  ID: 'Jawab hanya dalam bahasa Indonesia.',
+  TH: 'ตอบเป็นภาษาไทยเท่านั้น',
+  MY: 'မြန်မာဘာသာဖြင့်သာ ဖြေပါ။',
+};
+
+const code = (lang || 'EN').toUpperCase();
+const langInst = LANG_INST[code] ?? `Speak strictly in the page language code: ${lang}.`;
 
   // Persona text
   const personaLine =
@@ -208,3 +229,4 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
+
