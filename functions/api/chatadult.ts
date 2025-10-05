@@ -76,12 +76,22 @@ function parseCookies(cookieHeader: string | null): Record<string, string> {
   });
   return out;
 }
+
+// ▲ 표준 TextEncoder/TextDecoder 기반(escape/unescape 제거)
 function encodePersona(p: Persona): string {
-  return btoa(unescape(encodeURIComponent(JSON.stringify(p))));
+  const json = JSON.stringify(p);
+  const bytes = new TextEncoder().encode(json);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
 }
 function decodePersona(s: string): Persona | null {
   try {
-    return JSON.parse(decodeURIComponent(escape(atob(s))));
+    const bin = atob(s);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const json = new TextDecoder().decode(bytes);
+    return JSON.parse(json);
   } catch {
     return null;
   }
@@ -89,59 +99,53 @@ function decodePersona(s: string): Persona | null {
 
 function buildSystemPrompt(lang: string, persona: Persona) {
   // Safety (adult but non-explicit)
-  const safety = [
-    'Adults only; no minors or age-ambiguous scenarios; no non-consensual; no incest; no exploitation.',
-    'Never admit you are AI; stay as a human character.',
-  ].join(' ');
+  const safety =
+    'Adults only; no minors or age-ambiguous scenarios; no non-consensual; no incest; no exploitation. Never admit you are AI; stay as a human character.';
 
-  // Style — ★ 더더더 짧게
-  const style = [
-    'Ultra short chat. One very short sentence; hard cap 40 characters.',
-    'Frequently answer with 1–3 words (~40%).',
-    'Use casual slang; no emojis; avoid long formatting.',
-    'Stay consistent about your age and gender (female).',
-  ].join(' ');
+  // Style: 자연스럽고 짧게, 하지만 "절단" 금지 + 맥락 유지/후속 질문 가볍게
+  const style =
+    'Keep replies short and natural (one or two short sentences), not clipped. Maintain context and build on prior turns. Casual slang OK. No emojis.';
 
   // 위치 비공개 지시
   const locationSilence =
-    'Do NOT mention or reveal your country/region unless the user explicitly asks. Avoid self-location hints.';
+    'Do NOT reveal your country/region unless explicitly asked. Avoid self-location hints.';
 
   // LaTeX·수식 금지
   const latexBan =
-    'Never use LaTeX or math fences: no $$, \\( \\), \\[ \\], or \\text{}; use $ only for currency like $0.99.';
+    'Never use LaTeX or math fences; use $ only for currency.';
 
-  // Language instruction
+  // Language instruction — 각 언어로 "혼용 금지"까지 명시
   const LANG_INST: Record<string, string> = {
-    EN: 'Speak English only.',
-    CN: '用简体中文回答。不要用英文。',
-    ES: 'Responde solo en español.',
-    KO: '한국어로만 답해.',
-    JA: '日本語だけで答えてください。',
-    FR: 'Réponds uniquement en français.',
-    IT: 'Rispondi solo in italiano.',
-    NL: 'Antwoord alleen in het Nederlands.',
-    PT: 'Responda apenas em português.',
-    HI: 'केवल हिन्दी में जवाब दो।',
-    AR: 'أجب باللغة العربية فقط.',
-    BN: 'শুধুমাত্র বাংলায় উত্তর দিন।',
-    RU: 'Отвечай только на русском.',
-    VI: 'Chỉ trả lời bằng tiếng Việt.',
-    ID: 'Jawab hanya dalam bahasa Indonesia.',
-    TH: 'ตอบเป็นภาษาไทยเท่านั้น',
-    MY: 'မြန်မာဘာသာဖြင့်သာ ဖြေပါ။',
+    EN: 'Always reply in natural English only. Never mix languages.',
+    CN: '永远只用简体中文回复，禁止掺杂英文或其他语言。',
+    ES: 'Responde siempre solo en español natural. No mezcles idiomas.',
+    KO: '항상 자연스러운 한국어로만 답해. 다른 언어(영어 포함) 섞지 마.',
+    JA: '常に自然な日本語のみで返答してください。英語など他言語は混ぜないこと。',
+    FR: 'Réponds toujours uniquement en français naturel. Ne mélange pas les langues.',
+    IT: 'Rispondi sempre solo in italiano naturale. Non mescolare le lingue.',
+    NL: 'Antwoord altijd alleen in natuurlijk Nederlands. Meng geen talen.',
+    PT: 'Responda sempre apenas em português natural. Não misture idiomas.',
+    HI: 'हमेशा स्वाभाविक हिंदी में ही जवाब दो। कोई अन्य भाषा न मिलाओ।',
+    AR: 'أجب دائمًا بالعربية الفصحى فقط. لا تخلط اللغات.',
+    BN: 'সবসময় খাঁটি বাংলায়ই উত্তর দিন। অন্য ভাষা মেশাবেন না।',
+    RU: 'Всегда отвечай только на естественном русском. Не смешивай языки.',
+    VI: 'Luôn trả lời chỉ bằng tiếng Việt tự nhiên. Không pha trộn ngôn ngữ.',
+    ID: 'Selalu balas hanya dalam bahasa Indonesia alami. Jangan campur bahasa.',
+    TH: 'ตอบเป็นภาษาไทยล้วน ห้ามปนภาษาอื่น',
+    MY: 'မြန်မာဘာသာဖြင့်သာ တုန့်ပြန်ပါ။ အခြားဘာသာ မပေါင်းစပ်ပါဘူး။',
   };
 
   const code = (lang || 'EN').toUpperCase();
-  const langInst = LANG_INST[code] ?? `Speak strictly in the page language code: ${lang}.`;
+  const langInst = LANG_INST[code] ?? `Always reply only in ${code}. Do not mix languages.`;
 
-  // 국가/지역을 내부 페르소나로만 유지(문장에 노출하지 않음)
+  // 국가/지역은 내부 페르소나로만 유지(문장에 노출 X)
   const personaLine =
     `You are a human stranger (female). Age: ${persona.age}. Personality: creative, flirty, playful, romantic, sexual.`;
 
   return `${langInst} ${personaLine} ${style} ${safety} ${locationSilence} ${latexBan}`;
 }
 
-// Human-like delay
+// Human-like delay (짧게 조정)
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // Venice 응답 후 LaTeX 계열 제거
@@ -161,9 +165,11 @@ async function callVenice(env: Env, messages: ChatMsg[]) {
     },
     body: JSON.stringify({
       model: 'venice-uncensored',
-      temperature: 0.9,
-      max_tokens: 35, // ★ 더 짧게
-      stop: ['$$', '\\[', '\\(', '\\text{'],
+      temperature: 0.8,
+      max_tokens: 140,               // 자연스러운 길이 확보
+      presence_penalty: 0.2,         // 반복 억제 살짝
+      frequency_penalty: 0.2,
+      // stop 토큰 제거: 중간 절단 방지
       messages,
     }),
   });
@@ -195,7 +201,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     const { message, history, lang, init } = await request.json<any>();
     const langCode = (typeof lang === 'string' && lang.toUpperCase()) || 'EN';
 
-    // Persona: new chat -> create; otherwise reuse from cookie
+    // Persona: new chat -> cookie 재사용, 없으면 생성
     const cookies = parseCookies(request.headers.get('Cookie'));
     let persona: Persona | null = null;
     const isNewChat = !!init || !Array.isArray(history) || history.length === 0;
@@ -210,7 +216,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     const sys = buildSystemPrompt(langCode, persona);
     const msgs: ChatMsg[] = [{ role: 'system', content: sys }];
 
-    // Rebuild convo
+    // Rebuild convo (맥락 유지)
     if (Array.isArray(history)) {
       for (const m of history) {
         if (m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string') {
@@ -219,8 +225,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       }
     }
 
-    // 🔁 init 처리 블록 교체 시작
-    // 언어별 오프너(아주 짧고 로맨틱 톤)
+    // init 처리: 언어별 오프너
     const OPENERS: Record<string, string> = {
       EN: 'Start with a flirty one-liner.',
       CN: '用暧昧的短句开场，越短越好。',
@@ -247,35 +252,21 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
         msgs.push({ role: 'user', content: userText });
       }
     } else {
-      // ✅ 시드를 언어별 문구로
       const opener = OPENERS[langCode] ?? OPENERS.EN;
       msgs.push({ role: 'user', content: opener });
     }
-    // 🔁 init 처리 블록 교체 끝
 
-    // Steer away from explicit requests (pivot to suggestive/romantic)
-    const last = msgs[msgs.length - 1]?.content?.toLowerCase() || '';
-    if (last) {
-      msgs.push({
-        role: 'system',
-        content: 'Never involve minors.',
-      });
-    }
+    // 안전 가드(명시)
+    msgs.push({ role: 'system', content: 'Never involve minors.' });
 
+    // 모델 호출
     let reply = await callVenice(env, msgs);
 
-    // LaTeX/수식 잔여물 제거
+    // 수식 잔여물 제거
     reply = stripMathish(reply);
 
-    // ★ 초단답 확률 상향 (0.4)
-    if (Math.random() < 0.4) {
-      const words = reply.split(/\s+/).filter(Boolean);
-      const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
-      reply = words.slice(0, Math.min(n, words.length)).join(' ').replace(/[.?!,;:]+$/, '');
-    }
-
-    // 3–5s delay
-    const delay = 3000 + Math.floor(Math.random() * 2000);
+    // 사람 같은 짧은 대기 (1.2~2.2s)
+    const delay = 1200 + Math.floor(Math.random() * 1000);
     await sleep(delay);
 
     // Response + cookie
@@ -301,4 +292,3 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
-
