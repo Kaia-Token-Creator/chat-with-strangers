@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Random chat with strangers</title>
+  <meta name="description" content="Random chat with strangers" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://chat-with-strangers.com/favicon.ico" />
+
+  <!-- Open Graph / Social Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Random chat with strangers" />
+  <meta property="og:description" content="Random chat with strangers" />
+  <meta property="og:image" content="https://chat-with-strangers.com/preview.jpg" />
+  <meta property="og:url" content="https://chat-with-strangers.com/" />
+  <meta property="og:site_name" content="chat-with-strangers.com" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Random chat with strangers" />
+  <meta name="twitter:description" content="Random chat with strangers" />
+  <meta name="twitter:image" content="https://chat-with-strangers.com/preview.jpg" />
+
+  <style>
+    :root {
+      --fg: #000;
+      --bg: #fff;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji;
+    }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 560px;
+    }
+    h1 {
+      font-size: clamp(28px, 6vw, 48px);
+      line-height: 1.05;
+      margin: 0 0 4px 0;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-align: left;
+    }
+    h2 {
+      font-size: clamp(22px, 4.5vw, 36px);
+      line-height: 1.05;
+      margin: 0 0 24px 0;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      opacity: 0.9;
+      text-align: left;
+    }
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    select {
+      width: 100%;
+      font-size: 16px;
+      padding: 12px 14px;
+      border: 1px solid #111;
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (min-width: 560px) {
+      .row.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    button {
+      width: 100%;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #000;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:active { transform: translateY(1px); }
+    .hint {
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="title-rc">
+      <h1 id="title-rc">Random Chat</h1>
+      <h2>with strangers</h2>
+
+      <div class="row">
+        <div>
+          <label for="lang">Language</label>
+          <select id="lang" aria-label="Choose language"></select>
+        </div>
+      </div>
+
+      <div class="row two">
+        <div>
+          <label for="gender">Your gender (optional)</label>
+          <select id="gender" aria-label="Choose gender (optional)">
+            <option value="male">male</option>
+            <option value="female">female</option>
+            <option value="prefer-not-to-say" selected>prefer not to say</option>
+          </select>
+          <div class="hint">Gender won’t affect page navigation.</div>
+        </div>
+      </div>
+
+      <button id="enterBtn" type="button">Enter</button>
+    </section>
+  </main>
+
+  <script>
+    // ▼ 지원 언어 목록 (자국어 표기 + 코드)
+    const LANGS = [
+      { code: "EN", label: "English" },
+      { code: "CN", label: "中文" },
+      { code: "ES", label: "Español" },
+      { code: "KO", label: "한국어" },
+      { code: "JA", label: "日本語" },
+      { code: "FR", label: "Français" },
+      { code: "IT", label: "Italiano" },
+      { code: "NL", label: "Nederlands" },
+      { code: "PT", label: "Português" },
+      { code: "HI", label: "हिन्दी" },
+      { code: "AR", label: "العربية" },
+      { code: "BN", label: "বাংলা" },
+      { code: "RU", label: "Русский" },
+      { code: "VI", label: "Tiếng Việt" },
+      { code: "ID", label: "Bahasa Indonesia" },
+      { code: "TH", label: "ไทย" },
+      { code: "MY", label: "မြန်မာ" }
+    ];
+
+    // ▼ 언어 드롭다운 채우기
+    const langSelect = document.getElementById('lang');
+    LANGS.forEach(({ code, label }) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = label;
+      langSelect.appendChild(opt);
+    });
+    langSelect.value = 'EN'; // 기본 영어 고정
+
+    // ▼ Enter 버튼 클릭 시 이동
+    document.getElementById('enterBtn').addEventListener('click', () => {
+      const code = langSelect.value || 'EN';
+      const target = `/${code}`;
+      window.location.assign(target);
+    });
+
+    // ▼ 브라우저 언어 감지 (선택사항)
+    try {
+      const navLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+      const mapping = [
+        ["en", "EN"], ["zh", "CN"], ["es", "ES"], ["ko", "KO"], ["ja", "JA"],
+        ["fr", "FR"], ["it", "IT"], ["nl", "NL"], ["pt", "PT"], ["hi", "HI"],
+        ["ar", "AR"], ["bn", "BN"], ["ru", "RU"], ["vi", "VI"],
+        ["id", "ID"], ["th", "TH"], ["my", "MY"], ["my-MM", "MY"]
+      ];
+      for (const [prefix, code] of mapping) {
+        if (navLang.startsWith(prefix.toLowerCase()) && LANGS.some(l => l.code === code)) {
+          langSelect.value = code;
+          break;
+        }
+      }
+    } catch {}
+  </script>
+</body>
+</html>
