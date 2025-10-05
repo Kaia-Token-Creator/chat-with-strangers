@@ -20,21 +20,23 @@
   <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
   <!-- PayPal SDK (클라이언트 ID 입력 필수) -->
-  <!-- 아래 client-id=YOUR_PAYPAL_CLIENT_ID 를 실제 클라이언트 ID로 교체하세요. -->
   <script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
 
   <style>
-    :root { --fg:#000; --bg:#fff; --border:#111; }
+    :root { --fg:#000; --bg:#fff; --border:#111; --hotpink:#ff1493; }
     * { box-sizing: border-box; }
     html, body { height:100%; margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
     header {
       position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
     }
-    .title-btn {
-      font-weight:800; letter-spacing:-0.01em; font-size:16px; cursor:pointer; border:1px solid var(--fg);
-      padding:8px 12px; border-radius:8px; background:#fff;
+    /* 헤더 타이틀: 텍스트 링크 */
+    .site-title {
+      font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
+      padding:0; border:none; background:transparent; cursor:pointer;
     }
+    .site-title:hover { text-decoration:underline; }
+
     .hamburger { width:40px; height:36px; display:grid; place-items:center; border:1px solid var(--fg); border-radius:8px; background:#fff; cursor:pointer; }
     .hamburger span { display:block; width:18px; height:2px; background:#000; position:relative; }
     .hamburger span::before, .hamburger span::after { content:""; position:absolute; left:0; width:18px; height:2px; background:#000; }
@@ -56,6 +58,13 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
+    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
+    .btn.adult {
+      background: var(--hotpink);
+      color: #000;
+      border-color: var(--hotpink);
+    }
+
     .chat {
       flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
     }
@@ -90,7 +99,8 @@
 </head>
 <body>
   <header>
-    <button id="payBtn" class="title-btn">Random chat with stranger (free)</button>
+    <!-- 1) 헤더 타이틀: 텍스트 링크(새창) -->
+    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">Random chat with stranger (free)</a>
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
       <nav id="menu" class="menu" role="menu" aria-label="Quick links">
@@ -106,7 +116,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">new chat</button>
-      <button class="btn secondary" id="adultBtn">adults only</button>
+      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
+      <button class="btn adult" id="adultBtn">adults only</button>
       <button class="btn secondary" id="shareBtn">share</button>
     </div>
 
@@ -151,7 +162,7 @@
 
   <script>
     // ------- helpers
-    const lang = 'EN'; // 이 파일은 영어 페이지. 다른 언어 페이지에서는 이 값을 해당 코드로 변경.
+    const lang = 'EN';
     const chatEl = document.getElementById('chat');
     const msgEl = document.getElementById('msg');
     const sendBtn = document.getElementById('sendBtn');
@@ -233,13 +244,13 @@
 
     // ------- toolbar buttons
     newChatBtn.addEventListener('click', () => location.reload());
-    adultBtn.addEventListener('click', () => location.assign('/adult'));
 
+    // 3) share: base 도메인 공유 + (EN) 제거
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'Random chat with stranger',
-        text: 'Jump in and chat with a random stranger (EN).',
-        url: location.href
+        text: 'Jump in and chat with a random stranger.',
+        url: 'https://chat-with-stranger.com'
       };
       if (navigator.share) {
         try { await navigator.share(shareData); } catch {}
@@ -264,14 +275,19 @@
     });
 
     // ------- PayPal modal
-    const payBtn = document.getElementById('payBtn');
     const payModal = document.getElementById('payModal');
     const closePay = document.getElementById('closePay');
 
-    payBtn.addEventListener('click', () => payModal.showModal());
     closePay.addEventListener('click', () => payModal.close());
 
-    // Render PayPal Buttons when SDK loaded
+    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /adult로 이동
+    let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
+    adultBtn.addEventListener('click', () => {
+      nextRedirect = 'https://chat-with-stranger.com/adult';
+      payModal.showModal();
+    });
+
+    // PayPal Buttons 렌더
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
@@ -283,7 +299,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = 'https://chat-with-stranger.com';
+              location.href = nextRedirect;
             });
           }
         }).render('#paypal-buttons');
