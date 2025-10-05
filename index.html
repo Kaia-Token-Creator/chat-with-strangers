@@ -46,6 +46,26 @@
     }
     button:active { transform: translateY(1px); }
     .hint { margin-top: 10px; font-size: 12px; opacity: 0.7; }
+
+    /* ▼ footer styles (추가) */
+    footer.site-footer{
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid #000;
+      padding: 8px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .ad-slot{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:50px; /* 배너 높이 확보 */
+      width:100%;
+    }
   </style>
 </head>
 <body>
@@ -69,13 +89,28 @@
             <option value="female">👩 female</option>
             <option value="prefer-not-to-say" selected>🙈 prefer not to say</option>
           </select>
-          <div id="hint-gender" class="hint">Gender won’t affect page navigation.</div>
         </div>
       </div>
 
       <button id="enterBtn" type="button">Enter</button>
     </section>
   </main>
+
+  <!-- ▼ footer with banner (추가) -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="ad-slot" aria-label="sponsored banner">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
+    </div>
+  </footer>
 
   <script>
     // ---------- Language list (native labels + path code) ----------
@@ -100,124 +135,124 @@
     ];
 
     // ---------- Simple i18n dictionary ----------
-    // Only EN changed to singular; others 그대로 유지.
+    // Removed hintGender strings; everything else unchanged.
     const I18N = {
       EN: {
         title: "Random Chat", subtitle: "with stranger",
         labelLanguage: "Language", labelGender: "Your gender (optional)",
-        hintGender: "Gender won’t affect page navigation.", enter: "Enter",
+        enter: "Enter",
         genderMale: "👨 male", genderFemale: "👩 female", genderNA: "🙈 prefer not to say",
         dir: "ltr", htmlLang: "en"
       },
       CN: {
         title: "随机聊天", subtitle: "与陌生人",
         labelLanguage: "语言", labelGender: "性别（可选）",
-        hintGender: "性别不会影响页面跳转。", enter: "进入",
+        enter: "进入",
         genderMale: "👨 男", genderFemale: "👩 女", genderNA: "🙈 不愿透露",
         dir: "ltr", htmlLang: "zh-CN"
       },
       ES: {
         title: "Chat aleatorio", subtitle: "con desconocidos",
         labelLanguage: "Idioma", labelGender: "Tu género (opcional)",
-        hintGender: "El género no afectará la navegación.", enter: "Entrar",
+        enter: "Entrar",
         genderMale: "👨 hombre", genderFemale: "👩 mujer", genderNA: "🙈 prefiero no decirlo",
         dir: "ltr", htmlLang: "es"
       },
       KO: {
         title: "랜덤 채팅", subtitle: "낯선 사람과",
         labelLanguage: "언어", labelGender: "성별(선택)",
-        hintGender: "성별은 페이지 이동에 영향을 주지 않습니다.", enter: "입장",
+        enter: "입장",
         genderMale: "👨 남성", genderFemale: "👩 여성", genderNA: "🙈 밝히지 않음",
         dir: "ltr", htmlLang: "ko"
       },
       JA: {
         title: "ランダムチャット", subtitle: "見知らぬ人と",
         labelLanguage: "言語", labelGender: "性別（任意）",
-        hintGender: "性別はページ遷移に影響しません。", enter: "入る",
+        enter: "入る",
         genderMale: "👨 男性", genderFemale: "👩 女性", genderNA: "🙈 言いたくない",
         dir: "ltr", htmlLang: "ja"
       },
       FR: {
         title: "Discussion aléatoire", subtitle: "avec des inconnus",
         labelLanguage: "Langue", labelGender: "Votre genre (facultatif)",
-        hintGender: "Le genre n'affecte pas la navigation.", enter: "Entrer",
+        enter: "Entrer",
         genderMale: "👨 homme", genderFemale: "👩 femme", genderNA: "🙈 préfère ne pas le dire",
         dir: "ltr", htmlLang: "fr"
       },
       IT: {
         title: "Chat casuale", subtitle: "con sconosciuti",
         labelLanguage: "Lingua", labelGender: "Il tuo genere (opzionale)",
-        hintGender: "Il genere non influisce sulla navigazione.", enter: "Entra",
+        enter: "Entra",
         genderMale: "👨 uomo", genderFemale: "👩 donna", genderNA: "🙈 preferisco non dirlo",
         dir: "ltr", htmlLang: "it"
       },
       NL: {
         title: "Willekeurige chat", subtitle: "met vreemden",
         labelLanguage: "Taal", labelGender: "Je gender (optioneel)",
-        hintGender: "Gender beïnvloedt de navigatie niet.", enter: "Ga verder",
+        enter: "Ga verder",
         genderMale: "👨 man", genderFemale: "👩 vrouw", genderNA: "🙈 zeg ik liever niet",
         dir: "ltr", htmlLang: "nl"
       },
       PT: {
         title: "Bate-papo aleatório", subtitle: "com desconhecidos",
         labelLanguage: "Idioma", labelGender: "Seu gênero (opcional)",
-        hintGender: "O gênero não afeta a navegação.", enter: "Entrar",
+        enter: "Entrar",
         genderMale: "👨 masculino", genderFemale: "👩 feminino", genderNA: "🙈 prefiro não dizer",
         dir: "ltr", htmlLang: "pt"
       },
       HI: {
         title: "यादृच्छिक चैट", subtitle: "अजनबियों के साथ",
         labelLanguage: "भाषा", labelGender: "आपका लिंग (वैकल्पिक)",
-        hintGender: "लिंग पृष्ठ नेविगेशन को प्रभावित नहीं करेगा।", enter: "प्रवेश करें",
+        enter: "प्रवेश करें",
         genderMale: "👨 पुरुष", genderFemale: "👩 महिला", genderNA: "🙈 नहीं बताना",
         dir: "ltr", htmlLang: "hi"
       },
       AR: {
         title: "دردشة عشوائية", subtitle: "مع الغرباء",
         labelLanguage: "اللغة", labelGender: "جنسك (اختياري)",
-        hintGender: "لن يؤثر الجنس على الانتقال بين الصفحات.", enter: "ادخل",
+        enter: "ادخل",
         genderMale: "👨 ذكر", genderFemale: "👩 أنثى", genderNA: "🙈 أفضل عدم القول",
         dir: "rtl", htmlLang: "ar"
       },
       BN: {
         title: "র‌্যান্ডম চ্যাট", subtitle: "অপরিচিতদের সাথে",
         labelLanguage: "ভাষা", labelGender: "আপনার লিঙ্গ (ঐচ্ছিক)",
-        hintGender: "লিঙ্গ পেজ নেভিগেশনে প্রভাব ফেলবে না।", enter: "প্রবেশ করুন",
+        enter: "প্রবেশ করুন",
         genderMale: "👨 পুরুষ", genderFemale: "👩 নারী", genderNA: "🙈 বলতে চাই না",
         dir: "ltr", htmlLang: "bn"
       },
       RU: {
         title: "Случайный чат", subtitle: "с незнакомцами",
         labelLanguage: "Язык", labelGender: "Ваш пол (необязательно)",
-        hintGender: "Пол не влияет на переход страницы.", enter: "Войти",
+        enter: "Войти",
         genderMale: "👨 мужчина", genderFemale: "👩 женщина", genderNA: "🙈 предпочитаю не говорить",
         dir: "ltr", htmlLang: "ru"
       },
       VI: {
         title: "Trò chuyện ngẫu nhiên", subtitle: "với người lạ",
         labelLanguage: "Ngôn ngữ", labelGender: "Giới tính của bạn (tuỳ chọn)",
-        hintGender: "Giới tính không ảnh hưởng việc chuyển trang.", enter: "Vào",
+        enter: "Vào",
         genderMale: "👨 nam", genderFemale: "👩 nữ", genderNA: "🙈 không tiết lộ",
         dir: "ltr", htmlLang: "vi"
       },
       ID: {
         title: "Obrolan acak", subtitle: "dengan orang asing",
         labelLanguage: "Bahasa", labelGender: "Jenis kelamin Anda (opsional)",
-        hintGender: "Jenis kelamin tidak memengaruhi navigasi.", enter: "Masuk",
+        enter: "Masuk",
         genderMale: "👨 pria", genderFemale: "👩 wanita", genderNA: "🙈 tidak ingin menyebutkan",
         dir: "ltr", htmlLang: "id"
       },
       TH: {
         title: "แชทสุ่ม", subtitle: "กับคนแปลกหน้า",
         labelLanguage: "ภาษา", labelGender: "เพศของคุณ (ไม่บังคับ)",
-        hintGender: "เพศจะไม่ส่งผลต่อการย้ายหน้า", enter: "เข้าสู่",
+        enter: "เข้าสู่",
         genderMale: "👨 ชาย", genderFemale: "👩 หญิง", genderNA: "🙈 ไม่ระบุ",
         dir: "ltr", htmlLang: "th"
       },
       MY: {
         title: "ကျပန်းချတ်", subtitle: "မသိကြသူများနှင့်",
         labelLanguage: "ဘာသာစကား", labelGender: "လိင်အမျိုးအစား (ရွေးချယ်နိုင်)",
-        hintGender: "လိင်အမျိုးအစားသည် စာမျက်နှာပြောင်းခြင်းကို မသက်ရောက်ပါ။", enter: "ဝင်မည်",
+        enter: "ဝင်မည်",
         genderMale: "👨 အမျိုးသား", genderFemale: "👩 အမျိုးသမီး", genderNA: "🙈 မဖေါ်ပြချင်",
         dir: "ltr", htmlLang: "my"
       }
@@ -239,7 +274,6 @@
       subtitle: document.getElementById('subtitle-rc'),
       labelLanguage: document.getElementById('label-language'),
       labelGender: document.getElementById('label-gender'),
-      hintGender: document.getElementById('hint-gender'),
       enterBtn: document.getElementById('enterBtn'),
       genderSelect: document.getElementById('gender')
     };
@@ -252,7 +286,6 @@
       els.subtitle.textContent = t.subtitle;
       els.labelLanguage.textContent = t.labelLanguage;
       els.labelGender.textContent = t.labelGender;
-      els.hintGender.textContent = t.hintGender;
       els.enterBtn.textContent = t.enter;
 
       // Update gender options with emojis
