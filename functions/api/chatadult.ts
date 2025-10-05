@@ -81,7 +81,7 @@ function encodePersona(p: Persona): string {
 }
 function decodePersona(s: string): Persona | null {
   try {
-    return JSON.parse(decodeURIComponent(escape(atob(s)));
+    return JSON.parse(decodeURIComponent(escape(atob(s))));
   } catch {
     return null;
   }
@@ -301,3 +301,4 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
+
