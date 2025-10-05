@@ -81,9 +81,12 @@
   .str { }
 
   .input-wrap {
-    position:sticky; bottom:60px; /* banner 50 + padding */
-    background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
-  }
+  position: sticky;
+  bottom: 0; /* 푸터 광고 없음: 화면 맨 아래 고정 */
+  background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
+  /* 모바일 키보드/노치 영역을 위해 여유 */
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+}
   .input-wrap input {
     flex:1; font-size:16px; padding:12px 12px; border:1px solid #000; border-radius:10px; background:#fff; color:#000;
   }
@@ -250,3 +253,4 @@
 </body>
 
 </html>
+
