@@ -94,25 +94,41 @@ function buildSystemPrompt(lang: string, persona: Persona) {
     'Never admit you are AI; stay as a human character.',
   ].join(' ');
 
-  // Style
+  // Style — ★ 더더더 짧게
   const style = [
-    'Short, internet-style chat. 1 short sentence; max 80 characters.',
-    'Flirty & romantic; tease and innuendo frequently but tastefully.',
-    'Occasionally answer with a single word or 1–3 words (~20%).',
+    'Ultra short chat. One very short sentence; hard cap 40 characters.',
+    'Frequently answer with 1–3 words (~40%).',
     'Use casual slang; no emojis; avoid long formatting.',
-    'Stay consistent about your age, gender (female), country, and region.',
+    'Stay consistent about your age and gender (female).',
   ].join(' ');
 
-  const langInst = `Speak strictly in the page language code: ${lang}.`;
-  const personaLine =
-    `You are a human stranger (female). Age: ${persona.age}. Country: ${persona.country}. ` +
-    `Region: ${persona.region}. Personality: creative, flirty, playful, romantic, sexual.`;
+  // 위치 비공개 지시
+  const locationSilence =
+    'Do NOT mention or reveal your country/region unless the user explicitly asks. Avoid self-location hints.';
 
-  return `${langInst} ${personaLine} ${style} ${safety}`;
+  // LaTeX·수식 금지
+  const latexBan =
+    'Never use LaTeX or math fences: no $$, \\( \\), \\[ \\], or \\text{}; use $ only for currency like $0.99.';
+
+  const langInst = `Speak strictly in the page language code: ${lang}.`;
+
+  // 국가/지역을 내부 페르소나로만 유지(문장에 노출하지 않음)
+  const personaLine =
+    `You are a human stranger (female). Age: ${persona.age}. Personality: creative, flirty, playful, romantic, sexual.`;
+
+  return `${langInst} ${personaLine} ${style} ${safety} ${locationSilence} ${latexBan}`;
 }
 
 // Human-like delay
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Venice 응답 후 LaTeX 계열 제거
+function stripMathish(s: string) {
+  return s
+    .replace(/\$\$+/g, '')                 // $$, $$$ … 제거 (통화 $는 보존)
+    .replace(/(?:\\|\/)text\{([^}]*)\}/gi, '$1') // \text{...} 또는 /text{...} 내용만 남김
+    .replace(/\\\(|\\\)|\\\[|\\\]/g, '');  // \( \) \[ \] 제거
+}
 
 async function callVenice(env: Env, messages: ChatMsg[]) {
   const res = await fetch('https://api.venice.ai/api/v1/chat/completions', {
@@ -124,7 +140,8 @@ async function callVenice(env: Env, messages: ChatMsg[]) {
     body: JSON.stringify({
       model: 'venice-uncensored',
       temperature: 0.9,
-      max_tokens: 60,
+      max_tokens: 35, // ★ 더 짧게
+      stop: ['$$', '\\[', '\\(', '\\text{'],
       messages,
     }),
   });
@@ -195,15 +212,17 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     if (last) {
       msgs.push({
         role: 'system',
-        content:
-          'Never involve minors.',
+        content: 'Never involve minors.',
       });
     }
 
     let reply = await callVenice(env, msgs);
 
-    // Sometimes ultra-short (1–3 words)
-    if (Math.random() < 0.2) {
+    // LaTeX/수식 잔여물 제거
+    reply = stripMathish(reply);
+
+    // ★ 초단답 확률 상향 (0.2 → 0.4)
+    if (Math.random() < 0.4) {
       const words = reply.split(/\s+/).filter(Boolean);
       const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
       reply = words.slice(0, Math.min(n, words.length)).join(' ').replace(/[.?!,;:]+$/, '');
