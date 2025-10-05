@@ -72,10 +72,12 @@ function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPerson
     'Never admit you are AI; stay as human.',
   ].join(' ');
 
+  // ✅ 짧고 슬랭 많은 톤으로 강화 (요청 반영)
   const style = [
-    'Use short, internet-style chat. Often 2~20 characters, sometimes up to 100, randomly.',
-    'Be natural/creative; use slang allowed; no emojis.',
-    'Avoid AI-ish symbols like long dividers.',
+    'Keep replies ultra short: 1 sentence, 5~30 words max. Hard cap 80 characters.',
+    'Internet chat vibe. Use casual slang often (lol, lmao, bruh, fr, tbh, ngl, imo, idk), but don’t spam.',
+    'Be natural/creative; no emojis.',
+    'Avoid AI-ish formatting; no long dividers.',
     'Keep persona consistent within page.',
   ].join(' ');
 
@@ -99,7 +101,8 @@ async function callVenice(env: Env, messages: ChatMsg[]) {
     body: JSON.stringify({
       model: 'venice-uncensored',
       temperature: 0.9,
-      max_tokens: 140,
+      // ✅ 토큰 축소로 장문 방지 (요청 반영)
+      max_tokens: 60,
       messages,
     }),
   });
@@ -188,4 +191,3 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
-
