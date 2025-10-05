@@ -29,9 +29,6 @@
 <meta name="twitter:description" content="Random chat with stranger" />
 <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
-<!-- PayPal SDK (Live client-id 교체 가능) -->
-<script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
-
 <style>
   :root { --fg:#000; --bg:#fff; --border:#111; --hotpink:#ff1493; }
   * { box-sizing: border-box; }
@@ -94,17 +91,6 @@
 
   footer { position:sticky; bottom:0; border-top:1px solid #000; background:#fff; padding:6px 0; display:flex; justify-content:center; z-index:8; }
   .ad-slot { min-height:50px; width:100%; display:flex; justify-content:center; align-items:center; }
-
-  /* PayPal modal */
-  dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
-  .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
-  .modal-body { padding:14px; }
-  .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
-  .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
-
-  @supports (height: 100svh) {
-    main { height: calc(100svh - 0px); }
-  }
 </style>
 </head>
 <body>
@@ -140,19 +126,7 @@
   </div>
 </main>
 
-<!-- PayPal Modal -->
-<dialog id="payModal">
-  <div class="modal-head">Remove Ads (0.99 USD)</div>
-  <div class="modal-body">
-    <div id="paypal-buttons">Loading PayPal…</div>
-    <p style="font-size:12px;opacity:.7;margin-top:12px">
-      After successful payment, you’ll be redirected to chat-with-stranger.com/EN/noads
-    </p>
-  </div>
-  <div class="modal-foot">
-    <button class="close-btn" id="closePay">Close</button>
-  </div>
-</dialog>
+<!-- PayPal Modal 제거됨 -->
 
 <script>
   // ------- helpers
@@ -217,12 +191,12 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history, lang })
       });
-      const data = await r.json();
-      const reply = (data.reply || '').trim();
-      if (reply) {
-        history.push({ role: 'assistant', content: reply });
-        addLine('stranger', reply);
-      }
+        const data = await r.json();
+        const reply = (data.reply || '').trim();
+        if (reply) {
+          history.push({ role: 'assistant', content: reply });
+          addLine('stranger', reply);
+        }
     } catch (e) {
       console.error(e);
       addLine('stranger', '…connection lost, try again');
@@ -268,38 +242,11 @@
     if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
   });
 
-  // ------- PayPal modal
-  const payModal = document.getElementById('payModal');
-  const closePay = document.getElementById('closePay');
-
-  closePay.addEventListener('click', () => payModal.close());
-
   // video call 클릭 시: 새 창으로 지정 링크 열기
   noAdsBtn.addEventListener('click', () => {
     window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
-
-  // PayPal Buttons 렌더 (기존 유지)
-  window.addEventListener('load', () => {
-    if (window.paypal && document.getElementById('paypal-buttons')) {
-      window.paypal.Buttons({
-        style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Remove Ads - Adult Chat' }]
-          });
-        },
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function() {
-            // 기존 리다이렉트 로직은 사용하지 않음 (버튼 동작 변경)
-            // location.href = nextRedirect;
-          });
-        }
-      }).render('#paypal-buttons');
-    }
   });
 </script>
 </body>
 
 </html>
-
