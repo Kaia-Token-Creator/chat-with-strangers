@@ -2,14 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-
   <title>Random chat with stranger</title>
   <meta name="description" content="Random chat with stranger" />
-
-  <!-- Strongly recommend correct content-type from server:
-       Content-Type: text/html; charset=utf-8 -->
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
@@ -29,20 +24,28 @@
   <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
   <style>
-    :root { --fg:#000; --bg:#fff; }
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji;}
-    .wrap{min-height:100%;display:grid;place-items:center;padding:24px;}
-    .card{width:100%;max-width:560px;}
-    h1{font-size:clamp(28px,6vw,48px);line-height:1.05;margin:0 0 4px 0;font-weight:800;letter-spacing:-0.02em;text-align:left;}
-    h2{font-size:clamp(22px,4.5vw,36px);line-height:1.05;margin:0 0 24px 0;font-weight:700;letter-spacing:-0.015em;opacity:.9;text-align:left;}
-    label{font-size:14px;display:block;margin-bottom:8px;}
-    select{width:100%;font-size:16px;padding:12px 14px;border:1px solid #111;background:#fff;color:#000;border-radius:8px;appearance:none;-webkit-appearance:none;-moz-appearance:none;}
-    .row{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px;}
-    @media (min-width:560px){.row.two{grid-template-columns:1fr 1fr;}}
-    button{width:100%;font-size:16px;font-weight:700;padding:12px 14px;border-radius:10px;border:1px solid #000;background:#000;color:#fff;cursor:pointer;margin-top:20px;}
-    button:active{transform:translateY(1px);}
-    .hint{margin-top:10px;font-size:12px;opacity:.7;}
+    :root { --fg: #000; --bg: #fff; }
+    html, body {
+      height: 100%; margin: 0; background: var(--bg); color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji;
+    }
+    .wrap { min-height: 100%; display: grid; place-items: center; padding: 24px; }
+    .card { width: 100%; max-width: 560px; }
+    h1 { font-size: clamp(28px, 6vw, 48px); line-height: 1.05; margin: 0 0 4px 0; font-weight: 800; letter-spacing: -0.02em; text-align: left; }
+    h2 { font-size: clamp(22px, 4.5vw, 36px); line-height: 1.05; margin: 0 0 24px 0; font-weight: 700; letter-spacing: -0.015em; opacity: 0.9; text-align: left; }
+    label { font-size: 14px; display: block; margin-bottom: 8px; }
+    select {
+      width: 100%; font-size: 16px; padding: 12px 14px; border: 1px solid #111;
+      background: #fff; color: #000; border-radius: 8px; appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    }
+    .row { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    @media (min-width: 560px) { .row.two { grid-template-columns: 1fr 1fr; } }
+    button {
+      width: 100%; font-size: 16px; font-weight: 700; padding: 12px 14px; border-radius: 10px;
+      border: 1px solid #000; background: #000; color: #fff; cursor: pointer; margin-top: 20px;
+    }
+    button:active { transform: translateY(1px); }
+    .hint { margin-top: 10px; font-size: 12px; opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -75,41 +78,227 @@
   </main>
 
   <script>
-    // Language list
-    const LANGS=[{code:"EN",label:"English"},{code:"CN",label:"中文"},{code:"ES",label:"Español"},{code:"KO",label:"한국어"},{code:"JA",label:"日本語"},{code:"FR",label:"Français"},{code:"IT",label:"Italiano"},{code:"NL",label:"Nederlands"},{code:"PT",label:"Português"},{code:"HI",label:"हिन्दी"},{code:"AR",label:"العربية"},{code:"BN",label:"বাংলা"},{code:"RU",label:"Русский"},{code:"VI",label:"Tiếng Việt"},{code:"ID",label:"Bahasa Indonesia"},{code:"TH",label:"ไทย"},{code:"MY",label:"မြန်မာ"}];
+    // ---------- Language list (native labels + path code) ----------
+    const LANGS = [
+      { code: "EN", label: "English" },
+      { code: "CN", label: "中文" },
+      { code: "ES", label: "Español" },
+      { code: "KO", label: "한국어" },
+      { code: "JA", label: "日本語" },
+      { code: "FR", label: "Français" },
+      { code: "IT", label: "Italiano" },
+      { code: "NL", label: "Nederlands" },
+      { code: "PT", label: "Português" },
+      { code: "HI", label: "हिन्दी" },
+      { code: "AR", label: "العربية" },
+      { code: "BN", label: "বাংলা" },
+      { code: "RU", label: "Русский" },
+      { code: "VI", label: "Tiếng Việt" },
+      { code: "ID", label: "Bahasa Indonesia" },
+      { code: "TH", label: "ไทย" },
+      { code: "MY", label: "မြန်မာ" }
+    ];
 
-    // i18n (동일)
-    const I18N=/* 그대로 */ <?= '/* 여기에 당신의 I18N 객체를 그대로 붙이세요 (길어서 생략해도 됨) */' ?>;
-    // ↑ 템플릿 엔진을 쓰지 않는다면 이 줄은 삭제하고, 질문에 올린 I18N 객체를 그대로 넣으세요.
+    // ---------- Simple i18n dictionary ----------
+    // Only EN changed to singular; others 그대로 유지.
+    const I18N = {
+      EN: {
+        title: "Random Chat", subtitle: "with stranger",
+        labelLanguage: "Language", labelGender: "Your gender (optional)",
+        hintGender: "Gender won’t affect page navigation.", enter: "Enter",
+        genderMale: "👨 male", genderFemale: "👩 female", genderNA: "🙈 prefer not to say",
+        dir: "ltr", htmlLang: "en"
+      },
+      CN: {
+        title: "随机聊天", subtitle: "与陌生人",
+        labelLanguage: "语言", labelGender: "性别（可选）",
+        hintGender: "性别不会影响页面跳转。", enter: "进入",
+        genderMale: "👨 男", genderFemale: "👩 女", genderNA: "🙈 不愿透露",
+        dir: "ltr", htmlLang: "zh-CN"
+      },
+      ES: {
+        title: "Chat aleatorio", subtitle: "con desconocidos",
+        labelLanguage: "Idioma", labelGender: "Tu género (opcional)",
+        hintGender: "El género no afectará la navegación.", enter: "Entrar",
+        genderMale: "👨 hombre", genderFemale: "👩 mujer", genderNA: "🙈 prefiero no decirlo",
+        dir: "ltr", htmlLang: "es"
+      },
+      KO: {
+        title: "랜덤 채팅", subtitle: "낯선 사람과",
+        labelLanguage: "언어", labelGender: "성별(선택)",
+        hintGender: "성별은 페이지 이동에 영향을 주지 않습니다.", enter: "입장",
+        genderMale: "👨 남성", genderFemale: "👩 여성", genderNA: "🙈 밝히지 않음",
+        dir: "ltr", htmlLang: "ko"
+      },
+      JA: {
+        title: "ランダムチャット", subtitle: "見知らぬ人と",
+        labelLanguage: "言語", labelGender: "性別（任意）",
+        hintGender: "性別はページ遷移に影響しません。", enter: "入る",
+        genderMale: "👨 男性", genderFemale: "👩 女性", genderNA: "🙈 言いたくない",
+        dir: "ltr", htmlLang: "ja"
+      },
+      FR: {
+        title: "Discussion aléatoire", subtitle: "avec des inconnus",
+        labelLanguage: "Langue", labelGender: "Votre genre (facultatif)",
+        hintGender: "Le genre n'affecte pas la navigation.", enter: "Entrer",
+        genderMale: "👨 homme", genderFemale: "👩 femme", genderNA: "🙈 préfère ne pas le dire",
+        dir: "ltr", htmlLang: "fr"
+      },
+      IT: {
+        title: "Chat casuale", subtitle: "con sconosciuti",
+        labelLanguage: "Lingua", labelGender: "Il tuo genere (opzionale)",
+        hintGender: "Il genere non influisce sulla navigazione.", enter: "Entra",
+        genderMale: "👨 uomo", genderFemale: "👩 donna", genderNA: "🙈 preferisco non dirlo",
+        dir: "ltr", htmlLang: "it"
+      },
+      NL: {
+        title: "Willekeurige chat", subtitle: "met vreemden",
+        labelLanguage: "Taal", labelGender: "Je gender (optioneel)",
+        hintGender: "Gender beïnvloedt de navigatie niet.", enter: "Ga verder",
+        genderMale: "👨 man", genderFemale: "👩 vrouw", genderNA: "🙈 zeg ik liever niet",
+        dir: "ltr", htmlLang: "nl"
+      },
+      PT: {
+        title: "Bate-papo aleatório", subtitle: "com desconhecidos",
+        labelLanguage: "Idioma", labelGender: "Seu gênero (opcional)",
+        hintGender: "O gênero não afeta a navegação.", enter: "Entrar",
+        genderMale: "👨 masculino", genderFemale: "👩 feminino", genderNA: "🙈 prefiro não dizer",
+        dir: "ltr", htmlLang: "pt"
+      },
+      HI: {
+        title: "यादृच्छिक चैट", subtitle: "अजनबियों के साथ",
+        labelLanguage: "भाषा", labelGender: "आपका लिंग (वैकल्पिक)",
+        hintGender: "लिंग पृष्ठ नेविगेशन को प्रभावित नहीं करेगा।", enter: "प्रवेश करें",
+        genderMale: "👨 पुरुष", genderFemale: "👩 महिला", genderNA: "🙈 नहीं बताना",
+        dir: "ltr", htmlLang: "hi"
+      },
+      AR: {
+        title: "دردشة عشوائية", subtitle: "مع الغرباء",
+        labelLanguage: "اللغة", labelGender: "جنسك (اختياري)",
+        hintGender: "لن يؤثر الجنس على الانتقال بين الصفحات.", enter: "ادخل",
+        genderMale: "👨 ذكر", genderFemale: "👩 أنثى", genderNA: "🙈 أفضل عدم القول",
+        dir: "rtl", htmlLang: "ar"
+      },
+      BN: {
+        title: "র‌্যান্ডম চ্যাট", subtitle: "অপরিচিতদের সাথে",
+        labelLanguage: "ভাষা", labelGender: "আপনার লিঙ্গ (ঐচ্ছিক)",
+        hintGender: "লিঙ্গ পেজ নেভিগেশনে প্রভাব ফেলবে না।", enter: "প্রবেশ করুন",
+        genderMale: "👨 পুরুষ", genderFemale: "👩 নারী", genderNA: "🙈 বলতে চাই না",
+        dir: "ltr", htmlLang: "bn"
+      },
+      RU: {
+        title: "Случайный чат", subtitle: "с незнакомцами",
+        labelLanguage: "Язык", labelGender: "Ваш пол (необязательно)",
+        hintGender: "Пол не влияет на переход страницы.", enter: "Войти",
+        genderMale: "👨 мужчина", genderFemale: "👩 женщина", genderNA: "🙈 предпочитаю не говорить",
+        dir: "ltr", htmlLang: "ru"
+      },
+      VI: {
+        title: "Trò chuyện ngẫu nhiên", subtitle: "với người lạ",
+        labelLanguage: "Ngôn ngữ", labelGender: "Giới tính của bạn (tuỳ chọn)",
+        hintGender: "Giới tính không ảnh hưởng việc chuyển trang.", enter: "Vào",
+        genderMale: "👨 nam", genderFemale: "👩 nữ", genderNA: "🙈 không tiết lộ",
+        dir: "ltr", htmlLang: "vi"
+      },
+      ID: {
+        title: "Obrolan acak", subtitle: "dengan orang asing",
+        labelLanguage: "Bahasa", labelGender: "Jenis kelamin Anda (opsional)",
+        hintGender: "Jenis kelamin tidak memengaruhi navigasi.", enter: "Masuk",
+        genderMale: "👨 pria", genderFemale: "👩 wanita", genderNA: "🙈 tidak ingin menyebutkan",
+        dir: "ltr", htmlLang: "id"
+      },
+      TH: {
+        title: "แชทสุ่ม", subtitle: "กับคนแปลกหน้า",
+        labelLanguage: "ภาษา", labelGender: "เพศของคุณ (ไม่บังคับ)",
+        hintGender: "เพศจะไม่ส่งผลต่อการย้ายหน้า", enter: "เข้าสู่",
+        genderMale: "👨 ชาย", genderFemale: "👩 หญิง", genderNA: "🙈 ไม่ระบุ",
+        dir: "ltr", htmlLang: "th"
+      },
+      MY: {
+        title: "ကျပန်းချတ်", subtitle: "မသိကြသူများနှင့်",
+        labelLanguage: "ဘာသာစကား", labelGender: "လိင်အမျိုးအစား (ရွေးချယ်နိုင်)",
+        hintGender: "လိင်အမျိုးအစားသည် စာမျက်နှာပြောင်းခြင်းကို မသက်ရောက်ပါ။", enter: "ဝင်မည်",
+        genderMale: "👨 အမျိုးသား", genderFemale: "👩 အမျိုးသမီး", genderNA: "🙈 မဖေါ်ပြချင်",
+        dir: "ltr", htmlLang: "my"
+      }
+    };
 
-    // Populate language dropdown
-    const langSelect=document.getElementById('lang');
-    LANGS.forEach(({code,label})=>{const opt=document.createElement('option');opt.value=code;opt.textContent=label;langSelect.appendChild(opt);});
-    langSelect.value='EN';
+    // ---------- Populate language dropdown ----------
+    const langSelect = document.getElementById('lang');
+    LANGS.forEach(({ code, label }) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = label;
+      langSelect.appendChild(opt);
+    });
+    langSelect.value = 'EN'; // default EN
 
-    const els={title:document.getElementById('title-rc'),subtitle:document.getElementById('subtitle-rc'),labelLanguage:document.getElementById('label-language'),labelGender:document.getElementById('label-gender'),hintGender:document.getElementById('hint-gender'),enterBtn:document.getElementById('enterBtn'),genderSelect:document.getElementById('gender')};
+    // ---------- Apply i18n to the page ----------
+    const els = {
+      title: document.getElementById('title-rc'),
+      subtitle: document.getElementById('subtitle-rc'),
+      labelLanguage: document.getElementById('label-language'),
+      labelGender: document.getElementById('label-gender'),
+      hintGender: document.getElementById('hint-gender'),
+      enterBtn: document.getElementById('enterBtn'),
+      genderSelect: document.getElementById('gender')
+    };
 
-    function applyI18n(code){
-      const t=(I18N&&I18N[code])||I18N?.EN||{title:'Random Chat',subtitle:'with stranger',labelLanguage:'Language',labelGender:'Your gender (optional)',hintGender:'Gender won’t affect page navigation.',enter:'Enter',genderMale:'👨 male',genderFemale:'👩 female',genderNA:'🙈 prefer not to say',dir:'ltr',htmlLang:'en'};
-      els.title.textContent=t.title; els.subtitle.textContent=t.subtitle;
-      els.labelLanguage.textContent=t.labelLanguage; els.labelGender.textContent=t.labelGender; els.hintGender.textContent=t.hintGender; els.enterBtn.textContent=t.enter;
-      const [o1,o2,o3]=els.genderSelect.options; o1.textContent=t.genderMale; o2.textContent=t.genderFemale; o3.textContent=t.genderNA;
-      document.documentElement.lang=t.htmlLang||'en'; document.documentElement.dir=t.dir||'ltr';
+    function applyI18n(code) {
+      const t = I18N[code] || I18N.EN;
+
+      // Update texts
+      els.title.textContent = t.title;
+      els.subtitle.textContent = t.subtitle;
+      els.labelLanguage.textContent = t.labelLanguage;
+      els.labelGender.textContent = t.labelGender;
+      els.hintGender.textContent = t.hintGender;
+      els.enterBtn.textContent = t.enter;
+
+      // Update gender options with emojis
+      const [o1, o2, o3] = els.genderSelect.options;
+      o1.textContent = t.genderMale;
+      o2.textContent = t.genderFemale;
+      o3.textContent = t.genderNA;
+
+      // Set document language and direction
+      document.documentElement.lang = t.htmlLang || 'en';
+      document.documentElement.dir = t.dir || 'ltr';
     }
+
+    // Initialize i18n to EN
     applyI18n('EN');
 
-    langSelect.addEventListener('change',()=>applyI18n(langSelect.value));
-
-    document.getElementById('enterBtn').addEventListener('click',()=>{
-      const code=langSelect.value||'EN'; window.location.assign(`/${code}`);
+    // Change UI language when user selects a language
+    langSelect.addEventListener('change', () => {
+      const code = langSelect.value;
+      applyI18n(code);
     });
 
-    // Auto-detect
-    try{
-      const navLang=(navigator.language||navigator.userLanguage||"en").toLowerCase();
-      const mapping=[["en","EN"],["zh","CN"],["es","ES"],["ko","KO"],["ja","JA"],["fr","FR"],["it","IT"],["nl","NL"],["pt","PT"],["hi","HI"],["ar","AR"],["bn","BN"],["ru","RU"],["vi","VI"],["id","ID"],["th","TH"],["my","MY"]];
-      for(const [prefix,code] of mapping){ if(navLang.startsWith(prefix.toLowerCase()) && I18N?.[code]){ langSelect.value=code; applyI18n(code); break; } }
-    }catch{}
+    // ---------- Navigate on Enter ----------
+    document.getElementById('enterBtn').addEventListener('click', () => {
+      const code = langSelect.value || 'EN';
+      const target = `/${code}`;
+      window.location.assign(target);
+    });
+
+    // ---------- Optional: auto-detect browser language ----------
+    try {
+      const navLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+      const mapping = [
+        ["en", "EN"], ["zh", "CN"], ["es", "ES"], ["ko", "KO"], ["ja", "JA"],
+        ["fr", "FR"], ["it", "IT"], ["nl", "NL"], ["pt", "PT"], ["hi", "HI"],
+        ["ar", "AR"], ["bn", "BN"], ["ru", "RU"], ["vi", "VI"],
+        ["id", "ID"], ["th", "TH"], ["my", "MY"], ["my-MM", "MY"]
+      ];
+      for (const [prefix, code] of mapping) {
+        if (navLang.startsWith(prefix.toLowerCase()) && I18N[code]) {
+          langSelect.value = code;
+          applyI18n(code);
+          break;
+        }
+      }
+    } catch {}
   </script>
 </body>
 </html>
