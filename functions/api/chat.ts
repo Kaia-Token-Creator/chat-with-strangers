@@ -176,17 +176,39 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       }
     }
 
-    // init=true ⇒ opening line from stranger without user message
+    // 🔁 init 처리 블록 교체 시작
+    // 언어별 오프너(아주 짧고 로맨틱 톤)
+    const OPENERS: Record<string, string> = {
+      EN: 'Start with a flirty one-liner.',
+      CN: '用暧昧的短句开场，越短越好。',
+      ES: 'Empieza con una frase coqueta y corta.',
+      KO: '아주 짧게 은근하게 시작해줘.',
+      JA: '色っぽく短く始めて。',
+      FR: 'Commence par une phrase courte et coquine.',
+      IT: 'Inizia con una frase breve e civettuola.',
+      NL: 'Begin met een flirterige oneliner.',
+      PT: 'Comece com uma frase curta e ousada.',
+      HI: 'छोटी, छेड़खानी भरी लाइन से शुरू करो।',
+      AR: 'ابدأ بجملة قصيرة وغزلية.',
+      BN: 'একটা ছোট ফ্লার্টি লাইনে শুরু করো।',
+      RU: 'Начни с короткой кокетливой фразы.',
+      VI: 'Mở đầu bằng câu tán tỉnh thật ngắn.',
+      ID: 'Mulai dengan kalimat genit yang singkat.',
+      TH: 'เริ่มด้วยประโยคสั้นๆ แฝงความเจ้าชู้',
+      MY: 'အရမ်းချို့တဲ့ စကားတစ်ခုပဲ စတင်ပေး။',
+    };
+
     if (!init) {
-      // normal turn includes user message
       const userText = (message ?? '').toString().trim().slice(0, 500);
       if (userText) {
         msgs.push({ role: 'user', content: userText });
       }
     } else {
-      // seed a nudge so the model starts
-      msgs.push({ role: 'user', content: 'Start the chat with a short opener.' });
+      // ✅ 시드를 언어별 문구로
+      const opener = OPENERS[langCode] ?? OPENERS.EN;
+      msgs.push({ role: 'user', content: opener });
     }
+    // 🔁 init 처리 블록 교체 끝
 
     // Final safety guard: if user asked sexual content, rewrite to refusal hint
     const last = msgs[msgs.length - 1]?.content?.toLowerCase() || '';
@@ -229,4 +251,3 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     });
   }
 };
-
