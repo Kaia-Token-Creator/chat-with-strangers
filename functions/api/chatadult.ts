@@ -95,7 +95,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
         },
         body: JSON.stringify({
           model: "venice-uncensored",
-          temperature: 0.1,
+          temperature: 1.5,
           top_p: 0.9,
           frequency_penalty: 0.8,
           presence_penalty: 0.2,
@@ -133,6 +133,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
 
 
 
