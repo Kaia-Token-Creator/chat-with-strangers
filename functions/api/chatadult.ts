@@ -99,7 +99,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
           top_p: 0.9,
           frequency_penalty: 0.8,
           presence_penalty: 0.2,
-          max_tokens: 48,
+          max_tokens: 25,
           messages: payloadMsgs,
         }),
       });
@@ -133,5 +133,6 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
 
 
