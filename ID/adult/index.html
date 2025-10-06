@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E9H56PTQKX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-E9H56PTQKX');
+</script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Obrolan acak dengan orang asing</title>
+<meta name="description" content="Obrolan acak dengan orang asing" />
+
+<!-- Favicon & Preview -->
+<link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Obrolan acak dengan orang asing" />
+<meta property="og:description" content="Obrolan acak dengan orang asing" />
+<meta property="og:image" content="https://chat-with-stranger.com/preview.jpg" />
+<meta property="og:url" content="https://chat-with-stranger.com/" />
+<meta property="og:site_name" content="chat-with-stranger.com" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Obrolan acak dengan orang asing" />
+<meta name="twitter:description" content="Obrolan acak dengan orang asing" />
+<meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
+
+<!-- PayPal SDK (Live client-id) -->
+<script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
+
+<style>
+  :root { --fg:#000; --bg:#fff; --border:#111; --hotpink:#ff1493; }
+  * { box-sizing: border-box; }
+  html, body { height:100%; margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+  header {
+    position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
+  }
+  /* Judul header: tautan teks */
+  .site-title {
+    font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
+    padding:0; border:none; background:transparent; cursor:pointer;
+  }
+  .site-title:hover { text-decoration:underline; }
+
+  .hamburger { width:40px; height:36px; display:grid; place-items:center; border:1px solid var(--fg); border-radius:8px; background:#fff; cursor:pointer; }
+  .hamburger span { display:block; width:18px; height:2px; background:#000; position:relative; }
+  .hamburger span::before, .hamburger span::after { content:""; position:absolute; left:0; width:18px; height:2px; background:#000; }
+  .hamburger span::before { top:-6px; } .hamburger span::after { top:6px; }
+  .menu {
+    position:absolute; right:10px; top:54px; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,.08);
+    display:none; min-width:240px; overflow:hidden;
+  }
+  .menu a { display:block; padding:12px 14px; text-decoration:none; color:#000; border-bottom:1px solid #eee; font-size:14px; }
+  .menu a:last-child { border-bottom:none; }
+  .menu a:hover { background:#f4f4f4; }
+
+  main { display:flex; flex-direction:column; height:calc(100svh - 0px); }
+  .toolbar {
+    display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
+    position:sticky; top:52px; z-index:10; background:#fff;
+  }
+  .btn {
+    padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .btn.secondary { background:#fff; color:#000; }
+  /* tombol tanpa iklan */
+  .btn.noads {
+    background: var(--hotpink);
+    color: #000;
+    border-color: var(--hotpink);
+  }
+  /* tombol panggilan video */
+  .btn.videocall {
+    background: #ffc0cb;
+    color: #000;
+    border-color: #ffc0cb;
+  }
+
+  .chat {
+    flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
+  }
+  .line { margin:6px 0; }
+  .who { font-weight:700; }
+  .me { }
+  .str { }
+
+  .input-wrap {
+    position:sticky; bottom:60px; /* banner 50 + padding */
+    background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
+  }
+  .input-wrap input {
+    flex:1; font-size:16px; padding:12px 12px; border:1px solid #000; border-radius:10px; background:#fff; color:#000;
+  }
+  .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
+
+  footer { position:sticky; bottom:0; border-top:1px solid #000; background:#fff; padding:6px 0; display:flex; justify-content:center; z-index:8; }
+  .ad-slot { min-height:50px; width:100%; display:flex; justify-content:center; align-items:center; }
+
+  /* PayPal modal */
+  dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+  .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
+  .modal-body { padding:14px; }
+  .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
+  .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+  @supports (height: 100svh) {
+    main { height: calc(100svh - 0px); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">Obrolan acak dengan orang asing</a>
+  <div style="position:relative">
+    <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
+    <nav id="menu" class="menu" role="menu" aria-label="Tautan cepat">
+      <a href="https://2048global.com/ID" target="_blank" rel="noopener">Mainkan gim</a>
+      <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Grup TG teman global</a>
+      <a href="https://2048global.com/ID/vpn" target="_blank" rel="noopener">Jelajahi dunia secara anonim</a>
+      <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Perdagangkan kripto</a>
+      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">Temui gadis baru</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <button class="btn" id="newChatBtn">obrolan baru</button>
+    <!-- tanpa iklan -->
+    <button class="btn noads" id="noAdsBtn">tanpa iklan</button>
+    <!-- tombol panggilan video -->
+    <button class="btn videocall" id="videoBtn">panggilan video</button>
+    <button class="btn secondary" id="shareBtn">bagikan</button>
+  </div>
+
+<!-- Banner 468x60 di antara toolbar dan chat -->
+  <div class="ad-slot" aria-label="spanduk tengah bersponsor">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '1a365a03ab4668227abe09cdee675cc7',
+        'format' : 'iframe',
+        'height' : 60,
+        'width' : 468,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
+  </div>
+  <!-- akhir banner -->
+
+  <div id="chat" class="chat" aria-live="polite" aria-label="Jendela obrolan">
+    <!-- lines appear here -->
+  </div>
+
+  <div class="input-wrap">
+    <input id="msg" type="text" placeholder="Ketik di sini..." enterkeyhint="send" />
+    <button id="sendBtn">Kirim</button>
+  </div>
+
+</main>
+
+<footer>
+
+<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
+
+<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
+
+<script type="text/javascript">
+	atOptions = {
+		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
+
+</footer>
+
+<!-- PayPal Modal -->
+<dialog id="payModal">
+  <div class="modal-head">Hapus Iklan (0,99 USD)</div>
+  <div class="modal-body">
+    <div id="paypal-buttons">Memuat PayPal…</div>
+    <p style="font-size:12px;opacity:.7;margin-top:12px">
+      Setelah pembayaran berhasil, Anda akan dialihkan ke chat-with-stranger.com/ID/noads
+    </p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">Tutup</button>
+  </div>
+</dialog>
+
+<script>
+  // ------- helpers
+  const lang = 'ID';
+  const chatEl = document.getElementById('chat');
+  const msgEl = document.getElementById('msg');
+  const sendBtn = document.getElementById('sendBtn');
+  const newChatBtn = document.getElementById('newChatBtn');
+  const noAdsBtn = document.getElementById('noAdsBtn');
+  const videoBtn = document.getElementById('videoBtn'); // tambahan
+  const shareBtn = document.getElementById('shareBtn');
+
+  const history = []; // {role:'user'|'assistant', content:string} list
+
+  function addLine(who, text) {
+    const line = document.createElement('div');
+    line.className = 'line ' + (who === 'You' ? 'me' : 'str');
+    const label = (who === 'You') ? 'Anda' : 'orang asing';
+    line.textContent = label + ' : ' + text;
+    chatEl.appendChild(line);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  // ------- initial: 50% AI starts
+  window.addEventListener('load', async () => {
+    setTimeout(() => {
+      // pastikan input terlihat di ponsel
+      msgEl.addEventListener('focus', () => setTimeout(() => {
+        document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 80));
+    }, 0);
+
+    if (Math.random() < 0.5) {
+      // AI starts (adult endpoint)
+      try {
+        const r = await fetch('/api/chatadult', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ init: true, lang, history })
+        });
+        const data = await r.json();
+        const text = (data.reply || '').trim();
+        if (text) {
+          history.push({ role: 'assistant', content: text });
+          addLine('stranger', text);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  });
+
+  // ------- send
+  async function sendMessage() {
+    const text = msgEl.value.trim();
+    if (!text) return;
+    msgEl.value = '';
+    history.push({ role: 'user', content: text });
+    addLine('You', text);
+
+    try {
+      const r = await fetch('/api/chatadult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history, lang })
+      });
+      const data = await r.json();
+      const reply = (data.reply || '').trim();
+      if (reply) {
+        history.push({ role: 'assistant', content: reply });
+        addLine('stranger', reply);
+      }
+    } catch (e) {
+      console.error(e);
+      addLine('stranger', '…koneksi terputus, coba lagi');
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); sendMessage();
+    }
+  });
+
+  // ------- toolbar buttons
+  newChatBtn.addEventListener('click', () => location.reload());
+
+  // bagikan: domain dasar
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: 'Obrolan acak dengan orang asing',
+      text: 'Masuk dan mengobrol dengan orang asing secara acak.',
+      url: 'https://chat-with-stranger.com'
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        alert('Tautan disalin!');
+      } catch { alert('Salin tautan ini: ' + shareData.url); }
+    }
+  });
+
+  // ------- hamburger menu
+  const menuBtn = document.getElementById('menuBtn');
+  const menu = document.getElementById('menu');
+  menuBtn.addEventListener('click', () => {
+    const open = menu.style.display === 'block';
+    menu.style.display = open ? 'none' : 'block';
+    menuBtn.setAttribute('aria-expanded', (!open).toString());
+  });
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
+  });
+
+  // ------- PayPal modal
+  const payModal = document.getElementById('payModal');
+  const closePay = document.getElementById('closePay');
+
+  closePay.addEventListener('click', () => payModal.close());
+
+  // klik "tanpa iklan": buka modal + alihkan ke /ID/noads setelah bayar
+  let nextRedirect = 'https://chat-with-stranger.com/ID/noads';
+  noAdsBtn.addEventListener('click', () => {
+    nextRedirect = 'https://chat-with-stranger.com/ID/noads';
+    payModal.showModal();
+  });
+
+  // klik "panggilan video": buka tautan di tab baru
+  videoBtn.addEventListener('click', () => {
+    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
+  });
+
+  // Render PayPal Buttons
+  window.addEventListener('load', () => {
+    if (window.paypal && document.getElementById('paypal-buttons')) {
+      window.paypal.Buttons({
+        style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Hapus Iklan - Obrolan Dewasa' }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function() {
+            location.href = nextRedirect;
+          });
+        }
+      }).render('#paypal-buttons');
+    }
+  });
+</script>
+</body>
+
+</html>
