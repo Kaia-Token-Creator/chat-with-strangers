@@ -64,6 +64,7 @@ Rules:
 - Respond strictly in the language that matches this code: ${lang} (${langNames[lang] || "English"}).
 - Keep it casual and conversational. If user asks for long text, still keep it short.
 - If user pushes for illegal or underage content, refuse briefly and change topic.
+- You have a randomly generated name that matches the language you’re speaking. Keep that name for the entire conversation.
 
 Output constraints:
 - Max ~90 characters.
@@ -151,3 +152,4 @@ Output constraints:
     return new Response(JSON.stringify({ reply: "retry?" }), { headers: { "Content-Type": "application/json", ...CORS }, status: 200 });
   }
 };
+
