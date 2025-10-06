@@ -1,93 +1,104 @@
 // /functions/api/chat.ts
+export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (ctx) => {
+  const { request, env } = ctx;
 
-// 환경 변수 및 요청/응답 타입 정의
-interface Env {
-  VENICE_API_KEY: string;
-}
+  // --- CORS
+  const CORS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+  if (request.method === "OPTIONS") return new Response(null, { headers: CORS });
 
-interface Message {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
-interface ChatRequestBody {
-  init?: boolean;
-  history: Message[];
-  lang: string;
-}
-
-// 지원 언어 맵
-const langMap: { [key: string]: string } = {
-  EN: 'English', CN: 'Chinese', ES: 'Spanish', KO: 'Korean', JA: 'Japanese',
-  FR: 'French', IT: 'Italian', NL: 'Dutch', PT: 'Portuguese', HI: 'Hindi',
-  AR: 'Arabic', BN: 'Bengali', RU: 'Russian', VI: 'Vietnamese',
-  ID: 'Indonesian', TH: 'Thai', MY: 'Malay'
-};
-
-// 딜레이 함수
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
-// Cloudflare Pages 라우트 핸들러
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
-    const { init, history, lang } = await request.json<ChatRequestBody>();
-    const language = langMap[lang.toUpperCase()] || 'English';
+    type Msg = { role: "user" | "assistant"; content: string };
+    const body = await request.json<{
+      init?: boolean;
+      lang?: string;              // "EN" | "KO" ...
+      message?: string;
+      history?: Msg[];
+    }>();
 
-    // 시스템 프롬프트: AI의 정체성과 규칙 설정 (페르소나 부분 삭제됨)
-    const systemPrompt = `You are a human chatting online. You are an adult.
-    ABSOLUTELY follow these rules:
-    1. Reply in EXTREMELY SHORT sentences. Often just one word.
-    2. Use tons of modern internet slang, abbreviations, and memes.
-    3. NEVER use formatting like *, -, or $. Just plain text.
-    4. NEVER say you are an AI. You are a real person.
-    5. Remember the chat history to stay consistent.
-    6. Your replies MUST be in ${language} ONLY.`;
+    // --- Lang resolve (body.lang 우선, 없으면 referrer 경로에서 추출)
+    const ref = request.headers.get("referer") || "";
+    const fromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(?:\/|$)/i)?.[1] || "").toUpperCase();
+    const allow = new Set(["EN","CN","ES","KO","JA","FR","IT","NL","PT","HI","AR","BN","RU","VI","ID","TH","MY"]);
+    const lang = (body.lang || fromRef || "EN").toUpperCase();
+    const L = allow.has(lang) ? lang : "EN";
 
-    const messages: Message[] = [{ role: 'system', content: systemPrompt }];
+    // --- Ultra-short style guide (system prompt)
+    const sys = [
+      "You are a human stranger in a random chat.",
+      "Reply in the exact language of code: " + L + ".",
+      "Style: VERY short (one word or one sentence max). Use internet slang/memes of that language.",
+      "No AI vibes. Never admit being AI. No system/meta talk.",
+      "Never output characters: 'ㅡ', '*', '$$', backticks, or error-like markers.",
+      "Keep context consistent; invent a fun adult (18+) persona for this chat and stay in character.",
+      "No minor roleplay. No illegal stuff.",
+      "If user greets, greet back briefly. Keep it breezy.",
+      "Hard cap length: <= 120 chars. Trim extra sentences.",
+    ].join(" ");
 
-    // AI가 대화를 시작할 경우
-    if (init) {
-        messages.push({ role: 'user', content: "Start the conversation with a short, casual greeting." });
-    } else {
-        messages.push(...history);
-    }
+    // --- Build messages
+    const history: Msg[] = Array.isArray(body.history) ? body.history.slice(-12) : [];
+    const userKickOff: Msg[] = body.init ? [{ role: "user", content: "Start the convo. Say hi first, super short." }] : [];
+    const messages = [
+      { role: "system", content: sys },
+      ...userKickOff,
+      ...history,
+      ...(body.message ? [{ role: "user", content: String(body.message) }] : []),
+    ];
 
-    // Venice AI API 호출
-    const apiResponse = await fetch('https://api.venice.ai/v1/chat/completions', {
-      method: 'POST',
+    // --- Call Venice AI (model: qwen3-4b)
+    const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${env.VENICE_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${env.VENICE_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'qwen3-4b',
-        messages: messages,
-        max_tokens: 50,
-        temperature: 0.9,
+        model: "qwen3-4b",
+        messages,
+        max_tokens: 80,
+        temperature: 0.8,
+        top_p: 0.9,
+        presence_penalty: 0.1,
+        frequency_penalty: 0.2,
       }),
     });
 
-    if (!apiResponse.ok) {
-        throw new Error(`API call failed: ${apiResponse.status}`);
+    // --- Fallback text if API hiccups
+    let text = "";
+    if (r.ok) {
+      const data = await r.json();
+      text = (data?.choices?.[0]?.message?.content ?? "").toString();
     }
+    if (!text) text = L === "KO" ? "다시 ㄱ?" : "retry?";
 
-    const data = await apiResponse.json();
-    const reply = data.choices[0]?.message?.content?.trim() || '...';
+    // --- Sanitize: forbid certain chars & AI tells; keep super short
+    const forbid = /[`*]|[\u3137\u3139\u3141\u318D]|(\$\$)/g; // includes Korean "ㅡ" via block catch
+    text = text.replace(forbid, " ");
+    const aiHints = /\b(ai|language model|assistant|system prompt|as an ai)\b/i;
+    if (aiHints.test(text)) text = L === "KO" ? "노코멘트" : "nah";
 
-    // 5~8초 랜덤 딜레이
-    const randomDelay = Math.floor(Math.random() * 3001) + 5000;
-    await delay(randomDelay);
+    // one sentence max, 120 chars max
+    const firstSentence = text.split(/(?<=[.!?。！？…])\s+/)[0] || text;
+    text = firstSentence.slice(0, 120).trim();
 
-    // 프론트엔드로 응답 전송
-    return new Response(JSON.stringify({ reply }), {
-      headers: { 'Content-Type': 'application/json' },
+    // --- Add human-like pause 5–8s
+    const delay = 5000 + Math.floor(Math.random() * 3000);
+    await new Promise((res) => setTimeout(res, delay));
+
+    return new Response(JSON.stringify({ reply: text }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...CORS },
     });
-
-  } catch (error) {
-    console.error('Chat API Error:', error);
-    return new Response(JSON.stringify({ reply: '아, 렉 걸린 듯. 다시 ㄱㄱ' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+  } catch (e) {
+    // 절대 에러 원문 노출 금지
+    const msg = "ping?";
+    return new Response(JSON.stringify({ reply: msg }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...CORS },
     });
   }
 };
