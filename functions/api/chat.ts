@@ -65,7 +65,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       },
       body: JSON.stringify({
         model: "venice-uncensored",
-        temperature: 0.8,
+        temperature: 0.6,
         max_tokens: 48,
         messages: msgs,
       }),
