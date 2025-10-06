@@ -19,7 +19,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     const lang = (body.lang || langFromRef || "EN") as
       | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
-    // --- ultra-short, slangy openers per language (varied to avoid repetition)
+    // --- ultra-short, slangy openers per language
     const openers: Record<string, string[]> = {
       EN: ["hey", "sup", "yo?", "hiii", "what’s up", "hey there"],
       CN: ["嗨", "在吗", "哈喽", "你好呀", "嘿"],
@@ -40,7 +40,6 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       MY: ["hai", "apa khabar", "yo", "hey", "sup"],
     };
 
-    // --- map lang code to language guidance
     const langNames: Record<string, string> = {
       EN: "English", CN: "Simplified Chinese", ES: "Spanish", KO: "Korean", JA: "Japanese", FR: "French",
       IT: "Italian", NL: "Dutch", PT: "Portuguese", HI: "Hindi", AR: "Arabic", BN: "Bengali",
@@ -50,7 +49,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     // --- history
     const history: Msg[] = Array.isArray(body.history) ? body.history.slice(-20) : [];
 
-    // --- system prompt (EN only)
+    // --- system prompt (EN)
     const systemPrompt = `
 You are a human stranger in a 1:1 random chatroom.
 
@@ -73,7 +72,6 @@ Output constraints:
 - No lists, no numbered points.
 `.trim();
 
-    // --- user message for init
     const initMsg = { role: "user", content: "Start the chat with one super short, casual opener." };
 
     // --- build messages
@@ -83,18 +81,23 @@ Output constraints:
       ...history.map((m) => ({ role: m.role, content: m.content })),
     ];
 
-    // --- if not init and a new user message exists, include it (front already put into history, but be safe)
     if (body.message && (!history.length || history[history.length - 1].content !== body.message)) {
       messages.push({ role: "user", content: body.message });
     }
 
-    // --- call Venice AI (OpenAI-compatible chat completions)
+    // --- Venice (OpenAI-compatible)
     const apiUrl = "https://api.venice.ai/api/v1/chat/completions";
     const payload = {
       model: "qwen3-4b",
       messages,
       temperature: 0.7,
       max_tokens: 64,
+
+      // 🔒 핵심: 생각(<think>) 출력 비활성화 + 잔여 블록 자동 제거
+      venice_parameters: {
+        disable_thinking: true,
+        strip_thinking_response: true,
+      },
     };
 
     const r = await fetch(apiUrl, {
@@ -107,36 +110,44 @@ Output constraints:
     });
 
     if (!r.ok) {
-      // fall back to a local opener on init, or a soft failure message
+      // init일 땐 언어별 랜덤 오프너, 그 외엔 짧은 복구 응답
       const fallback = body.init
         ? (openers[lang] || openers.EN)[Math.floor(Math.random() * (openers[lang] || openers.EN).length)]
-        : "brb";
-      return new Response(JSON.stringify({ reply: fallback }), { headers: { "Content-Type": "application/json", ...CORS }, status: 200 });
+        : "hmm";
+      return new Response(JSON.stringify({ reply: fallback }), {
+        headers: { "Content-Type": "application/json", ...CORS },
+        status: 200,
+      });
     }
 
     const data = await r.json() as {
       choices?: { message?: { content?: string } }[];
     };
 
+    // --- take content
     let reply = (data.choices?.[0]?.message?.content || "").trim();
 
-    // --- sanitize: enforce ultra-short, remove disallowed chars and AIy stuff
-    const banPattern = /[\*]|[$]{2}|[ㅡ]/g; // asterisk, $$, Korean long bar
+    // --- 1차 안전망: 혹시 남은 <think> 블록이 있으면 전부 제거
+    if (reply.includes("<think")) {
+      reply = reply.replace(/<think[\s\S]*?<\/think>/gi, "").trim();
+    }
+    // --- 2차: 다른 태그류 제거 (narrow)
+    reply = reply.replace(/<\/?[^>]+>/g, "").trim();
+
+    // --- 금지문자 제거 + 길이 제한
+    const banPattern = /[\*]|[$]{2}|[ㅡ]/g;
     reply = reply.replace(banPattern, "");
-    // chop to one short sentence / ~90 chars
     if (reply.length > 90) reply = reply.slice(0, 90).trim();
 
-    // if empty, create a tiny opener/ack
+    // --- 완충: 비었으면 초간단 오프너/추임새
     if (!reply) {
       reply = body.init
         ? (openers[lang] || openers.EN)[Math.floor(Math.random() * (openers[lang] || openers.EN).length)]
-        : (lang === "EN" ? "hmm" : (openers[lang] || openers.EN)[0]);
+        : (lang === "EN" ? "ok" : (openers[lang] || openers.EN)[0]);
     }
 
     return new Response(JSON.stringify({ reply }), { headers: { "Content-Type": "application/json", ...CORS } });
-  } catch (e) {
-    // minimal, user-friendly fallback (no AI-ish tokens)
+  } catch {
     return new Response(JSON.stringify({ reply: "retry?" }), { headers: { "Content-Type": "application/json", ...CORS }, status: 200 });
   }
 };
-
