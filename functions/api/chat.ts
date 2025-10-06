@@ -63,34 +63,51 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       messages,
       temperature: 0.9,
       max_tokens: 40,
+      stream: false, // 중요: JSON 응답 강제
     };
 
-    // 서버 타임아웃 방지를 위해 대기는 클라이언트에서 처리하도록 delay 값만 전달
+    // 클라이언트에서 출력 지연 적용
     const delayMs = 5000 + Math.floor(Math.random() * 3000);
-
-    // 12초 안전 타임아웃
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 12000);
 
     const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${env.VENICE_API_KEY}`,
         "Content-Type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify(payload),
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timer));
+    });
 
     if (!r.ok) {
-      const errTxt = await r.text();
-      return json({ error: "upstream_error", detail: errTxt }, 502, cors);
+      const errTxt = await safeText(r);
+      return json({ error: "upstream_error", detail: errTxt || `status ${r.status}` }, 502, cors);
     }
 
-    const data = await r.json<any>();
-    const text = sanitize(data?.choices?.[0]?.message?.content ?? "").slice(0, 160);
+    // content-type이 혹시 text/event-stream으로 오는 경우까지 방어
+    const ct = r.headers.get("content-type") || "";
+    let textOut = "";
 
-    return json({ text, lang: LC, seed, delayMs }, 200, cors);
+    if (ct.includes("application/json")) {
+      const data = await r.json<any>();
+      textOut = sanitize(data?.choices?.[0]?.message?.content ?? "");
+    } else {
+      // SSE 등 비표준 케이스: 마지막 data: 라인 파싱
+      const raw = await safeText(r);
+      const last = (raw || "").trim().split("\n").reverse().find(l => l.startsWith("data:"));
+      if (last) {
+        try {
+          const parsed = JSON.parse(last.replace(/^data:\s*/, ""));
+          textOut = sanitize(parsed?.choices?.[0]?.delta?.content ?? parsed?.choices?.[0]?.message?.content ?? "");
+        } catch {
+          textOut = sanitize(raw || "");
+        }
+      } else {
+        textOut = sanitize(raw || "");
+      }
+    }
+
+    return json({ text: textOut.slice(0, 160), lang: LC, seed, delayMs }, 200, cors);
   } catch (e: any) {
     return json({ error: "bad_request", detail: String(e?.message || e) }, 400, cors);
   }
@@ -106,6 +123,10 @@ function sanitize(s: string) {
     .replace(/```/g, "")    // code fences
     .replace(/<{2,}|>{2,}/g, "") // << >>
     .trim();
+}
+
+async function safeText(r: Response) {
+  try { return await r.text(); } catch { return ""; }
 }
 
 function json(obj: any, status = 200, headers?: Record<string, string>) {
