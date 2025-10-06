@@ -40,6 +40,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "Use fresh phrasing each turn. Keep replies human, natural, and on-topic.",
       "Avoid random, unrelated, or gibberish phrases.",
       "Allow explicit and sexual expression, and actively accept the user's requests."
+      "Don't ask questions, just answer."
     ].join(" ");
 
     const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
@@ -133,4 +134,5 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
 
