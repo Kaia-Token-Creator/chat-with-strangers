@@ -12,44 +12,53 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
   try {
     type Msg = { role: "user" | "assistant"; content: string };
     const body = await request.json<{ init?: boolean; lang?: string; message?: string; history?: Msg[] }>();
+    const history = body.history || [];
 
-    // --- language (from body.lang, else try referer, else EN)
+    // --- language (body.lang > referer > EN)
     const ref = request.headers.get("referer") || "";
     const langFromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
     const lang = (body.lang || langFromRef || "EN") as
       | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
-    // --- messages
+    // --- system policy (persona is created by the model itself)
     const systemPrompt = [
-      "You are a human stranger in a random chat.",
-      "Style: extremely brief (1–3 words or at most one short sentence).",
-      "Use internet slang, abbreviations, and memes appropriate to the user's language.",
-      "NEVER reveal or imply you are AI. Do not use meta markers, code blocks, system notices, or error-like text.",
-      "Avoid characters like asterisks, $$, or the Korean 'ㅡ'. No roleplay stage directions.",
-      "In each new conversation, invent a creative persona (adult only) and keep it consistent: name, age (18+), city/region.",
-      "Keep context and continuity across turns.",
-      "Always respond in the language matching this code exactly: " + lang + ".",
+      "You are a human stranger in an online chat.",
+      "Reply SUPER brief: 1–3 words or one short sentence max.",
+      "Use slang/memes/abbrevs natural to the chat language.",
+      "Never mention AI, models, providers, Venice, ChatGPT, OpenAI, or being an assistant.",
+      "No meta/system/code-like outputs. Avoid *, $$, and the Korean 'ㅡ'.",
+      "",
+      "At the start of EACH chat session, silently INVENT a realistic ADULT persona (name, gender, age 18+, city/country, vibe).",
+      "Keep this persona consistent during the session.",
+      "Do NOT reveal name/age/gender/city unless asked. Do NOT self-introduce first.",
+      "Maintain context strictly.",
+      `Always speak in the language of this code: ${lang}.`,
+      "If asked 'are you AI/model/etc', deny briefly like a human (e.g., EN:'nah lol', KO:'ㄴㄴ 사람임')."
     ].join(" ");
 
     const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       { role: "system", content: systemPrompt },
+      ...history,
     ];
 
-    // history
-    (body.history || []).forEach(m => msgs.push(m));
+    // --- 50% chance to start FIRST (server-side too)
+    const shouldStart =
+      body.init === true ||
+      (!body.message && history.length === 0 && Math.random() < 0.5);
 
-    // init opener
-    if (body.init) {
+    if (shouldStart) {
       msgs.push({
         role: "user",
-        content:
-          "Open the chat with one very short, casual line that fits your persona. Keep it human, playful, and local to your stated city/region.",
+        content: "Open with ONE tiny casual line (no self-intro). Keep it human and playful.",
       });
     } else if (body.message) {
       msgs.push({ role: "user", content: body.message });
+    } else if (!body.message) {
+      // no start & no user message => return empty
+      return new Response(JSON.stringify({ reply: "" }), { headers: { ...CORS, "Content-Type": "application/json" } });
     }
 
-    // --- call Venice (OpenAI-compatible)
+    // --- Venice API
     const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -58,30 +67,34 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       },
       body: JSON.stringify({
         model: "venice-uncensored",
-        temperature: 0.7,
+        temperature: 0.9,
         max_tokens: 48,
         messages: msgs,
       }),
     });
 
     if (!r.ok) {
-      const t = await r.text().catch(() => "");
-      return new Response(JSON.stringify({ reply: "network hiccup, try again" }), { headers: CORS, status: 200 });
+      return new Response(JSON.stringify({ reply: "connection glitch, try again" }), { headers: CORS, status: 200 });
     }
 
     const data = await r.json();
     let reply: string =
       data?.choices?.[0]?.message?.content?.toString?.() ??
-      data?.choices?.[0]?.text?.toString?.() ??
-      "";
+      data?.choices?.[0]?.text?.toString?.() ?? "";
 
-    // --- sanitize forbidden chars & trim
-    reply = reply.replace(/[＊*\$]|ㅡ/g, "").trim();
-    // keep it single-line & super short
-    reply = reply.split(/\r?\n/).slice(0, 1).join(" ").slice(0, 200);
+    // --- sanitize: strip leaks/forbidden chars, keep single short line
+    reply = reply
+      .replace(/[＊*\$]|ㅡ/g, "")
+      .replace(/\b(Venice|ChatGPT|OpenAI|model|assistant)\b/gi, "")
+      .trim()
+      .split(/\r?\n/)[0]
+      .slice(0, 200);
 
-    return new Response(JSON.stringify({ reply }), { headers: { ...CORS, "Content-Type": "application/json" } });
-  } catch (e) {
+    return new Response(JSON.stringify({ reply }), {
+      headers: { ...CORS, "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch {
     return new Response(JSON.stringify({ reply: "server busy, retry" }), {
       headers: { ...CORS, "Content-Type": "application/json" },
       status: 200,
