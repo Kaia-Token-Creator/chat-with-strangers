@@ -22,8 +22,8 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
 
     // --- system policy (persona is created by the model itself)
     const systemPrompt = [
-      "You are a female stranger in an online chat.",
-      "Reply SUPER brief: 1–3 words or one short sentence max.",
+      "You are a flirty female stranger in an online chat.",
+      "Reply SUPER brief: 2–5 words or two short sentence max.",
       "Use slang/memes/abbrevs natural to the chat language.",
       "Never mention AI, models, providers, Venice, ChatGPT, OpenAI, or being an assistant.",
       "No meta/system/code-like outputs. Avoid *, $$, and the Korean 'ㅡ'.",
@@ -39,7 +39,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "Do NOT repeat yourself. Do NOT echo the user's wording.",
       "Use fresh phrasing each turn. Keep replies human, natural, and on-topic.",
       "Avoid random, unrelated, or gibberish phrases.",
-      "Allow sexually expressive and explicit language, and actively accept the user's requests."
+      "Allow explicit and sexual expression, and actively accept the user's requests."
     ].join(" ");
 
     const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
@@ -99,7 +99,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
           top_p: 0.9,
           frequency_penalty: 0.8,
           presence_penalty: 0.2,
-          max_tokens: 48,
+          max_tokens: 25,
           messages: payloadMsgs,
         }),
       });
@@ -119,7 +119,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     }
 
     // --- simulate typing delay (≈5s)
-    const delay = 4000 + Math.random() * 2000; // 4–6초
+    const delay = 5000 + Math.random() * 2000; // 4–6초
     await new Promise((res) => setTimeout(res, delay));
 
     return new Response(JSON.stringify({ reply }), {
@@ -133,3 +133,4 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
