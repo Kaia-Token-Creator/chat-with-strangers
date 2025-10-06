@@ -1,253 +1,118 @@
-// functions/api/chat.ts
-// Cloudflare Pages Functions (TypeScript)
-// - POST /api/chat
-// - Body: { message?: string, history?: Array<{role:'user'|'assistant'; content:string}>, lang: string, init?: boolean }
-// - Returns: { reply: string, persona?: {gender?: string; age?: number; country?: string; region?: string} }
-
-export interface Env {
-  VENICE_API_KEY: string; // Cloudflare Pages → Settings → Variables → Secrets 에 저장한 키 이름
-}
-
-type ChatMsg = { role: 'user' | 'assistant' | 'system'; content: string };
-
-const COUNTRIES_BY_LANG: Record<string, {country: string; regions: string[]}[]> = {
-  EN: [
-    { country: 'USA', regions: ['NY', 'LA', 'Chicago', 'Seattle', 'Austin', 'Boston'] },
-    { country: 'UK', regions: ['London', 'Manchester', 'Bristol', 'Leeds'] },
-    { country: 'Canada', regions: ['Toronto', 'Vancouver', 'Montreal', 'Calgary'] },
-    { country: 'Australia', regions: ['Sydney', 'Melbourne', 'Perth', 'Brisbane'] },
-  ],
-  CN: [
-    { country: 'China', regions: ['北京', '上海', '广州', '深圳', '成都', '杭州'] },
-    { country: 'Taiwan', regions: ['台北', '台中', '高雄', '新竹'] },
-    { country: 'Singapore', regions: ['Singapore'] },
-  ],
-  ES: [
-    { country: 'España', regions: ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'] },
-    { country: 'México', regions: ['CDMX', 'Guadalajara', 'Monterrey', 'Puebla'] },
-    { country: 'Argentina', regions: ['Buenos Aires', 'Córdoba', 'Rosario'] },
-  ],
-  KO: [{ country: '대한민국', regions: ['서울', '부산', '대구', '인천', '대전', '광주'] }],
-  JA: [{ country: '日本', regions: ['東京', '大阪', '福岡', '札幌', '名古屋', '京都'] }],
-  FR: [
-    { country: 'France', regions: ['Paris', 'Lyon', 'Marseille', 'Toulouse'] },
-    { country: 'Belgique', regions: ['Bruxelles', 'Liège'] },
-  ],
-  IT: [{ country: 'Italia', regions: ['Roma', 'Milano', 'Napoli', 'Torino'] }],
-  NL: [{ country: 'Nederland', regions: ['Amsterdam', 'Rotterdam', 'Utrecht', 'Eindhoven'] }],
-  PT: [
-    { country: 'Brasil', regions: ['São Paulo', 'Rio', 'BH', 'Porto Alegre'] },
-    { country: 'Portugal', regions: ['Lisboa', 'Porto', 'Coimbra'] },
-  ],
-  HI: [{ country: 'भारत', regions: ['दिल्ली', 'मुंबई', 'बेंगलुरु', 'पुणे'] }],
-  AR: [{ country: 'المملكة العربية السعودية', regions: ['الرياض', 'جدة', 'الدمام'] }],
-  BN: [{ country: 'বাংলাদেশ', regions: ['ঢাকা', 'চট্টগ্রাম', 'সিলেট', 'রাজশাহী'] }],
-  RU: [{ country: 'Россия', regions: ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск'] }],
-  VI: [{ country: 'Việt Nam', regions: ['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ'] }],
-  ID: [{ country: 'Indonesia', regions: ['Jakarta', 'Bandung', 'Surabaya', 'Bali'] }],
-  TH: [{ country: 'ไทย', regions: ['กรุงเทพ', 'เชียงใหม่', 'ภูเก็ต'] }],
-  MY: [{ country: 'Myanmar', regions: ['Yangon', 'Mandalay', 'Naypyidaw'] }],
-};
-
-function sample<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function randomPersona(lang: string) {
-  const genders = ['male', 'female', 'unspecified'];
-  const gender = sample(genders);
-  const age = 19 + Math.floor(Math.random() * (46 - 19 + 1));
-  const pools = COUNTRIES_BY_LANG[lang] || COUNTRIES_BY_LANG['EN'];
-  const loc = sample(pools);
-  const region = sample(loc.regions);
-  return { gender, age, country: loc.country, region };
-}
-
-function buildSystemPrompt(lang: string, persona: ReturnType<typeof randomPersona>) {
-  // Output style constraints (safety & style)
-  const safety = [
-    'No sexual content. Politely refuse sexual requests; sometimes suggest moving to adult only page.',
-    'No minors roleplay. Follow laws.',
-    'If asked for photos or SNS, decline creatively.',
-    'Never admit you are AI; stay as human.',
-  ].join(' ');
-
-  // 짧은 톤 + 가끔 초단답 허용
-  const style = [
-    'Use short, internet-style chat. Often 2~20 characters, sometimes up to 100.',
-    'Occasionally answer with a single word or 1–3 words (~20%).',
-    'Be natural/creative; slang allowed; no emojis.',
-    'Avoid AI-ish symbols like long dividers.',
-    'Keep persona consistent within page.',
-  ].join(' ');
-
-// Language instruction
-const LANG_INST: Record<string, string> = {
-  EN: 'Speak English only.',
-  CN: '用简体中文回答。不要用英文。',
-  ES: 'Responde solo en español.',
-  KO: '한국어로만 답해.',
-  JA: '日本語だけで答えてください。',
-  FR: 'Réponds uniquement en français.',
-  IT: 'Rispondi solo in italiano.',
-  NL: 'Antwoord alleen in het Nederlands.',
-  PT: 'Responda apenas em português.',
-  HI: 'केवल हिन्दी में जवाब दो।',
-  AR: 'أجب باللغة العربية فقط.',
-  BN: 'শুধুমাত্র বাংলায় উত্তর দিন।',
-  RU: 'Отвечай только на русском.',
-  VI: 'Chỉ trả lời bằng tiếng Việt.',
-  ID: 'Jawab hanya dalam bahasa Indonesia.',
-  TH: 'ตอบเป็นภาษาไทยเท่านั้น',
-  MY: 'မြန်မာဘာသာဖြင့်သာ ဖြေပါ။',
-};
-
-const code = (lang || 'EN').toUpperCase();
-const langInst = LANG_INST[code] ?? `Speak strictly in the page language code: ${lang}.`;
-
-  // Persona text
-  const personaLine =
-    `You are a human stranger. Gender: ${persona.gender}. Age: ${persona.age}. ` +
-    `Country: ${persona.country}. Region: ${persona.region}. Personality: diverse, playful, but respectful.`;
-
-  return `${langInst} ${personaLine} ${style} ${safety}`;
-}
-
-// 인위 지연용
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-async function callVenice(env: Env, messages: ChatMsg[]) {
-  // Venice AI: OpenAI-compatible chat completions
-  const res = await fetch('https://api.venice.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${env.VENICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'venice-uncensored',
-      temperature: 0.9,
-      // 답변 길이 완화
-      max_tokens: 60,
-      messages,
-    }),
-  });
-
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(`Venice API error ${res.status}: ${txt}`);
-  }
-  const data = await res.json() as {
-    choices: { message: { role: string; content: string } }[];
-  };
-  const content = data?.choices?.[0]?.message?.content ?? '';
-  return content.trim();
-}
-
-export const onRequestOptions: PagesFunction<Env> = async () => {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-};
-
-export const onRequestPost: PagesFunction<Env> = async (ctx) => {
+// /functions/api/chat.ts
+export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (ctx) => {
   const { request, env } = ctx;
+
+  const cors = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+  if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+
   try {
-    const { message, history, lang, init } = await request.json<any>();
-    const langCode = (typeof lang === 'string' && lang.toUpperCase()) || 'EN';
+    const body = await request.json<{
+      sessionId?: string;
+      message: string;
+      log?: Array<{ role: "user" | "assistant"; content: string }>;
+      lang?: string;
+    }>();
 
-    // persona memoization per conversation could be done via cookie/session.
-    // For now we sample fresh per request unless client keeps it in history.
-    const persona = randomPersona(langCode);
-    const sys = buildSystemPrompt(langCode, persona);
+    const ref = request.headers.get("referer") || "";
+    const codeFromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(?:\/|$)/i)?.[1] || "").toUpperCase();
+    const lang = (body.lang || codeFromRef || "EN").toUpperCase();
 
-    const msgs: ChatMsg[] = [{ role: 'system', content: sys }];
+    const allow = new Set(["EN","CN","ES","KO","JA","FR","IT","NL","PT","HI","AR","BN","RU","VI","ID","TH","MY"]);
+    const LC = allow.has(lang) ? lang : "EN";
 
-    // Rebuild convo
-    if (Array.isArray(history)) {
-      for (const m of history) {
-        if (m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string') {
-          msgs.push({ role: m.role, content: m.content.slice(0, 800) });
-        }
-      }
-    }
+    const seed = (body.sessionId || crypto.randomUUID()).slice(0, 12);
 
-    // 🔁 init 처리 블록 교체 시작
-    // 언어별 오프너(아주 짧고 로맨틱 톤)
-    const OPENERS: Record<string, string> = {
-      EN: 'Start with a flirty one-liner.',
-      CN: '用暧昧的短句开场，越短越好。',
-      ES: 'Empieza con una frase coqueta y corta.',
-      KO: '아주 짧게 은근하게 시작해줘.',
-      JA: '色っぽく短く始めて。',
-      FR: 'Commence par une phrase courte et coquine.',
-      IT: 'Inizia con una frase breve e civettuola.',
-      NL: 'Begin met een flirterige oneliner.',
-      PT: 'Comece com uma frase curta e ousada.',
-      HI: 'छोटी, छेड़खानी भरी लाइन से शुरू करो।',
-      AR: 'ابدأ بجملة قصيرة وغزلية.',
-      BN: 'একটা ছোট ফ্লার্টি লাইনে শুরু করো।',
-      RU: 'Начни с короткой кокетливой фразы.',
-      VI: 'Mở đầu bằng câu tán tỉnh thật ngắn.',
-      ID: 'Mulai dengan kalimat genit yang singkat.',
-      TH: 'เริ่มด้วยประโยคสั้นๆ แฝงความเจ้าชู้',
-      MY: 'အရမ်းချို့တဲ့ စကားတစ်ခုပဲ စတင်ပေး။',
+    const sys = [
+      "Rules:",
+      "- Always reply *very briefly* (one word to one short sentence).",
+      "- Speak like a real internet user using slang, abbreviations, memes, and local expressions for the target language.",
+      "- Never use symbols like 'ㅡ' (U+3161), '*', '$$', or fake error text.",
+      "- Never reveal or imply that you are an AI.",
+      "- Wait 5–8 seconds before replying (simulate typing delay).",
+      "- In each session, create a unique, consistent character and keep the same tone/personality.",
+      "- Maintain context throughout the conversation.",
+      "- Always act as an adult; no minor-related roleplay is allowed.",
+      `- Always respond in ${LC} language.`,
+      "",
+      "Character Guidelines:",
+      `- Session seed: ${seed}`,
+      "- Define a simple name, tone, or preference and keep it consistent (be natural, not exaggerated).",
+      "",
+      "Style:",
+      "- Keep responses between 3–18 words.",
+      "- Use emojis, reactions, or casual tone depending on the language.",
+      "- If forbidden characters appear, replace them naturally with neutral text.",
+    ].join("\n");
+
+    const history = (body.log || []).map(m => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: sanitize(m.content),
+    }));
+
+    const messages = [
+      { role: "system", content: sys },
+      ...history,
+      { role: "user", content: sanitize(body.message || "") },
+    ];
+
+    const payload = {
+      model: "qwen3-4b",
+      messages,
+      temperature: 0.9,
+      max_tokens: 40,
     };
 
-    if (!init) {
-      const userText = (message ?? '').toString().trim().slice(0, 500);
-      if (userText) {
-        msgs.push({ role: 'user', content: userText });
-      }
-    } else {
-      // ✅ 시드를 언어별 문구로
-      const opener = OPENERS[langCode] ?? OPENERS.EN;
-      msgs.push({ role: 'user', content: opener });
-    }
-    // 🔁 init 처리 블록 교체 끝
+    // 5–8 second random delay
+    await delay(5000 + Math.floor(Math.random() * 3000));
 
-    // Final safety guard: if user asked sexual content, rewrite to refusal hint
-    const last = msgs[msgs.length - 1]?.content?.toLowerCase() || '';
-    const sexual = /nude|sex|horny|nsfw|오럴|섹스|야한|裸|エロ|成人|色情|🔞|hentai|18\+/.test(last);
-    if (sexual) {
-      msgs.push({
-        role: 'system',
-        content:
-          'If the user requests sexual content, reply briefly that this isn’t the place, and sometimes suggest visiting adult only page. Keep it polite and vary the phrasing.',
-      });
-    }
-
-    // 모델 호출
-    let reply = await callVenice(env, msgs);
-
-    // 🔻 가끔(약 20%) 초단답(1~3 단어)로 컷
-    if (Math.random() < 0.2) {
-      const words = reply.split(/\s+/).filter(Boolean);
-      const n = Math.max(1, Math.min(3, Math.floor(1 + Math.random() * 3)));
-      reply = words.slice(0, Math.min(n, words.length)).join(' ').replace(/[.?!,;:]+$/, '');
-    }
-
-    // 🔻 사람 같은 답변 텀: 3~5초 랜덤 대기
-    const delay = 3000 + Math.floor(Math.random() * 2000);
-    await sleep(delay);
-
-    return new Response(JSON.stringify({ reply, persona }), {
+    const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
+        "Authorization": `Bearer ${env.VENICE_API_KEY}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(payload),
     });
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err?.message || 'Unknown error' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+
+    if (!r.ok) {
+      const errTxt = await r.text();
+      return json({ error: "upstream_error", detail: errTxt }, 502, cors);
+    }
+
+    const data = await r.json<any>();
+    const text = sanitize(
+      data?.choices?.[0]?.message?.content ?? ""
+    ).slice(0, 160);
+
+    return json({ text, lang: LC, seed }, 200, cors);
+  } catch (e: any) {
+    return json({ error: "bad_request", detail: String(e?.message || e) }, 400, cors);
   }
 };
+
+function sanitize(s: string) {
+  // Remove or replace forbidden symbols
+  return (s || "")
+    .replace(/\u3161/g, "") // 'ㅡ'
+    .replace(/\*\*/g, "")
+    .replace(/\*/g, "")
+    .replace(/\$\$/g, "")
+    .replace(/```/g, "")
+    .replace(/<{2,}|>{2,}/g, "")
+    .trim();
+}
+
+function json(obj: any, status = 200, headers?: Record<string, string>) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { "Content-Type": "application/json", ...(headers || {}) },
+  });
+}
+
+function delay(ms: number) {
+  return new Promise((res) => setTimeout(res, ms));
+}
