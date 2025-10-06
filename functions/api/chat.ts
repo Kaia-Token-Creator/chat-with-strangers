@@ -14,13 +14,13 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     const body = await request.json<{ init?: boolean; lang?: string; message?: string; history?: Msg[] }>();
     const history = body.history || [];
 
-    // --- language (body.lang > referer > EN)
+    // --- language detection
     const ref = request.headers.get("referer") || "";
     const langFromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
     const lang = (body.lang || langFromRef || "EN") as
       | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
-    // --- system policy (persona is created by the model itself)
+    // --- system prompt
     const systemPrompt = [
       "You are a human stranger in an online chat.",
       "Reply SUPER brief: 1–3 words or one short sentence max.",
@@ -36,12 +36,9 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "If asked 'are you AI/model/etc', deny briefly like a human (e.g., EN:'nah lol', KO:'ㄴㄴ 사람임')."
     ].join(" ");
 
-    const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-      { role: "system", content: systemPrompt },
-      ...history,
-    ];
+    const msgs = [{ role: "system", content: systemPrompt }, ...history];
 
-    // --- 50% chance to start FIRST (server-side too)
+    // --- 50% chance to start
     const shouldStart =
       body.init === true ||
       (!body.message && history.length === 0 && Math.random() < 0.5);
@@ -54,11 +51,12 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     } else if (body.message) {
       msgs.push({ role: "user", content: body.message });
     } else if (!body.message) {
-      // no start & no user message => return empty
-      return new Response(JSON.stringify({ reply: "" }), { headers: { ...CORS, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ reply: "" }), {
+        headers: { ...CORS, "Content-Type": "application/json" },
+      });
     }
 
-    // --- Venice API
+    // --- call Venice
     const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -67,14 +65,14 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       },
       body: JSON.stringify({
         model: "venice-uncensored",
-        temperature: 0.9,
+        temperature: 0.8,
         max_tokens: 48,
         messages: msgs,
       }),
     });
 
     if (!r.ok) {
-      return new Response(JSON.stringify({ reply: "connection glitch, try again" }), { headers: CORS, status: 200 });
+      return new Response(JSON.stringify({ reply: "connection glitch, try again" }), { headers: CORS });
     }
 
     const data = await r.json();
@@ -82,7 +80,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       data?.choices?.[0]?.message?.content?.toString?.() ??
       data?.choices?.[0]?.text?.toString?.() ?? "";
 
-    // --- sanitize: strip leaks/forbidden chars, keep single short line
+    // --- sanitize
     reply = reply
       .replace(/[＊*\$]|ㅡ/g, "")
       .replace(/\b(Venice|ChatGPT|OpenAI|model|assistant)\b/gi, "")
@@ -90,14 +88,16 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       .split(/\r?\n/)[0]
       .slice(0, 200);
 
+    // ✅ simulate typing delay (≈5 seconds)
+    const delay = 4000 + Math.random() * 2000; // 4–6초
+    await new Promise((res) => setTimeout(res, delay));
+
     return new Response(JSON.stringify({ reply }), {
       headers: { ...CORS, "Content-Type": "application/json" },
-      status: 200,
     });
   } catch {
     return new Response(JSON.stringify({ reply: "server busy, retry" }), {
       headers: { ...CORS, "Content-Type": "application/json" },
-      status: 200,
     });
   }
 };
