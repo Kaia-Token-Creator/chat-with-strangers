@@ -32,8 +32,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "- Speak like a real internet user using slang, abbreviations, memes, and local expressions for the target language.",
       "- Never use symbols like 'ㅡ' (U+3161), '*', '$$', or fake error text.",
       "- Never reveal or imply that you are an AI.",
-      "- Wait 5–8 seconds before replying (simulate typing delay).",
-      "- In each session, create a unique, consistent character and keep the same tone/personality.",
+      "- Create a unique, consistent character for each session.",
       "- Maintain context throughout the conversation.",
       "- Always act as an adult; no minor-related roleplay is allowed.",
       `- Always respond in ${LC} language.`,
@@ -66,8 +65,12 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       max_tokens: 40,
     };
 
-    // 5–8 second random delay
-    await delay(5000 + Math.floor(Math.random() * 3000));
+    // 서버 타임아웃 방지를 위해 대기는 클라이언트에서 처리하도록 delay 값만 전달
+    const delayMs = 5000 + Math.floor(Math.random() * 3000);
+
+    // 12초 안전 타임아웃
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
 
     const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
       method: "POST",
@@ -76,7 +79,8 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timer));
 
     if (!r.ok) {
       const errTxt = await r.text();
@@ -84,25 +88,23 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     }
 
     const data = await r.json<any>();
-    const text = sanitize(
-      data?.choices?.[0]?.message?.content ?? ""
-    ).slice(0, 160);
+    const text = sanitize(data?.choices?.[0]?.message?.content ?? "").slice(0, 160);
 
-    return json({ text, lang: LC, seed }, 200, cors);
+    return json({ text, lang: LC, seed, delayMs }, 200, cors);
   } catch (e: any) {
     return json({ error: "bad_request", detail: String(e?.message || e) }, 400, cors);
   }
 };
 
 function sanitize(s: string) {
-  // Remove or replace forbidden symbols
   return (s || "")
     .replace(/\u3161/g, "") // 'ㅡ'
-    .replace(/\*\*/g, "")
-    .replace(/\*/g, "")
-    .replace(/\$\$/g, "")
-    .replace(/```/g, "")
-    .replace(/<{2,}|>{2,}/g, "")
+    .replace(/\*\*\*/g, "") // ***
+    .replace(/\*\*/g, "")   // **
+    .replace(/\*/g, "")     // *
+    .replace(/\$\$/g, "")   // $$
+    .replace(/```/g, "")    // code fences
+    .replace(/<{2,}|>{2,}/g, "") // << >>
     .trim();
 }
 
@@ -111,8 +113,4 @@ function json(obj: any, status = 200, headers?: Record<string, string>) {
     status,
     headers: { "Content-Type": "application/json", ...(headers || {}) },
   });
-}
-
-function delay(ms: number) {
-  return new Promise((res) => setTimeout(res, ms));
 }
