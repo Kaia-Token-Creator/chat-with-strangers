@@ -89,7 +89,7 @@ Output constraints:
     }
 
     // --- call Venice AI (OpenAI-compatible chat completions)
-    const apiUrl = "https://api.venice.ai/v1/chat/completions";
+    const apiUrl = "https://api.venice.ai/api/v1/chat/completions";
     const payload = {
       model: "qwen3-4b",
       messages,
@@ -139,3 +139,4 @@ Output constraints:
     return new Response(JSON.stringify({ reply: "retry?" }), { headers: { "Content-Type": "application/json", ...CORS }, status: 200 });
   }
 };
+
