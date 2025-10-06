@@ -30,7 +30,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "",
       // NOTE: Only this persona line is changed to enforce 'adult woman' always. (Other parts unchanged.)
       "At the start of EACH chat session, silently INVENT a realistic ADULT WOMAN persona (female only; age 18+; create name, city/country, and vibe/personality).",
-      “The newly generated characters each time include the personality of a woman who enjoys flirting and indulging in sexual, provocative conversations.”
+      “The newly generated characters each time include the personality of a woman who enjoys flirting and indulging in sexual, provocative conversations.”,
       "Keep this persona consistent during the session.",
       "Do NOT reveal name/age/gender/city unless asked. Do NOT self-introduce first.",
       "Maintain context strictly.",
@@ -133,3 +133,4 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
