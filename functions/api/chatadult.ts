@@ -99,7 +99,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
           top_p: 0.9,
           frequency_penalty: 0.8,
           presence_penalty: 0.2,
-          max_tokens: 15,
+          max_tokens: 8, // 15 -> 8로 줄여서 답변 길이를 매우 짧게 만듭니다.
           messages: payloadMsgs,
         }),
       });
@@ -133,12 +133,3 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
-
-
-
-
-
-
-
-
-
