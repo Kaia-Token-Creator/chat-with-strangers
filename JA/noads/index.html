@@ -64,8 +64,6 @@
   .btn {
     padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
   }
-  .btn.secondary { background:#fff; color:#000; }
-  /* 「広告なし」ボタンスタイル再利用（ビデオ通話ラベル） */
   .btn.noads {
     background: var(--hotpink);
     color: #000;
@@ -113,8 +111,6 @@
 <main>
   <div class="toolbar">
     <button class="btn" id="newChatBtn">新しいチャット</button>
-    <!-- ボタンテキ스트のみ変更: ビデオ通話 -->
-    <button class="btn noads" id="noAdsBtn">ビデオ通話</button>
     <button class="btn secondary" id="shareBtn">共有</button>
   </div>
 
@@ -244,13 +240,10 @@
     if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
   });
 
-  // ビデオ通話（広告なしボタン）クリック時：新規タブでリンクを開く
-  noAdsBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
 </script>
 </body>
 
 </html>
+
 
 
