@@ -74,13 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* ปุ่ม “วิดีโอคอล”: ชมพูอ่อน */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
-
+ 
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
   }
@@ -123,7 +117,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">กลุ่ม TG เพื่อนทั่วโลก</a>
       <a href="https://2048global.com/TH/vpn" target="_blank" rel="noopener">ท่องโลกแบบไม่ระบุตัวตน</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">เทรดคริปโต</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">พบสาวใหม่</a>
     </nav>
   </div>
 </header>
@@ -133,25 +126,9 @@
     <button class="btn" id="newChatBtn">เริ่มแชทใหม่</button>
     <!-- adults only → no ads -->
     <button class="btn noads" id="noAdsBtn">ไม่มีโฆษณา</button>
-    <!-- ▼ วิดีโอคอล -->
-    <button class="btn videocall" id="videoBtn">วิดีโอคอล</button>
     <button class="btn secondary" id="shareBtn">แชร์</button>
   </div>
 
-<!-- ▼ แบนเนอร์ระหว่างทูลบาร์กับแชท (468x60) -->
-  <div class="ad-slot" aria-label="สปอนเซอร์ แบนเนอร์กลาง">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ จบแบนเนอร์ -->
 
   <div id="chat" class="chat" aria-live="polite" aria-label="หน้าต่างแชท">
     <!-- lines appear here -->
@@ -164,24 +141,6 @@
 
 </main>
 
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -205,7 +164,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // 추가
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -326,10 +284,6 @@
     payModal.showModal();
   });
 
-  // วิดีโอคอล: เปิดลิงก์ในแท็บใหม่
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
 
   // แสดงปุ่ม PayPal
   window.addEventListener('load', () => {
@@ -353,3 +307,4 @@
 </body>
 
 </html>
+
