@@ -74,13 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* video call 버튼: 연핑크 배경 + 검은 텍스트 */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
-
+  
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
   }
@@ -123,7 +117,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">গ্লোবাল ফ্রেন্ডস টিজি গ্রুপ</a>
       <a href="https://2048global.com/BN/vpn" target="_blank" rel="noopener">গোপনীয়ভাবে বিশ্ব অন্বেষণ করুন</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">ক্রিপ্টো ট্রেডিং</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">নতুন মেয়েদের সাথে পরিচিত হন</a>
     </nav>
   </div>
 </header>
@@ -133,8 +126,6 @@
     <button class="btn" id="newChatBtn">নতুন চ্যাট</button>
     <!-- adults only → no ads -->
     <button class="btn noads" id="noAdsBtn">বিজ্ঞাপন নেই</button>
-    <!-- ▼ 추가: video call 버튼 -->
-    <button class="btn videocall" id="videoBtn">ভিডিও কল</button>
     <button class="btn secondary" id="shareBtn">শেয়ার</button>
   </div>
 
@@ -164,24 +155,6 @@
 
 </main>
 
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168ব0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3ব4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -205,7 +178,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // 추가
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -325,11 +297,6 @@
     payModal.showModal();
   });
 
-  // video call 클릭 시: 새 창에서 링크 열기
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
-
   // PayPal Buttons 렌더
   window.addEventListener('load', () => {
     if (window.paypal && document.getElementById('paypal-buttons')) {
@@ -352,3 +319,4 @@
 </body>
 
 </html>
+
