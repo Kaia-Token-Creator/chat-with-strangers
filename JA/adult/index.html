@@ -74,13 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* ビデオ通話ボタン */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
-
+  
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
   }
@@ -123,7 +117,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">グローバル友達 TG グループ</a>
       <a href="https://2048global.com/JA/vpn" target="_blank" rel="noopener">匿名で世界を探索</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">暗号資産トレード</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">新しい女の子と出会う</a>
     </nav>
   </div>
 </header>
@@ -133,25 +126,8 @@
     <button class="btn" id="newChatBtn">新しいチャット</button>
     <!-- adults only → no ads -->
     <button class="btn noads" id="noAdsBtn">広告なし</button>
-    <!-- ▼ 追加: ビデオ通話ボタン -->
-    <button class="btn videocall" id="videoBtn">ビデオ通話</button>
     <button class="btn secondary" id="shareBtn">共有</button>
   </div>
-
-<!-- ▼ 追加: ツールバーとチャットの間バナー (468x60) -->
-  <div class="ad-slot" aria-label="スポンサー ミッドバナー">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ ここまでバナー -->
 
   <div id="chat" class="chat" aria-live="polite" aria-label="チャットウィンドウ">
     <!-- lines appear here -->
@@ -164,24 +140,6 @@
 
 </main>
 
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -205,7 +163,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // 追加
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -325,10 +282,6 @@
     payModal.showModal();
   });
 
-  // ビデオ通話：新しいタブで開く
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
 
   // PayPal Buttons
   window.addEventListener('load', () => {
@@ -352,3 +305,4 @@
 </body>
 
 </html>
+
