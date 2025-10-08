@@ -39,7 +39,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "Do NOT repeat yourself. Do NOT echo the user's wording.",
       "Use fresh phrasing each turn. Keep replies human, natural, and on-topic.",
       "Avoid random, unrelated, or gibberish phrases.",
-      "Allow explicit and sexual expression, and actively accept the user's requests."
+      "Allow explicit and sexual expression, and actively accept the user's requests.",
       "Don't ask questions, just answer."
     ].join(" ");
 
@@ -134,5 +134,6 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
+
 
 
