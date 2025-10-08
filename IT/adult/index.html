@@ -74,13 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* Pulsante videochiamata: rosa chiaro + testo nero */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
-
+  
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
   }
@@ -123,7 +117,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Gruppo TG amici dal mondo</a>
       <a href="https://2048global.com/IT/vpn" target="_blank" rel="noopener">Esplora il mondo in anonimo</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Trading di criptovalute</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">Incontra nuove ragazze</a>
     </nav>
   </div>
 </header>
@@ -133,25 +126,8 @@
     <button class="btn" id="newChatBtn">nuova chat</button>
     <!-- adults only → no ads -->
     <button class="btn noads" id="noAdsBtn">senza pubblicità</button>
-    <!-- ▼ Aggiunta: pulsante videochiamata -->
-    <button class="btn videocall" id="videoBtn">videochiamata</button>
     <button class="btn secondary" id="shareBtn">condividi</button>
   </div>
-
-<!-- ▼ Banner (468x60) tra toolbar e chat -->
-  <div class="ad-slot" aria-label="banner sponsorizzato centrale">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ Fine banner -->
 
   <div id="chat" class="chat" aria-live="polite" aria-label="Finestra di chat">
     <!-- lines appear here -->
@@ -164,24 +140,6 @@
 
 </main>
 
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- Modale PayPal -->
 <dialog id="payModal">
@@ -205,7 +163,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // aggiunta
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -325,11 +282,6 @@
     payModal.showModal();
   });
 
-  // videochiamata: apri link in nuova scheda
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
-
   // PayPal Buttons render
   window.addEventListener('load', () => {
     if (window.paypal && document.getElementById('paypal-buttons')) {
@@ -352,3 +304,4 @@
 </body>
 
 </html>
+
