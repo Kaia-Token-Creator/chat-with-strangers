@@ -72,11 +72,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
+
 
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
@@ -109,7 +105,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">ကမ္ဘာလုံးဆိုင်ရာ မိတ်သူများ Telegram အုပ်</a>
       <a href="https://2048global.com/MYA/vpn" target="_blank" rel="noopener">အမည်မဖော်ဘဲ ကမ္ဘာလုံးကို ရှာဖွေပါ</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Crypto ရောင်းဝယ်ရေး</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">အမျိုးသမီးအသစ်တွေကို တွေ့ပါ</a>
     </nav>
   </div>
 </header>
@@ -118,25 +113,10 @@
   <div class="toolbar">
     <button class="btn" id="newChatBtn">စကားဝိုင်းအသစ်</button>
     <button class="btn noads" id="noAdsBtn">ကြော်ညာမရှိ</button>
-    <button class="btn videocall" id="videoBtn">ဗီဒီယိုခေါ်ဆိုမှု</button>
     <button class="btn secondary" id="shareBtn">မျှဝေ</button>
   </div>
 
-  <!-- ▼ toolbar နှင့် chat အကြား ဘန်နာ (468x60) -->
-  <div class="ad-slot" aria-label="ပံ့ပိုးကူညီ အလယ်ဘန်နာ">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ 여기까지 배너 -->
-
+ 
   <div id="chat" class="chat" aria-live="polite" aria-label="စကားပြော ဝင်းဒိုး">
     <!-- lines appear here -->
   </div>
@@ -147,25 +127,6 @@
   </div>
 
 </main>
-
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -189,7 +150,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // 추가
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -310,10 +270,6 @@
     payModal.showModal();
   });
 
-  // video call 클릭 시: 새 창에서 링크 열기
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
 
   // PayPal Buttons 렌더
   window.addEventListener('load', () => {
@@ -337,3 +293,4 @@
 </body>
 
 </html>
+
