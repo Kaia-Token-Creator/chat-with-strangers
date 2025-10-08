@@ -74,12 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* video call 버튼: 연핑크 배경 + 검은 텍스트 */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
+  
 
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
@@ -123,7 +118,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">全球朋友 TG 群</a>
       <a href="https://2048global.com/CN/vpn" target="_blank" rel="noopener">匿名探索全球</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">加密交易</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">结识新女生</a>
     </nav>
   </div>
 </header>
@@ -133,25 +127,8 @@
     <button class="btn" id="newChatBtn">开始新聊天</button>
     <!-- adults only → no ads -->
     <button class="btn noads" id="noAdsBtn">去广告</button>
-    <!-- ▼ 추가: video call 버튼 -->
-    <button class="btn videocall" id="videoBtn">视频通话</button>
     <button class="btn secondary" id="shareBtn">分享</button>
   </div>
-
-<!-- ▼ 여기 추가: toolbar와 chat 사이 배너 (468x60) -->
-  <div class="ad-slot" aria-label="中部赞助横幅">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ 여기까지 배너 -->
 
   <div id="chat" class="chat" aria-live="polite" aria-label="聊天窗口">
     <!-- lines appear here -->
@@ -163,25 +140,6 @@
   </div>
 
 </main>
-
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -205,7 +163,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // 추가
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -325,11 +282,7 @@
     payModal.showModal();
   });
 
-  // video call 클릭 시: 새 창에서 링크 열기
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
-
+ 
   // PayPal Buttons 렌더
   window.addEventListener('load', () => {
     if (window.paypal && document.getElementById('paypal-buttons')) {
@@ -352,3 +305,4 @@
 </body>
 
 </html>
+
