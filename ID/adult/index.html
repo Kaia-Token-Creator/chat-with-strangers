@@ -74,13 +74,7 @@
     color: #000;
     border-color: var(--hotpink);
   }
-  /* tombol panggilan video */
-  .btn.videocall {
-    background: #ffc0cb;
-    color: #000;
-    border-color: #ffc0cb;
-  }
-
+ 
   .chat {
     flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
   }
@@ -123,7 +117,6 @@
       <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Grup TG teman global</a>
       <a href="https://2048global.com/ID/vpn" target="_blank" rel="noopener">Jelajahi dunia secara anonim</a>
       <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Perdagangkan kripto</a>
-      <a href="https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c" target="_blank" rel="noopener">Temui gadis baru</a>
     </nav>
   </div>
 </header>
@@ -133,25 +126,9 @@
     <button class="btn" id="newChatBtn">obrolan baru</button>
     <!-- tanpa iklan -->
     <button class="btn noads" id="noAdsBtn">tanpa iklan</button>
-    <!-- tombol panggilan video -->
-    <button class="btn videocall" id="videoBtn">panggilan video</button>
     <button class="btn secondary" id="shareBtn">bagikan</button>
   </div>
 
-<!-- Banner 468x60 di antara toolbar dan chat -->
-  <div class="ad-slot" aria-label="spanduk tengah bersponsor">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- akhir banner -->
 
   <div id="chat" class="chat" aria-live="polite" aria-label="Jendela obrolan">
     <!-- lines appear here -->
@@ -163,25 +140,6 @@
   </div>
 
 </main>
-
-<footer>
-
-<script type='text/javascript' src='//pl27787581.revenuecpmgate.com/86/bb/e5/86bbe5b6649a5d1b4ad9a3ed2a867bfb.js'></script>
-
-<script type='text/javascript' src='//pl27787577.revenuecpmgate.com/51/61/0e/51610e60535666b76168b0e4aeb44ef0.js'></script>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-
-</footer>
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
@@ -205,7 +163,6 @@
   const sendBtn = document.getElementById('sendBtn');
   const newChatBtn = document.getElementById('newChatBtn');
   const noAdsBtn = document.getElementById('noAdsBtn');
-  const videoBtn = document.getElementById('videoBtn'); // tambahan
   const shareBtn = document.getElementById('shareBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -326,10 +283,6 @@
     payModal.showModal();
   });
 
-  // klik "panggilan video": buka tautan di tab baru
-  videoBtn.addEventListener('click', () => {
-    window.open('https://www.revenuecpmgate.com/bz3z3wee?key=0ad8f68c538dea390f83236ea0025e6c', '_blank', 'noopener');
-  });
 
   // Render PayPal Buttons
   window.addEventListener('load', () => {
@@ -353,3 +306,4 @@
 </body>
 
 </html>
+
