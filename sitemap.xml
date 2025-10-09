@@ -4,67 +4,68 @@
 
   <!-- 메인 페이지 -->
   <url>
-    <loc>https://chat-with-strangers.com/</loc>
+    <loc>https://chat-with-stranger.com/</loc>
     <lastmod>2025-10-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- 1차 하위 언어 페이지 -->
-  <url><loc>https://chat-with-strangers.com/AR/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/BN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/CN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/EN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/ES/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/FR/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/HI/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/ID/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/IT/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/JA/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/KO/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/MY/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/NL/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/PT/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/RU/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/TH/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://chat-with-strangers.com/VI/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/AR/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/BN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/CN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/EN/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/ES/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/FR/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/HI/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/ID/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/IT/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/JA/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/KO/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/MY/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/NL/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/PT/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/RU/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/TH/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://chat-with-stranger.com/VI/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- female 하위 페이지 -->
-  <url><loc>https://chat-with-strangers.com/AR/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/BN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/CN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/EN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/ES/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/FR/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/HI/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/ID/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/IT/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/JA/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/KO/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/MY/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/NL/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/PT/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/RU/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/TH/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://chat-with-strangers.com/VI/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/AR/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/BN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/CN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/EN/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/ES/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/FR/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/HI/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/ID/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/IT/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/JA/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/KO/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/MY/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/NL/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/PT/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/RU/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/TH/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://chat-with-stranger.com/VI/female/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
 
   <!-- noads 하위 페이지 -->
-  <url><loc>https://chat-with-strangers.com/AR/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/BN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/CN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/EN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/ES/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/FR/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/HI/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/ID/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/IT/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/JA/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/KO/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/MY/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/NL/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/PT/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/RU/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/TH/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://chat-with-strangers.com/VI/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/AR/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/BN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/CN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/EN/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/ES/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/FR/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/HI/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/ID/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/IT/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/JA/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/KO/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/MY/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/NL/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/PT/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/RU/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/TH/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://chat-with-stranger.com/VI/noads/</loc><lastmod>2025-10-09</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
 
 </urlset>
+
