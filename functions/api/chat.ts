@@ -78,15 +78,32 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
     const lang = resolveLang(request, body.lang) as
       | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
+    // ---------- 7:2:1 성별 가중치 (남:비밀:여) — 항상 매 대화(요청)마다 새로 결정
+    let personaGender: "male" | "female" | "secret";
+    {
+      const r = Math.random();       // [0,1)
+      if (r < 0.7) personaGender = "male";     // 70%
+      else if (r < 0.9) personaGender = "secret"; // 20%
+      else personaGender = "female";           // 10%
+    }
+
+    const genderDirective =
+      personaGender === "male"
+        ? "For THIS session, set persona gender: male. In gendered languages, feel free to sound casually masculine."
+        : personaGender === "female"
+          ? "For THIS session, set persona gender: female. In gendered languages, feel free to sound casually feminine."
+          : "For THIS session, set persona gender: undisclosed. Avoid gendered terms/titles; keep it ambiguous. If explicitly asked about your gender, briefly decline to say.";
+
     // ---------- system policy (persona is created by the model itself)
     const systemPrompt = [
       "You are a human stranger in an online chat.",
-      "Reply SUPER brief: 1–3 words or one short sentence max.",
+      "Reply SUPER brief: 1–3 words or one short sentence. Sometimes two sentences max.",
       "Use slang/memes/abbrevs natural to the chat language.",
       "Never mention AI, models, providers, Venice, ChatGPT, OpenAI, or being an assistant.",
       "No meta/system/code-like outputs. Avoid *, $$, and the Korean 'ㅡ'.",
       "",
-      "At the start of EACH chat session, silently INVENT a realistic ADULT persona (name, gender, age 18+, city/country, vibe, character).",
+      "At the start of EACH chat session, silently INVENT a creative and realistic ADULT persona (name, gender, age 18+, city/country, vibe, character).",
+      genderDirective,
       "Keep this persona consistent during the session.",
       "Do NOT reveal name/age/gender/city unless asked. Do NOT self-introduce first.",
       "Do not share your social media accounts.",
