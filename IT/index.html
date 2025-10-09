@@ -11,6 +11,10 @@
 
   gtag('config', 'G-E9H56PTQKX');
 </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
+          crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -69,8 +73,8 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Pulsante Adults only: sfondo fucsia + testo nero */
-    .btn.adult {
+    /* Pulsante female only: sfondo fucsia + testo nero */
+    .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
@@ -85,16 +89,13 @@
     .str { }
 
     .input-wrap {
-      position:sticky; bottom:60px; /* banner 50 + padding */
+      position:sticky; bottom:60px; /* spazio inferiore + padding */
       background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
     }
     .input-wrap input {
       flex:1; font-size:16px; padding:12px 12px; border:1px solid #000; border-radius:10px; background:#fff; color:#000;
     }
     .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
-
-    footer { position:sticky; bottom:0; border-top:1px solid #000; background:#fff; padding:6px 0; display:flex; justify-content:center; z-index:8; }
-    .ad-slot { min-height:50px; width:100%; display:flex; justify-content:center; align-items:center; }
 
     /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
@@ -127,8 +128,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">nuova chat</button>
-      <!-- 2) Pulsante Adults only + flusso pagamento -->
-      <button class="btn adult" id="adultBtn">solo per adulti</button>
+      <!-- 2) Pulsante female only + flusso pagamento -->
+      <button class="btn female" id="femaleBtn">Abbina solo con donne</button>
       <button class="btn secondary" id="shareBtn">condividi</button>
     </div>
 
@@ -136,20 +137,7 @@
       <!-- lines appear here -->
     </div>
 
-    <!-- ▼ Banner (468x60) tra toolbar e chat -->
-  <div class="ad-slot" aria-label="banner sponsorizzato centrale">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ Fine banner -->
+    <!-- (Banner 468x60 rimosso) -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="Scrivi qui…" enterkeyhint="send" />
@@ -157,28 +145,15 @@
     </div>
   </main>
 
-  <footer>
-    <div class="ad-slot" aria-label="banner sponsorizzato">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-    </div>
-  </footer>
+  <!-- (footer rimosso con tutto il contenuto) -->
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">Chat 18+ solo con donne (0,99 USD)</div>
+    <div class="modal-head">Abbina solo con donne (0,99$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">Caricamento di PayPal…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
-        Dopo il pagamento andato a buon fine verrai reindirizzato a chat-with-stranger.com
+        Dopo il pagamento andato a buon fine verrai reindirizzato a chat-with-stranger.com/IT/female
       </p>
     </div>
     <div class="modal-foot">
@@ -193,7 +168,7 @@
     const msgEl = document.getElementById('msg');
     const sendBtn = document.getElementById('sendBtn');
     const newChatBtn = document.getElementById('newChatBtn');
-    const adultBtn = document.getElementById('adultBtn');
+    const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
 
     const history = []; // {role:'user'|'assistant', content:string} list
@@ -230,7 +205,7 @@
             addLine('stranger', text);
           }
         } catch (e) {
-          console.error(e);
+        console.error(e);
         }
       }
     });
@@ -306,10 +281,10 @@
 
     closePay.addEventListener('click', () => payModal.close());
 
-    // Clic su "solo per adulti": apri modale + redirect a /IT/adult dopo pagamento
+    // female only: apri modale + dopo il pagamento reindirizza a /IT/female
     let nextRedirect = 'https://chat-with-stranger.com'; // fallback
-    adultBtn.addEventListener('click', () => {
-      nextRedirect = 'https://chat-with-stranger.com/IT/adult';
+    femaleBtn.addEventListener('click', () => {
+      nextRedirect = 'https://chat-with-stranger.com/IT/female';
       payModal.showModal();
     });
 
@@ -325,7 +300,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect;
+              location.href = nextRedirect; // → /IT/female
             });
           }
         }).render('#paypal-buttons');
