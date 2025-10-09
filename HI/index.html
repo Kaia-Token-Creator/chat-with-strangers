@@ -11,6 +11,10 @@
 
   gtag('config', 'G-E9H56PTQKX');
 </script>
+
+  <!-- AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
+          crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -41,7 +45,7 @@
       position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
     }
-    /* 헤더 타이틀: 텍스트 링크 */
+    /* हेडर शीर्षक: टेक्स्ट लिंक */
     .site-title {
       font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
       padding:0; border:none; background:transparent; cursor:pointer;
@@ -69,8 +73,8 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
-    .btn.adult {
+    /* female only: हॉट-पिंक पृष्ठभूमि + काला टेक्स्ट */
+    .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
@@ -85,16 +89,13 @@
     .str { }
 
     .input-wrap {
-      position:sticky; bottom:60px; /* banner 50 + padding */
+      position:sticky; bottom:60px; /* नीचे की जगह + padding */
       background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
     }
     .input-wrap input {
       flex:1; font-size:16px; padding:12px 12px; border:1px solid #000; border-radius:10px; background:#fff; color:#000;
     }
     .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
-
-    footer { position:sticky; bottom:0; border-top:1px solid #000; background:#fff; padding:6px 0; display:flex; justify-content:center; z-index:8; }
-    .ad-slot { min-height:50px; width:100%; display:flex; justify-content:center; align-items:center; }
 
     /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
@@ -110,7 +111,7 @@
 </head>
 <body>
   <header>
-    <!-- 1) 헤더 타이틀: 텍스트 링크(새창) -->
+    <!-- 1) हेडर शीर्षक: टेक्स्ट लिंक (नया टैब) -->
     <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">अजनबी से यादृच्छिक चैट (फ्री)</a>
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
@@ -127,8 +128,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">नई चैट</button>
-      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
-      <button class="btn adult" id="adultBtn">केवल वयस्क</button>
+      <!-- 2) female only बटन स्टाइल व पेमेंट फ्लो -->
+      <button class="btn female" id="femaleBtn">केवल महिलाओं से मैच</button>
       <button class="btn secondary" id="shareBtn">शेयर करें</button>
     </div>
 
@@ -136,20 +137,7 @@
       <!-- lines appear here -->
     </div>
 
-    <!-- ▼ 여기 추가: toolbar와 chat 사이 배너 (468x60) -->
-  <div class="ad-slot" aria-label="प्रायोजित मध्य बैनर">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ 여기까지 배너 -->
+    <!-- (468×60 मध्य बैनर हटाया गया) -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="यहाँ लिखें..." enterkeyhint="send" />
@@ -157,28 +145,15 @@
     </div>
   </main>
 
-  <footer>
-    <div class="ad-slot" aria-label="प्रायोजित बैनर">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-    </div>
-  </footer>
+  <!-- (footer और उसकी सामग्री हटाई गई) -->
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">18+ केवल महिलाओं के साथ चैट (0.99 USD)</div>
+    <div class="modal-head">केवल महिलाओं से मैच (0.99$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">PayPal लोड हो रहा है…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
-        भुगतान सफल होने के बाद, आपको chat-with-stranger.com पर रीडायरेक्ट किया जाएगा
+        भुगतान सफल होने के बाद आपको chat-with-stranger.com/HI/female पर रीडायरेक्ट किया जाएगा
       </p>
     </div>
     <div class="modal-foot">
@@ -193,7 +168,7 @@
     const msgEl = document.getElementById('msg');
     const sendBtn = document.getElementById('sendBtn');
     const newChatBtn = document.getElementById('newChatBtn');
-    const adultBtn = document.getElementById('adultBtn');
+    const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
 
     const history = []; // {role:'user'|'assistant', content:string} list
@@ -209,7 +184,7 @@
     // ------- initial: 50% AI starts
     window.addEventListener('load', async () => {
       setTimeout(() => {
-        // handle mobile keyboard: ensure input visible
+        // मोबाइल कीबोर्ड: इनपुट दिखता रहे
         msgEl.addEventListener('focus', () => setTimeout(() => {
           document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 80));
@@ -230,7 +205,7 @@
             addLine('stranger', text);
           }
         } catch (e) {
-          console.error(e);
+        console.error(e);
         }
       }
     });
@@ -257,7 +232,7 @@
         }
       } catch (e) {
         console.error(e);
-        addLine('stranger', '…connection lost, try again');
+        addLine('stranger', '…कनेक्शन टूट गया, फिर से कोशिश करें');
       }
     }
 
@@ -271,7 +246,7 @@
     // ------- toolbar buttons
     newChatBtn.addEventListener('click', () => location.reload());
 
-    // 3) share: base 도메인 공유 + (EN) 제거
+    // share: base domain
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'अजनबी से यादृच्छिक चैट',
@@ -306,14 +281,14 @@
 
     closePay.addEventListener('click', () => payModal.close());
 
-    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /adult로 이동
-    let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
-    adultBtn.addEventListener('click', () => {
-      nextRedirect = 'https://chat-with-stranger.com/HI/adult';
+    // female only: मोडल खोलें + भुगतान के बाद /HI/female पर रीडायरेक्ट
+    let nextRedirect = 'https://chat-with-stranger.com'; // सुरक्षा हेतु डिफ़ॉल्ट
+    femaleBtn.addEventListener('click', () => {
+      nextRedirect = 'https://chat-with-stranger.com/HI/female';
       payModal.showModal();
     });
 
-    // PayPal Buttons 렌더
+    // PayPal Buttons render
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
@@ -325,7 +300,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect;
+              location.href = nextRedirect; // → /HI/female
             });
           }
         }).render('#paypal-buttons');
