@@ -3,15 +3,19 @@
 <head>
 
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-E9H56PTQKX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9H56PTQKX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-E9H56PTQKX');
-</script>
-  
+    gtag('config', 'G-E9H56PTQKX');
+  </script>
+
+  <!-- AdSense (Auto Ads) 추가 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
+          crossorigin="anonymous"></script>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>دردشة عشوائية مع غريب</title>
@@ -69,7 +73,7 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
+    /* female only: 핫핑크 배경 + 검은 텍스트 */
     .btn.adult {
       background: var(--hotpink);
       color: #000;
@@ -127,8 +131,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">محادثة جديدة</button>
-      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
-      <button class="btn adult" id="adultBtn">للبالغين فقط</button>
+      <!-- 2) female only 버튼 스타일 및 결제 플로우 -->
+      <button class="btn adult" id="adultBtn">مطابقة مع الإناث فقط</button>
       <button class="btn secondary" id="shareBtn">مشاركة</button>
     </div>
 
@@ -137,19 +141,19 @@
     </div>
 
     <!-- ▼ 여기 추가: toolbar와 chat 사이 배너 (468x60) -->
-  <div class="ad-slot" aria-label="لافتة إعلانية بمنتصف الصفحة">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ 여기까지 배너 -->
+    <div class="ad-slot" aria-label="لافتة إعلانية بمنتصف الصفحة">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '1a365a03ab4668227abe09cdee675cc7',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
+    </div>
+    <!-- ▲ 여기까지 배너 -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="اكتب هنا..." enterkeyhint="send" />
@@ -174,7 +178,7 @@
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">دردشة +18 مع إناث فقط (0.99 دولار)</div>
+    <div class="modal-head">مطابقة مع الإناث فقط (0.99$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">جارٍ تحميل باي بال…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
@@ -306,10 +310,10 @@
 
     closePay.addEventListener('click', () => payModal.close());
 
-    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /adult로 이동
+    // female only 클릭 시: 모달 오픈 + 결제 성공 후 /female로 이동
     let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
     adultBtn.addEventListener('click', () => {
-      nextRedirect = 'https://chat-with-stranger.com/AR/adult';
+      nextRedirect = 'https://chat-with-stranger.com/AR/female';
       payModal.showModal();
     });
 
@@ -325,7 +329,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect;
+              location.href = nextRedirect; // → /AR/female 로 이동
             });
           }
         }).render('#paypal-buttons');
