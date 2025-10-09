@@ -1,5 +1,5 @@
 // /functions/api/chat.ts
-export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (ctx) => {
+export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async (ctx) => {
   const { request, env } = ctx;
 
   const CORS = {
@@ -14,13 +14,71 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     const body = await request.json<{ init?: boolean; lang?: string; message?: string; history?: Msg[] }>();
     const history = body.history || [];
 
-    // --- language (body.lang > referer > EN)
-    const ref = request.headers.get("referer") || "";
-    const langFromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
-    const lang = (body.lang || langFromRef || "EN") as
+    // ---------- Robust language resolve (body.lang > URL path > referer path > Accept-Language > EN)
+    function resolveLang(req: Request, explicit?: string) {
+      let raw = (explicit || "").trim();
+
+      // 1) URL path like /KO/..., /JA
+      if (!raw) {
+        try {
+          const u = new URL(req.url);
+          const seg = (u.pathname.split("/")[1] || "").trim();
+          if (seg) raw = seg;
+        } catch {}
+      }
+
+      // 2) Referer path
+      if (!raw) {
+        const ref = req.headers.get("referer") || "";
+        const m = ref.match(/https?:\/\/[^/]+\/([A-Za-z-]{2,5})(?:\/|$)/);
+        if (m) raw = m[1];
+      }
+
+      // 3) Accept-Language first tag
+      if (!raw) {
+        const al = req.headers.get("accept-language") || "";
+        const first = al.split(",")[0]?.split(";")[0]?.trim();
+        if (first) raw = first;
+      }
+
+      const norm = (raw || "EN").toUpperCase();
+
+      // Map variants to site codes
+      const map: Record<string, string> = {
+        EN:"EN","EN-US":"EN","EN-GB":"EN",
+
+        KO:"KO","KR":"KO","KO-KR":"KO",
+
+        JA:"JA","JP":"JA","JA-JP":"JA",
+
+        CN:"CN","ZH":"CN","ZH-CN":"CN","ZH-HANS":"CN","ZH-HK":"CN","ZH-TW":"CN",
+
+        ES:"ES","ES-ES":"ES","ES-MX":"ES","ES-419":"ES",
+
+        FR:"FR","FR-FR":"FR",
+        IT:"IT","IT-IT":"IT",
+        NL:"NL","NL-NL":"NL",
+        PT:"PT","PT-PT":"PT","PT-BR":"PT",
+        HI:"HI",
+        AR:"AR",
+        BN:"BN",
+        RU:"RU",
+        VI:"VI",
+        ID:"ID",
+        TH:"TH",
+        MY:"MY","MS":"MY","MS-MY":"MY" // Malay
+      };
+
+      if (map[norm]) return map[norm];
+      const two = norm.slice(0, 2);
+      if (map[two]) return map[two];
+      return "EN";
+    }
+
+    const lang = resolveLang(request, body.lang) as
       | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
-    // --- system policy (persona is created by the model itself)
+    // ---------- system policy (persona is created by the model itself)
     const systemPrompt = [
       "You are a human stranger in an online chat.",
       "Reply SUPER brief: 1–3 words or one short sentence max.",
@@ -83,17 +141,18 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       return inter / Math.min(A.size, B.size);
     };
 
-    // --- call Venice API (function to allow one retry)
+    // ---------- DeepSeek Chat API call (non-stream)
     async function callOnce(extraHint?: string) {
       const payloadMsgs = extraHint ? [...msgs, { role: "user", content: extraHint }] : msgs;
-      const r = await fetch("https://api.venice.ai/api/v1/chat/completions", {
+
+      const r = await fetch("https://api.deepseek.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${env.VENICE_API_KEY}`,
+          "Authorization": `Bearer ${env.DEEPSEEK_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "venice-uncensored",
+          model: "deepseek-chat",
           temperature: 0.6,
           top_p: 0.9,
           frequency_penalty: 0.8,
@@ -102,6 +161,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
           messages: payloadMsgs,
         }),
       });
+
       if (!r.ok) return "";
       const data = await r.json();
       const raw =
@@ -125,12 +185,10 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       headers: { ...CORS, "Content-Type": "application/json" },
       status: 200,
     });
-  } catch {
+  } catch (e) {
     return new Response(JSON.stringify({ reply: "server busy, retry" }), {
       headers: { ...CORS, "Content-Type": "application/json" },
       status: 200,
     });
   }
 };
-
-
