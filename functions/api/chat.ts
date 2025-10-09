@@ -170,11 +170,11 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
         },
         body: JSON.stringify({
           model: "deepseek-chat",
-          temperature: 0.6,
+          temperature: 1.5,
           top_p: 0.9,
           frequency_penalty: 0.8,
           presence_penalty: 0.2,
-          max_tokens: 48,
+          max_tokens: 60,
           messages: payloadMsgs,
         }),
       });
@@ -209,3 +209,4 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
     });
   }
 };
+
