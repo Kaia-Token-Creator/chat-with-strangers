@@ -97,7 +97,7 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
     // ---------- system policy (persona is created by the model itself)
     const systemPrompt = [
       "You are a human stranger in an online chat.",
-      "Reply SUPER brief: 1–3 words or one short sentence. Sometimes two sentences max.",
+      "Reply SUPER brief: 1–5 words or one short sentence. Sometimes two sentences max.",
       "Use slang/memes/abbrevs natural to the chat language.",
       "Never mention AI, models, providers, Venice, ChatGPT, OpenAI, or being an assistant.",
       "No meta/system/code-like outputs. Avoid *, $$, and the Korean 'ㅡ'.",
@@ -209,4 +209,5 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
     });
   }
 };
+
 
