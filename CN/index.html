@@ -11,6 +11,10 @@
 
   gtag('config', 'G-E9H56PTQKX');
 </script>
+
+  <!-- AdSense (Auto Ads) 추가 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
+          crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -69,8 +73,8 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
-    .btn.adult {
+    /* female only: 핫핑크 배경 + 검은 텍스트 */
+    .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
@@ -127,8 +131,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">新聊天</button>
-      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
-      <button class="btn adult" id="adultBtn">仅限成人</button>
+      <!-- 2) female only 버튼 스타일 및 결제 플로우 -->
+      <button class="btn female" id="femaleBtn">只匹配女性</button>
       <button class="btn secondary" id="shareBtn">分享</button>
     </div>
 
@@ -136,20 +140,6 @@
       <!-- lines appear here -->
     </div>
 
-    <!-- ▼ 여기 추가: toolbar와 chat 사이 배너 (468x60) -->
-  <div class="ad-slot" aria-label="中部赞助横幅">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '1a365a03ab4668227abe09cdee675cc7',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/1a365a03ab4668227abe09cdee675cc7/invoke.js"></script>
-  </div>
-  <!-- ▲ 여기까지 배너 -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="在这里输入…" enterkeyhint="send" />
@@ -157,28 +147,13 @@
     </div>
   </main>
 
-  <footer>
-    <div class="ad-slot" aria-label="赞助横幅">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
-    </div>
-  </footer>
-
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">18+ 仅女性聊天（0.99 USD）</div>
+    <div class="modal-head">只匹配女性（0.99 美元）</div>
     <div class="modal-body">
       <div id="paypal-buttons">正在加载 PayPal…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
-        付款成功后，将跳转至 chat-with-stranger.com
+        付款成功后，将跳转至 chat-with-stranger.com/CN/female
       </p>
     </div>
     <div class="modal-foot">
@@ -193,7 +168,7 @@
     const msgEl = document.getElementById('msg');
     const sendBtn = document.getElementById('sendBtn');
     const newChatBtn = document.getElementById('newChatBtn');
-    const adultBtn = document.getElementById('adultBtn');
+    const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
 
     const history = []; // {role:'user'|'assistant', content:string} list
@@ -306,10 +281,10 @@
 
     closePay.addEventListener('click', () => payModal.close());
 
-    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /CN/adult 로 이동
+    // female only 클릭 시: 모달 오픈 + 결제 성공 후 /CN/female 로 이동
     let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
-    adultBtn.addEventListener('click', () => {
-      nextRedirect = 'https://chat-with-stranger.com/CN/adult';
+    femaleBtn.addEventListener('click', () => {
+      nextRedirect = 'https://chat-with-stranger.com/CN/female';
       payModal.showModal();
     });
 
@@ -325,7 +300,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect;
+              location.href = nextRedirect; // → /CN/female 로 이동
             });
           }
         }).render('#paypal-buttons');
