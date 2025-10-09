@@ -11,6 +11,10 @@
 
   gtag('config', 'G-E9H56PTQKX');
 </script>
+
+  <!-- AdSense (Auto Ads) 추가 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
+          crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -69,7 +73,7 @@
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Adults only: 핫핑크 배경 + 검은 텍스트 */
+    /* female only: 핫핑크 배경 + 검은 텍스트 */
     .btn.adult {
       background: var(--hotpink);
       color: #000;
@@ -127,8 +131,8 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">নতুন চ্যাট</button>
-      <!-- 2) Adults only 버튼 스타일 및 결제 플로우 -->
-      <button class="btn adult" id="adultBtn">শুধু প্রাপ্তবয়স্কদের জন্য</button>
+      <!-- 2) female only 버튼 스타일 및 결제 플ো우 -->
+      <button class="btn adult" id="adultBtn">শুধুমাত্র মহিলাদের সাথে মেলান</button>
       <button class="btn secondary" id="shareBtn">শেয়ার</button>
     </div>
 
@@ -161,24 +165,24 @@
     <div class="ad-slot" aria-label="স্পনসরড ব্যানার">
       <script type="text/javascript">
         atOptions = {
-          'key' : '8e6971cd4774512c53де74df3b4ff5fc',
+          'key' : '8e6971cd4774512c53de74df3b4ff5fc',
           'format' : 'iframe',
           'height' : 50,
           'width' : 320,
           'params' : {}
         };
       </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53де74df3b4ff5fc/invoke.js"></script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/8e6971cd4774512c53de74df3b4ff5fc/invoke.js"></script>
     </div>
   </footer>
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">১৮+ কেবলমাত্র মহিলা চ্যাট (০.৯৯ USD)</div>
+    <div class="modal-head">শুধুমাত্র মহিলাদের সাথে মেলান (0.99$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">পেপ্যাল লোড হচ্ছে…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
-        সফল পেমেন্টের পর আপনাকে chat-with-stranger.com/BN/adult এ রিডাইরেক্ট করা হবে
+        সফল পেমেন্টের পর আপনাকে chat-with-stranger.com/BN/female এ রিডাইরেক্ট করা হবে
       </p>
     </div>
     <div class="modal-foot">
@@ -306,10 +310,10 @@
 
     closePay.addEventListener('click', () => payModal.close());
 
-    // adults only 클릭 시: 모달 오픈 + 결제 성공 후 /adult로 이동
+    // female only 클릭 시: 모달 오픈 + 결제 성공 후 /female로 이동
     let nextRedirect = 'https://chat-with-stranger.com'; // 기본값(안쓰지만 안전장치)
     adultBtn.addEventListener('click', () => {
-      nextRedirect = 'https://chat-with-stranger.com/BN/adult';
+      nextRedirect = 'https://chat-with-stranger.com/BN/female';
       payModal.showModal();
     });
 
@@ -325,7 +329,7 @@
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect;
+              location.href = nextRedirect; // → /BN/female 로 이동
             });
           }
         }).render('#paypal-buttons');
