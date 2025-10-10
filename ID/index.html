@@ -296,7 +296,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Dukungan obrolan acak' }]
+              purchase_units: [{ amount: { value: '2.99', currency_code: 'USD' }, description: 'Dukungan obrolan acak' }]
             });
           },
           onApprove: function(data, actions) {
@@ -310,3 +310,4 @@
   </script>
 </body>
 </html>
+
