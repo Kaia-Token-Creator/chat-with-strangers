@@ -149,7 +149,7 @@
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">အမျိုးသမီးများသာ မက်ချ် (0.99$)</div>
+    <div class="modal-head">အမျိုးသမီးများသာ မက်ချ် (2.99$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">PayPal ကို တင်နေပါသည်…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
@@ -296,7 +296,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'ကျပန်းစကားပြော အထောက်အပံ့' }]
+              purchase_units: [{ amount: { value: '2.99', currency_code: 'USD' }, description: 'ကျပန်းစကားပြော အထောက်အပံ့' }]
             });
           },
           onApprove: function(data, actions) {
@@ -310,3 +310,4 @@
   </script>
 </body>
 </html>
+
