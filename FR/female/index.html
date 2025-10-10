@@ -291,7 +291,7 @@
         style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
         createOrder: function(data, actions) {
           return actions.order.create({
-            purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'Supprimer les pubs - Chat adulte' }]
+            purchase_units: [{ amount: { value: '', currency_code: 'USD' }, description: 'Supprimer les pubs - Chat adulte' }]
           });
         },
         onApprove: function(data, actions) {
@@ -306,5 +306,6 @@
 </body>
 
 </html>
+
 
 
