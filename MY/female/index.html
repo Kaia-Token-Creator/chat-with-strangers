@@ -133,7 +133,7 @@
 
 <!-- PayPal Modal -->
 <dialog id="payModal">
-  <div class="modal-head">ကြော်ညာဖယ်ရှားရန် (0.99 USD)</div>
+  <div class="modal-head">ကြော်ညာဖယ်ရှားရန် (2.99 USD)</div>
   <div class="modal-body">
     <div id="paypal-buttons">PayPal ကို တင်နေသည်…</div>
     <p style="font-size:12px;opacity:.7;margin-top:12px">
@@ -281,7 +281,7 @@
         style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
         createOrder: function(data, actions) {
           return actions.order.create({
-            purchase_units: [{ amount: { value: '0.99', currency_code: 'USD' }, description: 'ကြော်ညာဖယ်ရှားရန် - လူကြီးများ စကားပြော' }]
+            purchase_units: [{ amount: { value: '2.99', currency_code: 'USD' }, description: 'ကြော်ညာဖယ်ရှားရန် - လူကြီးများ စကားပြော' }]
           });
         },
         onApprove: function(data, actions) {
@@ -296,4 +296,5 @@
 </body>
 
 </html>
+
 
