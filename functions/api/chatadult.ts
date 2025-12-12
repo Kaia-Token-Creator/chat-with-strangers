@@ -1,3 +1,4 @@
+
 // /functions/api/chat.ts
 export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (ctx) => {
   const { request, env } = ctx;
@@ -13,6 +14,26 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     type Msg = { role: "user" | "assistant"; content: string };
     const body = await request.json<{ init?: boolean; lang?: string; message?: string; history?: Msg[] }>();
     const history = body.history || [];
+
+    // ---------- INPUT SIZE GUARD (ANTI TOKEN FLOOD)
+    const MAX_MESSAGE_CHARS = 2000; // ≈ 1.5k~2k tokens (대략)
+    const MAX_HISTORY_CHARS = 6000; // 누적 히스토리 제한
+
+    if (body.message && body.message.length > MAX_MESSAGE_CHARS) {
+      return new Response(
+        JSON.stringify({ reply: "Message too long." }),
+        { status: 400, headers: { ...CORS, "Content-Type": "application/json" } }
+      );
+    }
+
+    const historyChars = history.reduce((sum, m) => sum + (m.content?.length || 0), 0);
+    if (historyChars > MAX_HISTORY_CHARS) {
+      return new Response(
+        JSON.stringify({ reply: "Conversation too long." }),
+        { status: 400, headers: { ...CORS, "Content-Type": "application/json" } }
+      );
+    }
+    // ---------- END INPUT GUARD
 
     // --- language (body.lang > referer > EN)
     const ref = request.headers.get("referer") || "";
@@ -133,7 +154,3 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     });
   }
 };
-
-
-
-
