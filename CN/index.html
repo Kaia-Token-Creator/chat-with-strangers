@@ -162,7 +162,7 @@
 
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">仅匹配 18+ 女性聊天（2.99 美元）</div>
+    <div class="modal-head">仅匹配 18+ 女性聊天（6.9 美元）</div>
     <div class="modal-body">
       <div id="paypal-buttons">正在加载 PayPal…</div>
       
@@ -306,7 +306,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '2.99', currency_code: 'USD' }, description: '随机聊天支持' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: '随机聊天支持' }]
             });
           },
           onApprove: function(data, actions) {
@@ -327,6 +327,7 @@
   
 </body>
 </html>
+
 
 
 
