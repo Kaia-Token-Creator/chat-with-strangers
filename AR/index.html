@@ -163,7 +163,7 @@
  
   <!-- PayPal Modal -->
   <dialog id="payModal">
-    <div class="modal-head">التعرّف على فتيات +18 للدردشة الخاصة(2.99$)</div>
+    <div class="modal-head">التعرّف على فتيات +18 للدردشة الخاصة(6.9$)</div>
     <div class="modal-body">
       <div id="paypal-buttons">جارٍ تحميل باي بال…</div>
       <p style="font-size:12px;opacity:.7;margin-top:12px">
@@ -309,7 +309,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '2.99', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
             });
           },
           onApprove: function(data, actions) {
@@ -330,6 +330,7 @@
 	
 </body>
 </html>
+
 
 
 
