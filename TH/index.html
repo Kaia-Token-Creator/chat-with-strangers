@@ -158,17 +158,24 @@
 
   <!-- (footer ถูกลบออก) -->
 
-  <!-- โมดอล PayPal -->
-  <dialog id="payModal">
-    <div class="modal-head">แชทส่วนตัวกับผู้หญิง 18+ (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">กำลังโหลด PayPal…</div>
-     
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">ปิด</button>
-    </div>
-  </dialog>
+  <!-- PayPal โมดัล -->
+<dialog id="payModal">
+  <div class="modal-head">
+    จับคู่กับผู้หญิงอายุ 18+ เท่านั้น สำหรับการเซ็กซ์ติ้ง ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">สาว ๆ กำลังรอคุณอยู่…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      เมื่อชำระเงินแล้ว คุณจะได้รับการยืนยันว่าเป็นผู้ใหญ่โดยอัตโนมัติ และจะได้รับลิงก์ถาวรที่สามารถใช้งานได้ตลอดไป
+    </p>
+    <p>คุณสามารถแชตได้ไม่จำกัดกับสาว ๆ อายุ 18+ ที่ชวนคุย</p>
+    <p>ไม่ต้องกังวล ในรายการชำระเงินจะแสดงเป็น “การเรียนภาษา”</p>
+    <p>คุณจะต้องชอบแน่นอน ฉันสัญญา สนุกได้ทันทีตอนนี้</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">ปิด</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -305,7 +312,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'การเรียนภาษา' }]
             });
           },
           onApprove: function(data, actions) {
@@ -326,6 +333,7 @@
 	
 </body>
 </html>
+
 
 
 
