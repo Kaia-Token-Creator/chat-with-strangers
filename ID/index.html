@@ -160,17 +160,24 @@
 
   <!-- (footer beserta isinya dihapus) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">Chat privat dengan perempuan 18+ (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">Memuat PayPal…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">Tutup</button>
-    </div>
-  </dialog>
+  <!-- Modal PayPal -->
+<dialog id="payModal">
+  <div class="modal-head">
+    Match hanya dengan wanita +18 untuk sexting. ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">Para gadis sedang menunggumu…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      Setelah kamu membayar, kamu akan otomatis diverifikasi sebagai orang dewasa dan mendapatkan tautan permanen yang bisa digunakan selamanya.
+    </p>
+    <p>Kamu bisa chat tanpa batas dengan gadis +18 yang genit</p>
+    <p>Tenang saja, di laporan pembayaran akan tertulis “pembelajaran bahasa”.</p>
+    <p>Kamu pasti akan menyukainya. Aku janji. Nikmati sekarang.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">Tutup</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -307,7 +314,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Dukungan obrolan acak' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'pembelajaran bahasa' }]
             });
           },
           onApprove: function(data, actions) {
@@ -328,6 +335,7 @@ Jelajahi dunia secara anonim
 	
 </body>
 </html>
+
 
 
 
