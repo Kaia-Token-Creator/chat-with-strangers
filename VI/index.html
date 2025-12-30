@@ -159,17 +159,24 @@
 
   <!-- (Đã xoá footer) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">Trò chuyện riêng tư với nữ 18+ (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">Đang tải PayPal…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">Đóng</button>
-    </div>
-  </dialog>
+ <!-- Modal PayPal -->
+<dialog id="payModal">
+  <div class="modal-head">
+    Chỉ match với phụ nữ +18 để sexting. ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">Các cô gái đang chờ bạn…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      Sau khi thanh toán, bạn sẽ được xác minh là người lớn tự động và nhận một liên kết vĩnh viễn có thể sử dụng mãi mãi.
+    </p>
+    <p>Bạn có thể chat không giới hạn với các cô gái +18 quyến rũ</p>
+    <p>Đừng lo, trên sao kê thanh toán sẽ hiển thị là “học ngôn ngữ”.</p>
+    <p>Bạn sẽ thích điều này. Tôi thề. Tận hưởng ngay bây giờ.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">Đóng</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -305,7 +312,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Hỗ trợ trò chuyện ngẫu nhiên' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Hhọc ngôn ngữ' }]
             });
           },
           onApprove: function(data, actions) {
@@ -326,6 +333,7 @@ Khám phá thế giới ẩn danh
  
 </body>
 </html>
+
 
 
 
