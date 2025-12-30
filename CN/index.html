@@ -160,17 +160,25 @@
     </div>
   </main>
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">仅匹配 18+ 女性聊天（6.9 美元）</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">正在加载 PayPal…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">关闭</button>
-    </div>
-  </dialog>
+<!-- PayPal 弹窗 -->
+<dialog id="payModal">
+  <div class="modal-head">
+    仅匹配 +18 女性进行性暗聊。($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">女孩们正在等你…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      付款后，你将自动通过成人验证，并获得一个可永久使用的专属链接。
+    </p>
+    <p>你可以与 +18 的撩人女孩无限次聊天</p>
+    <p>不用担心，账单上将显示为“语言学习”。</p>
+    <p>你一定会喜欢的。我保证。现在就享受吧。</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">关闭</button>
+  </div>
+</dialog>
+
 
   <script>
     // ------- helpers
@@ -306,7 +314,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: '随机聊天支持' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: '语言学习' }]
             });
           },
           onApprove: function(data, actions) {
@@ -327,6 +335,7 @@
   
 </body>
 </html>
+
 
 
 
