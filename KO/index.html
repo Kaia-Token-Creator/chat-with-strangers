@@ -160,17 +160,23 @@
 
   <!-- (footer 전체 삭제됨) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">+18 여성과 은밀한 채팅 (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">PayPal 불러오는 중…</div>
-     
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">닫기</button>
-    </div>
-  </dialog>
+ <!-- PayPal 모달 -->
+<dialog id="payModal">
+  <div class="modal-head">
+    +18 성인 여성과 은밀한 채팅. ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">그녀들이 당신을 기다리고 있어요…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      결제가 완료되면 자동으로 성인 인증이 되며, 영구적으로 사용할 수 있는 링크를 받게 됩니다.
+    </p>
+    <p>+18 여성들과 무제한으로 채팅할 수 있습니다</p>
+    <p>걱정 마세요. 결제 내역에는 ‘언어 학습’으로 표시됩니다.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">닫기</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -306,7 +312,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: '언어학습' }]
             });
           },
           onApprove: function(data, actions) {
@@ -327,6 +333,7 @@
  
 </body>
 </html>
+
 
 
 
