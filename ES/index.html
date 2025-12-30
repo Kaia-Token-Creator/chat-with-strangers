@@ -161,17 +161,25 @@
 
   <!-- (Se eliminó <footer> y su contenido) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">Chatea de manera privada con +18 mujeres (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">Cargando PayPal…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">Cerrar</button>
-    </div>
-  </dialog>
+  <!-- Modal de PayPal -->
+<dialog id="payModal">
+  <div class="modal-head">
+    Match solo mujeres +18 para sexting. ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">Las chicas te están esperando…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      Una vez que pagues, serás verificado automáticamente como adulto y obtendrás un enlace permanente que podrás usar para siempre.
+    </p>
+    <p>Puedes chatear de forma ilimitada con chicas +18 coquetas</p>
+    <p>No te preocupes, en el extracto del pago aparecerá como “learning language”.</p>
+    <p>Te va a encantar. Lo juro. Disfruta ahora mismo.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">Cerrar</button>
+  </div>
+</dialog>
+
 
   <script>
     // ------- helpers
@@ -307,7 +315,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Learning language' }]
             });
           },
           onApprove: function(data, actions) {
@@ -328,6 +336,7 @@ Explora el mundo de forma anónima
 	
 </body>
 </html>
+
 
 
 
