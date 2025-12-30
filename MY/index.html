@@ -158,17 +158,24 @@
 
   <!-- (footer 삭제됨) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">18+ အမျိုးသမီးများနှင့် ကိုယ်ပိုင်စကားပြောခြင်း (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">PayPal ကို တင်နေပါသည်…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">ပိတ်</button>
-    </div>
-  </dialog>
+  <!-- PayPal မော်ဒယ် -->
+<dialog id="payModal">
+  <div class="modal-head">
+    စက္စ်တင်းအတွက် အသက် ၁၈ နှစ်အထက် မိန်းကလေးများသာ မက်ချ်။ ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">မိန်းကလေးတွေက သင့်ကို စောင့်နေပါတယ်…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      ငွေပေးချေပြီးသည်နှင့် သင်သည် အရွယ်ရောက်ပြီးသားအဖြစ် အလိုအလျောက် အတည်ပြုခံရပြီး အမြဲတမ်း အသုံးပြုနိုင်သော လင့်ခ်တစ်ခုကို ရရှိပါမည်။
+    </p>
+    <p>အသက် ၁၈ နှစ်အထက် ဆွဲဆောင်မှုရှိသော မိန်းကလေးများနှင့် မကန့်သတ်ဘဲ စကားပြောနိုင်ပါသည်</p>
+    <p>စိတ်မပူပါနဲ့၊ ငွေပေးချေမှုစာရင်းမှာ “ဘာသာစကားလေ့လာမှု” လို့ ပေါ်လာပါလိမ့်မယ်။</p>
+    <p>သင် သဘောကျမှာ သေချာပါတယ်။ ကတိပေးပါတယ်။ အခုပဲ ပျော်ရွှင်ပါ။</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">ပိတ်ရန်</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -305,7 +312,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'ကျပန်းစကားပြော အထောက်အပံ့' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'ဘာသာစကားလေ့လာမှု' }]
             });
           },
           onApprove: function(data, actions) {
@@ -326,6 +333,7 @@
  
 </body>
 </html>
+
 
 
 
