@@ -160,17 +160,24 @@
 
   <!-- (footer verwijderd) -->
 
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">Privé chat met vrouwen 18+ (6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">PayPal laden…</div>
-      
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">Sluiten</button>
-    </div>
-  </dialog>
+  <!-- PayPal-modal -->
+<dialog id="payModal">
+  <div class="modal-head">
+    Match alleen met vrouwen van 18+ voor sexting. ($6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">Meisjes wachten op je…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      Zodra je betaalt, word je automatisch als volwassene geverifieerd en krijg je een permanente link die je voor altijd kunt gebruiken.
+    </p>
+    <p>Je kunt onbeperkt chatten met flirterige vrouwen van 18+</p>
+    <p>Maak je geen zorgen, op het betalingsoverzicht verschijnt dit als “taal leren”.</p>
+    <p>Je gaat het geweldig vinden. Ik zweer het. Geniet nu meteen.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">Sluiten</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -306,7 +313,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'taal leren' }]
             });
           },
           onApprove: function(data, actions) {
@@ -327,6 +334,7 @@ Verken de wereld anoniem
 
 </body>
 </html>
+
 
 
 
