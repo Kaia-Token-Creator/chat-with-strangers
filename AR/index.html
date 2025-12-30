@@ -161,19 +161,24 @@
   </main>
 
  
-  <!-- PayPal Modal -->
-  <dialog id="payModal">
-    <div class="modal-head">التعرّف على فتيات +18 للدردشة الخاصة(6.9$)</div>
-    <div class="modal-body">
-      <div id="paypal-buttons">جارٍ تحميل باي بال…</div>
-      <p style="font-size:12px;opacity:.7;margin-top:12px">
-        بعد إتمام الدفع بنجاح، سيتم تحويلك إلى chat-with-stranger.com
-      </p>
-    </div>
-    <div class="modal-foot">
-      <button class="close-btn" id="closePay">إغلاق</button>
-    </div>
-  </dialog>
+ <!-- نافذة PayPal -->
+<dialog id="payModal" dir="rtl">
+  <div class="modal-head">
+    مطابقة مع نساء +18 فقط للدردشة الجنسية. (‏$6.9)
+  </div>
+  <div class="modal-body">
+    <div id="paypal-buttons">الفتيات بانتظارك…</div>
+    <p style="font-size:15px;opacity:.7;margin-top:12px">
+      بمجرد إتمام الدفع، سيتم التحقق منك تلقائيًا ك成人 وستحصل على رابط دائم يمكنك استخدامه إلى الأبد.
+    </p>
+    <p>يمكنك الدردشة عددًا غير محدود من المرات مع فتيات +18 جذّابات</p>
+    <p>لا تقلق، سيظهر في كشف الدفع باسم “learning language”.</p>
+    <p>ستحبّه. أقسم لك. استمتع الآن.</p>
+  </div>
+  <div class="modal-foot">
+    <button class="close-btn" id="closePay">إغلاق</button>
+  </div>
+</dialog>
 
   <script>
     // ------- helpers
@@ -309,7 +314,7 @@
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Random chat support' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Learning language' }]
             });
           },
           onApprove: function(data, actions) {
@@ -330,6 +335,7 @@
 	
 </body>
 </html>
+
 
 
 
