@@ -5,7 +5,6 @@
 <script src="https://3nbf4.com/act/files/tag.min.js?z=10322170" data-cfasync="false" async></script>
 <script>(function(s){s.dataset.zone='10322169',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
-
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
      crossorigin="anonymous"></script>
 
@@ -15,7 +14,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-E9H56PTQKX');
 </script>
   
@@ -48,16 +46,15 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji;
     }
     .wrap {
-  display: block;           /* grid 제거 */
-  min-height: auto;         /* 전체 높이 채우지 않게 */
-  padding: 16px 24px 40px;  /* 위아래 여백 적당히 */
-}
-
-.card {
-  width: 100%;
-  max-width: 560px;
-  margin: 0 auto;           /* 가로 중앙 정렬은 여기서 */
-}
+      display: block;
+      min-height: auto;
+      padding: 16px 24px 40px;
+    }
+    .card {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+    }
     h1 { font-size: clamp(28px, 6vw, 48px); line-height: 1.05; margin: 0 0 4px 0; font-weight: 800; letter-spacing: -0.02em; text-align: left; }
     h2 { font-size: clamp(22px, 4.5vw, 36px); line-height: 1.05; margin: 0 0 24px 0; font-weight: 700; letter-spacing: -0.015em; opacity: 0.9; text-align: left; }
     label { font-size: 14px; display: block; margin-bottom: 8px; }
@@ -74,7 +71,6 @@
     button:active { transform: translateY(1px); }
     .hint { margin-top: 10px; font-size: 12px; opacity: 0.7; }
 
-    /* ▼ footer styles (추가) */
     footer.site-footer{
       position: sticky;
       bottom: 0;
@@ -90,7 +86,7 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      min-height:50px; /* 배너 높이 확보 */
+      min-height:50px;
       width:100%;
     }
   </style>
@@ -117,6 +113,12 @@
             <option value="female">👩 female</option>
             <option value="prefer-not-to-say" selected>🙈 prefer not to say</option>
           </select>
+        </div>
+
+        <!-- ✅ Age select added -->
+        <div>
+          <label id="label-age" for="age">Age</label>
+          <select id="age" aria-label="Choose age"></select>
         </div>
       </div>
 
@@ -148,123 +150,122 @@
     ];
 
     // ---------- Simple i18n dictionary ----------
-    // Removed hintGender strings; everything else unchanged.
     const I18N = {
       EN: {
         title: "Random Chat", subtitle: "with stranger",
-        labelLanguage: "Language", labelGender: "Your gender (optional)",
+        labelLanguage: "Language", labelGender: "Your gender (optional)", labelAge: "Age",
         enter: "Enter",
         genderMale: "👨 male", genderFemale: "👩 female", genderNA: "🙈 prefer not to say",
         dir: "ltr", htmlLang: "en"
       },
       CN: {
         title: "随机聊天", subtitle: "与陌生人",
-        labelLanguage: "语言", labelGender: "性别（可选）",
+        labelLanguage: "语言", labelGender: "性别（可选）", labelAge: "年龄",
         enter: "进入",
         genderMale: "👨 男", genderFemale: "👩 女", genderNA: "🙈 不愿透露",
         dir: "ltr", htmlLang: "zh-CN"
       },
       ES: {
         title: "Chat aleatorio", subtitle: "con desconocidos",
-        labelLanguage: "Idioma", labelGender: "Tu género (opcional)",
+        labelLanguage: "Idioma", labelGender: "Tu género (opcional)", labelAge: "Edad",
         enter: "Entrar",
         genderMale: "👨 hombre", genderFemale: "👩 mujer", genderNA: "🙈 prefiero no decirlo",
         dir: "ltr", htmlLang: "es"
       },
       KO: {
         title: "랜덤 채팅", subtitle: "낯선 사람과",
-        labelLanguage: "언어", labelGender: "성별(선택)",
+        labelLanguage: "언어", labelGender: "성별(선택)", labelAge: "나이",
         enter: "입장",
         genderMale: "👨 남성", genderFemale: "👩 여성", genderNA: "🙈 밝히지 않음",
         dir: "ltr", htmlLang: "ko"
       },
       JA: {
         title: "ランダムチャット", subtitle: "見知らぬ人と",
-        labelLanguage: "言語", labelGender: "性別（任意）",
+        labelLanguage: "言語", labelGender: "性別（任意）", labelAge: "年齢",
         enter: "入る",
         genderMale: "👨 男性", genderFemale: "👩 女性", genderNA: "🙈 言いたくない",
         dir: "ltr", htmlLang: "ja"
       },
       FR: {
         title: "Discussion aléatoire", subtitle: "avec des inconnus",
-        labelLanguage: "Langue", labelGender: "Votre genre (facultatif)",
+        labelLanguage: "Langue", labelGender: "Votre genre (facultatif)", labelAge: "Âge",
         enter: "Entrer",
         genderMale: "👨 homme", genderFemale: "👩 femme", genderNA: "🙈 préfère ne pas le dire",
         dir: "ltr", htmlLang: "fr"
       },
       IT: {
         title: "Chat casuale", subtitle: "con sconosciuti",
-        labelLanguage: "Lingua", labelGender: "Il tuo genere (opzionale)",
+        labelLanguage: "Lingua", labelGender: "Il tuo genere (opzionale)", labelAge: "Età",
         enter: "Entra",
         genderMale: "👨 uomo", genderFemale: "👩 donna", genderNA: "🙈 preferisco non dirlo",
         dir: "ltr", htmlLang: "it"
       },
       NL: {
         title: "Willekeurige chat", subtitle: "met vreemden",
-        labelLanguage: "Taal", labelGender: "Je gender (optioneel)",
+        labelLanguage: "Taal", labelGender: "Je gender (optioneel)", labelAge: "Leeftijd",
         enter: "Ga verder",
         genderMale: "👨 man", genderFemale: "👩 vrouw", genderNA: "🙈 zeg ik liever niet",
         dir: "ltr", htmlLang: "nl"
       },
       PT: {
         title: "Bate-papo aleatório", subtitle: "com desconhecidos",
-        labelLanguage: "Idioma", labelGender: "Seu gênero (opcional)",
+        labelLanguage: "Idioma", labelGender: "Seu gênero (opcional)", labelAge: "Idade",
         enter: "Entrar",
         genderMale: "👨 masculino", genderFemale: "👩 feminino", genderNA: "🙈 prefiro não dizer",
         dir: "ltr", htmlLang: "pt"
       },
       HI: {
         title: "यादृच्छिक चैट", subtitle: "अजनबियों के साथ",
-        labelLanguage: "भाषा", labelGender: "आपका लिंग (वैकल्पिक)",
+        labelLanguage: "भाषा", labelGender: "आपका लिंग (वैकल्पिक)", labelAge: "आयु",
         enter: "प्रवेश करें",
         genderMale: "👨 पुरुष", genderFemale: "👩 महिला", genderNA: "🙈 नहीं बताना",
         dir: "ltr", htmlLang: "hi"
       },
       AR: {
         title: "دردشة عشوائية", subtitle: "مع الغرباء",
-        labelLanguage: "اللغة", labelGender: "جنسك (اختياري)",
+        labelLanguage: "اللغة", labelGender: "جنسك (اختياري)", labelAge: "العمر",
         enter: "ادخل",
         genderMale: "👨 ذكر", genderFemale: "👩 أنثى", genderNA: "🙈 أفضل عدم القول",
         dir: "rtl", htmlLang: "ar"
       },
       BN: {
         title: "র‌্যান্ডম চ্যাট", subtitle: "অপরিচিতদের সাথে",
-        labelLanguage: "ভাষা", labelGender: "আপনার লিঙ্গ (ঐচ্ছিক)",
+        labelLanguage: "ভাষা", labelGender: "আপনার লিঙ্গ (ঐচ্ছিক)", labelAge: "বয়স",
         enter: "প্রবেশ করুন",
         genderMale: "👨 পুরুষ", genderFemale: "👩 নারী", genderNA: "🙈 বলতে চাই না",
         dir: "ltr", htmlLang: "bn"
       },
       RU: {
         title: "Случайный чат", subtitle: "с незнакомцами",
-        labelLanguage: "Язык", labelGender: "Ваш пол (необязательно)",
+        labelLanguage: "Язык", labelGender: "Ваш пол (необязательно)", labelAge: "Возраст",
         enter: "Войти",
         genderMale: "👨 мужчина", genderFemale: "👩 женщина", genderNA: "🙈 предпочитаю не говорить",
         dir: "ltr", htmlLang: "ru"
       },
       VI: {
         title: "Trò chuyện ngẫu nhiên", subtitle: "với người lạ",
-        labelLanguage: "Ngôn ngữ", labelGender: "Giới tính của bạn (tuỳ chọn)",
+        labelLanguage: "Ngôn ngữ", labelGender: "Giới tính của bạn (tuỳ chọn)", labelAge: "Tuổi",
         enter: "Vào",
         genderMale: "👨 nam", genderFemale: "👩 nữ", genderNA: "🙈 không tiết lộ",
         dir: "ltr", htmlLang: "vi"
       },
       ID: {
         title: "Obrolan acak", subtitle: "dengan orang asing",
-        labelLanguage: "Bahasa", labelGender: "Jenis kelamin Anda (opsional)",
+        labelLanguage: "Bahasa", labelGender: "Jenis kelamin Anda (opsional)", labelAge: "Usia",
         enter: "Masuk",
         genderMale: "👨 pria", genderFemale: "👩 wanita", genderNA: "🙈 tidak ingin menyebutkan",
         dir: "ltr", htmlLang: "id"
       },
       TH: {
         title: "แชทสุ่ม", subtitle: "กับคนแปลกหน้า",
-        labelLanguage: "ภาษา", labelGender: "เพศของคุณ (ไม่บังคับ)",
+        labelLanguage: "ภาษา", labelGender: "เพศของคุณ (ไม่บังคับ)", labelAge: "อายุ",
         enter: "เข้าสู่",
         genderMale: "👨 ชาย", genderFemale: "👩 หญิง", genderNA: "🙈 ไม่ระบุ",
         dir: "ltr", htmlLang: "th"
       },
       MY: {
         title: "ကျပန်းချတ်", subtitle: "မသိကြသူများနှင့်",
-        labelLanguage: "ဘာသာစကား", labelGender: "လိင်အမျိုးအစား (ရွေးချယ်နိုင်)",
+        labelLanguage: "ဘာသာစကား", labelGender: "လိင်အမျိုးအစား (ရွေးချယ်နိုင်)", labelAge: "အသက်",
         enter: "ဝင်မည်",
         genderMale: "👨 အမျိုးသား", genderFemale: "👩 အမျိုးသမီး", genderNA: "🙈 မဖေါ်ပြချင်",
         dir: "ltr", htmlLang: "my"
@@ -279,7 +280,17 @@
       opt.textContent = label;
       langSelect.appendChild(opt);
     });
-    langSelect.value = 'EN'; // default EN
+    langSelect.value = 'EN';
+
+    // ✅ Populate age dropdown (18~100)
+    const ageSelect = document.getElementById('age');
+    for (let a = 18; a <= 100; a++) {
+      const opt = document.createElement('option');
+      opt.value = String(a);
+      opt.textContent = String(a);
+      ageSelect.appendChild(opt);
+    }
+    ageSelect.value = "18"; // default 18
 
     // ---------- Apply i18n to the page ----------
     const els = {
@@ -287,6 +298,7 @@
       subtitle: document.getElementById('subtitle-rc'),
       labelLanguage: document.getElementById('label-language'),
       labelGender: document.getElementById('label-gender'),
+      labelAge: document.getElementById('label-age'),
       enterBtn: document.getElementById('enterBtn'),
       genderSelect: document.getElementById('gender')
     };
@@ -294,28 +306,24 @@
     function applyI18n(code) {
       const t = I18N[code] || I18N.EN;
 
-      // Update texts
       els.title.textContent = t.title;
       els.subtitle.textContent = t.subtitle;
       els.labelLanguage.textContent = t.labelLanguage;
       els.labelGender.textContent = t.labelGender;
+      els.labelAge.textContent = t.labelAge;
       els.enterBtn.textContent = t.enter;
 
-      // Update gender options with emojis
       const [o1, o2, o3] = els.genderSelect.options;
       o1.textContent = t.genderMale;
       o2.textContent = t.genderFemale;
       o3.textContent = t.genderNA;
 
-      // Set document language and direction
       document.documentElement.lang = t.htmlLang || 'en';
       document.documentElement.dir = t.dir || 'ltr';
     }
 
-    // Initialize i18n to EN
     applyI18n('EN');
 
-    // Change UI language when user selects a language
     langSelect.addEventListener('change', () => {
       const code = langSelect.value;
       applyI18n(code);
@@ -349,13 +357,3 @@
  
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
