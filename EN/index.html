@@ -11,7 +11,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-E9H56PTQKX');
 </script>
 
@@ -71,9 +70,16 @@
     .toolbar {
       display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
       position:sticky; top:52px; z-index:10; background:#fff;
+
+      /* ✅ added: keep 4 buttons in one row (only affects layout, not behavior) */
+      flex-wrap: nowrap;
     }
     .btn {
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+      /* ✅ added: slight shrink to fit 4 buttons */
+      font-size:13px;
+      padding:10px 10px;
+      white-space: nowrap;
     }
     .btn.secondary { background:#fff; color:#000; }
     /* female only: hotpink background + black text */
@@ -82,6 +88,13 @@
       color: #000;
       border-color: var(--hotpink);
     }
+
+    /* ✅ added: LGBT button (share와 동일 UI = secondary) + colored letters */
+    .btn.lgbt { background:#fff; color:#000; }
+    .lgbt .L { color:#ff0000; }
+    .lgbt .G { color:#ffcc00; }
+    .lgbt .B { color:#00aa00; }
+    .lgbt .T { color:#8a2be2; }
 
     .chat {
       flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
@@ -102,10 +115,17 @@
 
     /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+    /* ✅ added: LGBT modal uses same styling */
+    dialog#lgbtModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+
     .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
     .modal-body { padding:14px; }
     .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
     .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    /* ✅ added: radio UI */
+    .radio-row { display:flex; gap:14px; align-items:center; margin:10px 0 12px; font-size:14px; }
+    .radio-row label { display:flex; gap:6px; align-items:center; cursor:pointer; }
 
     @supports (height: 100svh) {
       main { height: calc(100svh - 0px); }
@@ -114,19 +134,19 @@
 </head>
 <body>
   <header>
-	     <!-- 1) Header title: text link (new tab) -->
+    <!-- 1) Header title: text link (new tab) -->
     <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">
         Random chat with stranger (free)
     </a>
 
     <!-- 추가된 링크: 오른쪽에 표시됨 -->
     <a class="link" 
-   href="https://www.2048global.com" 
-   target="_blank" 
-   rel="noopener"
-   style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
-    Game
-</a>
+      href="https://www.2048global.com" 
+      target="_blank" 
+      rel="noopener"
+      style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
+      Game
+    </a>
 
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
@@ -138,24 +158,25 @@
         <a href="https://otieu.com/4/10321811" target="_blank" rel="noopener">Meet new girls</a>
       </nav>
     </div>
-</header>
-
+  </header>
 
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">new chat</button>
       <!-- 2) female only button style & payment flow -->
-      <button class="btn female" id="femaleBtn">Match female only</button>
+      <button class="btn female" id="femaleBtn">Match female</button>
+
+      <!-- ✅ added: LGBT button between female and share -->
+      <button class="btn secondary lgbt" id="lgbtBtn" aria-haspopup="dialog">
+        <span class="L">L</span><span class="G">G</span><span class="B">B</span><span class="T">T</span>
+      </button>
+
       <button class="btn secondary" id="shareBtn">share</button>
     </div>
-
-	 
 
     <div id="chat" class="chat" aria-live="polite" aria-label="Chat window">
       <!-- lines appear here -->
     </div>
-
-    <!-- (Removed 468x60 mid banner per request) -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="Type here..." enterkeyhint="send" />
@@ -163,25 +184,50 @@
     </div>
   </main>
 
-  <!-- (Removed <footer> entirely per request) -->
-
-  <!-- PayPal Modal -->
+  <!-- PayPal Modal (Female) : 기존 그대로 유지 -->
   <dialog id="payModal">
-<div class="modal-head">
-  Match with +18 flirty females only for explicit adult conversation. (Just $6.9)
-</div>
-	  <div class="modal-body">
+    <div class="modal-head">
+      Match with +18 flirty females only for explicit adult conversation. (Just $6.9)
+    </div>
+    <div class="modal-body">
       <div id="paypal-buttons">Flirty adult Girls are waiting for you…</div>
       <p style="font-size:15px;opacity:.7;margin-top:12px">
         Once you pay, you will be automatically verified as an adult and receive a permanent access link you can use forever.
       </p>
-		  <p>Enjoy explicit chatting unlimited times with flirty adult females</p>
-		  <p>Don't worry, it will appear as 'learning language' on the payment statement.</p>
-		  <p>You're going to love it. I swear.</p>
-		  <p>Start right now.</p>
+      <p>Enjoy explicit chatting unlimited times with flirty adult females</p>
+      <p>Don't worry, it will appear as 'learning language' on the payment statement.</p>
+      <p>You're going to love it. I swear.</p>
+      <p>Start right now.</p>
     </div>
     <div class="modal-foot">
       <button class="close-btn" id="closePay">Close</button>
+    </div>
+  </dialog>
+
+  <!-- ✅ added: PayPal Modal (LGBT) : female 모달과 분리 -->
+  <dialog id="lgbtModal">
+    <div class="modal-head">
+      Match with LGBT stranger only for explicit adult conversation. (Just $6.9)
+    </div>
+    <div class="modal-body">
+      <!-- ✅ Gay/Lesbian radio -->
+      <div class="radio-row" role="radiogroup" aria-label="LGBT type">
+        <label><input type="radio" name="lgbtType" value="gay" checked /> Gay</label>
+        <label><input type="radio" name="lgbtType" value="lesbian" /> Lesbian</label>
+      </div>
+
+      <div id="paypal-buttons-lgbt">Flirty friends are waiting for you…</div>
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        Once you pay, you will be automatically verified as an adult and receive a permanent access link you can use forever.
+      </p>
+      <p>Enjoy explicit chatting unlimited times with flirty adult LGBT</p>
+      <p>Gay for Gay, Lesbian for Lesbian.</p>
+      <p>Don't worry, it will appear as 'learning language' on the payment statement.</p>
+      <p>You're going to love it. I swear.</p>
+      <p>Start right now.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closeLgbt">Close</button>
     </div>
   </dialog>
 
@@ -194,6 +240,9 @@
     const newChatBtn = document.getElementById('newChatBtn');
     const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
+
+    // ✅ added
+    const lgbtBtn = document.getElementById('lgbtBtn');
 
     const history = []; // {role:'user'|'assistant', content:string} list
 
@@ -299,20 +348,27 @@
       if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
     });
 
-    // ------- PayPal modal
+    // ------- PayPal modal (female) : 기존 그대로
     const payModal = document.getElementById('payModal');
     const closePay = document.getElementById('closePay');
-
     closePay.addEventListener('click', () => payModal.close());
 
-    // female only 클릭 시: 모달 오픈 + 결제 성공 후 /EN/female 로 이동
     let nextRedirect = 'https://chat-with-stranger.com'; // safety default
     femaleBtn.addEventListener('click', () => {
       nextRedirect = 'https://chat-with-stranger.com/EN/female';
       payModal.showModal();
     });
 
-    // PayPal Buttons render
+    // ✅ added: PayPal modal (LGBT) : female와 분리
+    const lgbtModal = document.getElementById('lgbtModal');
+    const closeLgbt = document.getElementById('closeLgbt');
+    closeLgbt.addEventListener('click', () => lgbtModal.close());
+
+    lgbtBtn.addEventListener('click', () => {
+      lgbtModal.showModal();
+    });
+
+    // PayPal Buttons render (female) : 기존 그대로
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
@@ -330,45 +386,36 @@
         }).render('#paypal-buttons');
       }
     });
+
+    // ✅ added: PayPal Buttons render (LGBT) : 라디오 선택에 따라 description/redirect 변경
+    window.addEventListener('load', () => {
+      if (window.paypal && document.getElementById('paypal-buttons-lgbt')) {
+        window.paypal.Buttons({
+          style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+          createOrder: function(data, actions) {
+            const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+            const desc = (choice === 'lesbian') ? 'learning L language' : 'learning G language';
+            return actions.order.create({
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: desc }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+              const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+              location.href = (choice === 'lesbian')
+                ? 'https://chat-with-stranger.com/EN/les'
+                : 'https://chat-with-stranger.com/EN/g4g';
+            });
+          }
+        }).render('#paypal-buttons-lgbt');
+      }
+    });
   </script>
 
-<footer style="text-align:center;">
-  <a href="https://2048global.com/vpn" target="_blank" rel="noopener" style="color:#000;">
-    explore globe anonymously
-  </a>
-</footer>
- 
+  <footer style="text-align:center;">
+    <a href="https://2048global.com/vpn" target="_blank" rel="noopener" style="color:#000;">
+      explore globe anonymously
+    </a>
+  </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
