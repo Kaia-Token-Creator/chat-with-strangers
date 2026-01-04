@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
+	
 <script src="https://3nbf4.com/act/files/tag.min.js?z=10322170" data-cfasync="false" async></script>
 <script>(function(s){s.dataset.zone='10322169',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
+	
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9H56PTQKX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-E9H56PTQKX');
 </script>
 
-  <!-- AdSense (Auto Ads) -->
+  <!-- AdSense (Auto Ads) 추가 -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
           crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Chat Con Desconocidos – Chat Aleatorio Gratis y Anónimo</title>
-  <meta name="description" content="Chat Con Desconocidos ofrece chat aleatorio gratis, anónimo y perfecto para practicar idiomas. Disponible en 17 idiomas." />
+  <title>Chat con desconocidos – Chat aleatorio gratis y habla con extraños online</title>
+  <meta name="description" content="Chatea anónimamente con desconocidos con chat aleatorio gratis. Compatible con 17 idiomas y útil para aprender idiomas. Empieza a chatear al instante." />
 
   <!-- Favicon & Preview -->
   <link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
@@ -48,7 +47,7 @@
       position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
     }
-    /* Título del header: enlace de texto */
+    /* Header title: text link */
     .site-title {
       font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
       padding:0; border:none; background:transparent; cursor:pointer;
@@ -71,17 +70,31 @@
     .toolbar {
       display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
       position:sticky; top:52px; z-index:10; background:#fff;
+
+      /* ✅ added: keep 4 buttons in one row (only affects layout, not behavior) */
+      flex-wrap: nowrap;
     }
     .btn {
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+      /* ✅ added: slight shrink to fit 4 buttons */
+      font-size:13px;
+      padding:10px 10px;
+      white-space: nowrap;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* female only: fondo rosa + texto negro */
+    /* female only: hotpink background + black text */
     .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
     }
+
+    /* ✅ added: LGBT button (share와 동일 UI = secondary) + colored letters */
+    .btn.lgbt { background:#fff; color:#000; }
+    .lgbt .L { color:#ff0000; }
+    .lgbt .G { color:#ffcc00; }
+    .lgbt .B { color:#00aa00; }
+    .lgbt .T { color:#8a2be2; }
 
     .chat {
       flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
@@ -92,7 +105,7 @@
     .str { }
 
     .input-wrap {
-      position:sticky; bottom:60px; /* reserva por si hay banner inferior + padding */
+      position:sticky; bottom:60px; /* reserve for possible bottom banner + padding */
       background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
     }
     .input-wrap input {
@@ -102,10 +115,17 @@
 
     /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+    /* ✅ added: LGBT modal uses same styling */
+    dialog#lgbtModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+
     .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
     .modal-body { padding:14px; }
     .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
     .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    /* ✅ added: radio UI */
+    .radio-row { display:flex; gap:14px; align-items:center; margin:10px 0 12px; font-size:14px; }
+    .radio-row label { display:flex; gap:6px; align-items:center; cursor:pointer; }
 
     @supports (height: 100svh) {
       main { height: calc(100svh - 0px); }
@@ -114,24 +134,27 @@
 </head>
 <body>
   <header>
-    <!-- 1) Título del header: enlace (nueva pestaña) -->
-    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">Chat aleatorio con desconocidos (gratis)</a>
+    <!-- 1) Header title: text link (new tab) -->
+    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">
+        Chat aleatorio con desconocidos (gratis)
+    </a>
 
-	  <a class="link" 
-   href="https://www.2048global.com/ES" 
-   target="_blank" 
-   rel="noopener"
-   style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
-    Game
-</a>
-	  
+    <!-- 추가된 링크: 오른쪽에 표시됨 -->
+    <a class="link" 
+      href="https://www.2048global.com" 
+      target="_blank" 
+      rel="noopener"
+      style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
+      Juego
+    </a>
+
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
-      <nav id="menu" class="menu" role="menu" aria-label="Enlaces rápidos">
-        <a href="https://2048global.com/ES" target="_blank" rel="noopener">Jugar</a>
-        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Grupo TG de amigos globales</a>
-        <a href="https://2048global.com/ES/vpn" target="_blank" rel="noopener">Explora el mundo de forma anónima</a>
-        <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Operar cripto</a>
+      <nav id="menu" class="menu" role="menu" aria-label="Quick links">
+        <a href="https://2048global.com" target="_blank" rel="noopener">Jugar al juego</a>
+        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Grupo de amigos globales en Telegram</a>
+        <a href="https://2048global.com/vpn" target="_blank" rel="noopener">Explora el mundo de forma anónima</a>
+        <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Trading de criptomonedas</a>
         <a href="https://otieu.com/4/10321811" target="_blank" rel="noopener">Conoce chicas nuevas</a>
       </nav>
     </div>
@@ -140,18 +163,20 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">nuevo chat</button>
-      <!-- 2) female only: estilo del botón y flujo de pago -->
-      <button class="btn female" id="femaleBtn">Coincidir solo con mujeres</button>
+      <!-- 2) female only button style & payment flow -->
+      <button class="btn female" id="femaleBtn">Emparejar con mujeres</button>
+
+      <!-- ✅ added: LGBT button between female and share -->
+      <button class="btn secondary lgbt" id="lgbtBtn" aria-haspopup="dialog">
+        <span class="L">L</span><span class="G">G</span><span class="B">B</span><span class="T">T</span>
+      </button>
+
       <button class="btn secondary" id="shareBtn">compartir</button>
     </div>
 
-	  
-
-    <div id="chat" class="chat" aria-live="polite" aria-label="Ventana de chat">
+    <div id="chat" class="chat" aria-live="polite" aria-label="Chat window">
       <!-- lines appear here -->
     </div>
-
-    <!-- (El banner 468x60 ha sido eliminado) -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="Escribe aquí..." enterkeyhint="send" />
@@ -159,27 +184,52 @@
     </div>
   </main>
 
-  <!-- (Se eliminó <footer> y su contenido) -->
+  <!-- PayPal Modal (Female) : 기존 그대로 유지 -->
+  <dialog id="payModal">
+    <div class="modal-head">
+      Empareja solo con mujeres coquetas +18 para una conversación explícita de adultos. (Solo $6.9)
+    </div>
+    <div class="modal-body">
+      <div id="paypal-buttons">Chicas adultas coquetas te están esperando…</div>
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        Una vez pagues, se te verificará automáticamente como adulto y recibirás un enlace de acceso permanente que podrás usar para siempre.
+      </p>
+      <p>Disfruta de chat explícito ilimitado con mujeres adultas coquetas</p>
+      <p>No te preocupes, aparecerá como 'learning language' en el extracto de pago.</p>
+      <p>Te va a encantar. Lo juro.</p>
+      <p>Empieza ahora mismo.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closePay">Cerrar</button>
+    </div>
+  </dialog>
 
-  <!-- Modal de PayPal -->
-<dialog id="payModal">
-  <div class="modal-head">
-    Match solo mujeres +18 para sexting. ($6.9)
-  </div>
-  <div class="modal-body">
-    <div id="paypal-buttons">Las chicas te están esperando…</div>
-    <p style="font-size:15px;opacity:.7;margin-top:12px">
-      Una vez que pagues, serás verificado automáticamente como adulto y obtendrás un enlace permanente que podrás usar para siempre.
-    </p>
-    <p>Puedes chatear de forma ilimitada con chicas +18 coquetas</p>
-    <p>No te preocupes, en el extracto del pago aparecerá como “aprendizaje de idiomas”.</p>
-    <p>Te va a encantar. Lo juro. Disfruta ahora mismo.</p>
-  </div>
-  <div class="modal-foot">
-    <button class="close-btn" id="closePay">Cerrar</button>
-  </div>
-</dialog>
+  <!-- ✅ added: PayPal Modal (LGBT) : female 모달과 분리 -->
+  <dialog id="lgbtModal">
+    <div class="modal-head">
+      Empareja solo con desconocidos LGBT para una conversación explícita de adultos. (Solo $6.9)
+    </div>
+    <div class="modal-body">
+      <!-- ✅ Gay/Lesbian radio -->
+      <div class="radio-row" role="radiogroup" aria-label="LGBT type">
+        <label><input type="radio" name="lgbtType" value="gay" checked /> Gay</label>
+        <label><input type="radio" name="lgbtType" value="lesbian" /> Lesbiana</label>
+      </div>
 
+      <div id="paypal-buttons-lgbt">Amistades coquetas te están esperando…</div>
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        Una vez pagues, se te verificará automáticamente como adulto y recibirás un enlace de acceso permanente que podrás usar para siempre.
+      </p>
+      <p>Disfruta de chat explícito ilimitado con adultos LGBT coquetos</p>
+      <p>Gay con Gay, Lesbiana con Lesbiana.</p>
+      <p>No te preocupes, aparecerá como 'learning language' en el extracto de pago.</p>
+      <p>Te va a encantar. Lo juro.</p>
+      <p>Empieza ahora mismo.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closeLgbt">Cerrar</button>
+    </div>
+  </dialog>
 
   <script>
     // ------- helpers
@@ -190,6 +240,9 @@
     const newChatBtn = document.getElementById('newChatBtn');
     const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
+
+    // ✅ added
+    const lgbtBtn = document.getElementById('lgbtBtn');
 
     const history = []; // {role:'user'|'assistant', content:string} list
 
@@ -222,7 +275,7 @@
           const text = (data.reply || '').trim();
           if (text) {
             history.push({ role: 'assistant', content: text });
-            addLine('stranger', text);
+            addLine('desconocido', text);
           }
         } catch (e) {
           console.error(e);
@@ -236,7 +289,7 @@
       if (!text) return;
       msgEl.value = '';
       history.push({ role: 'user', content: text });
-      addLine('You', text);
+      addLine('Tú', text);
 
       try {
         const r = await fetch('/api/chat', {
@@ -248,11 +301,11 @@
         const reply = (data.reply || '').trim();
         if (reply) {
           history.push({ role: 'assistant', content: reply });
-          addLine('stranger', reply);
+          addLine('desconocido', reply);
         }
       } catch (e) {
         console.error(e);
-        addLine('stranger', '…conexión perdida, inténtalo de nuevo');
+        addLine('desconocido', '…conexión perdida, inténtalo de nuevo');
       }
     }
 
@@ -266,11 +319,11 @@
     // ------- toolbar buttons
     newChatBtn.addEventListener('click', () => location.reload());
 
-    // share: dominio base
+    // share: base domain
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'Chat aleatorio con desconocidos',
-        text: 'Entra y chatea con un desconocido.',
+        text: 'Entra y chatea con un desconocido al azar.',
         url: 'https://chat-with-stranger.com'
       };
       if (navigator.share) {
@@ -295,27 +348,34 @@
       if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
     });
 
-    // ------- PayPal modal
+    // ------- PayPal modal (female) : 기존 그대로
     const payModal = document.getElementById('payModal');
     const closePay = document.getElementById('closePay');
-
     closePay.addEventListener('click', () => payModal.close());
 
-    // female only: abrir modal + tras pago redirigir a /ES/female
-    let nextRedirect = 'https://chat-with-stranger.com'; // fallback seguro
+    let nextRedirect = 'https://chat-with-stranger.com'; // safety default
     femaleBtn.addEventListener('click', () => {
       nextRedirect = 'https://chat-with-stranger.com/ES/female';
       payModal.showModal();
     });
 
-    // Render de PayPal Buttons
+    // ✅ added: PayPal modal (LGBT) : female와 분리
+    const lgbtModal = document.getElementById('lgbtModal');
+    const closeLgbt = document.getElementById('closeLgbt');
+    closeLgbt.addEventListener('click', () => lgbtModal.close());
+
+    lgbtBtn.addEventListener('click', () => {
+      lgbtModal.showModal();
+    });
+
+    // PayPal Buttons render (female) : 기존 그대로
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'aprendizaje de idiomas' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Learning language' }]
             });
           },
           onApprove: function(data, actions) {
@@ -326,27 +386,36 @@
         }).render('#paypal-buttons');
       }
     });
+
+    // ✅ added: PayPal Buttons render (LGBT) : 라디오 선택에 따라 description/redirect 변경
+    window.addEventListener('load', () => {
+      if (window.paypal && document.getElementById('paypal-buttons-lgbt')) {
+        window.paypal.Buttons({
+          style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+          createOrder: function(data, actions) {
+            const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+            const desc = (choice === 'lesbian') ? 'learning L language' : 'learning G language';
+            return actions.order.create({
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: desc }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+              const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+              location.href = (choice === 'lesbian')
+                ? 'https://chat-with-stranger.com/ES/les'
+                : 'https://chat-with-stranger.com/ES/g4g';
+            });
+          }
+        }).render('#paypal-buttons-lgbt');
+      }
+    });
   </script>
 
-	<footer style="text-align:center;">
-  <a href="https://2048global.com/ES/vpn" target="_blank" rel="noopener" style="color:#000;">
-Explora el mundo de forma anónima
-</a>
-</footer>
-	
+  <footer style="text-align:center;">
+    <a href="https://2048global.com/vpn" target="_blank" rel="noopener" style="color:#000;">
+      Explora el mundo de forma anónima
+    </a>
+  </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
