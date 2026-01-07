@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
+	
 <script src="https://3nbf4.com/act/files/tag.min.js?z=10322170" data-cfasync="false" async></script>
 <script>(function(s){s.dataset.zone='10322169',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
+	
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9H56PTQKX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-E9H56PTQKX');
 </script>
 
-  <!-- AdSense -->
+  <!-- AdSense (Auto Ads) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
           crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Chatta con Sconosciuti – Chat Casuale Gratis e Anonima</title>
-  <meta name="description" content="Chatta con Sconosciuti ti permette di fare chat casuali gratuite, anonime e utili per imparare lingue. Supporta 17 lingue." />
+  <title>Chatta con Sconosciuti – Chat Casuale Gratuita & Parla con Estranei Online</title>
+  <meta name="description" content="Chatta in modo anonimo con sconosciuti tramite chat casuale gratuita. Supporta 17 lingue e aiuta nell’apprendimento linguistico. Inizia subito a chattare." />
 
   <!-- Favicon & Preview -->
   <link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
@@ -37,7 +36,7 @@
   <meta name="twitter:description" content="Chat casuale con sconosciuti" />
   <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
-  <!-- PayPal SDK (ID client obbligatorio) -->
+  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
 
   <style>
@@ -48,7 +47,6 @@
       position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
     }
-    /* Titolo header: link testuale */
     .site-title {
       font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
       padding:0; border:none; background:transparent; cursor:pointer;
@@ -71,17 +69,26 @@
     .toolbar {
       display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
       position:sticky; top:52px; z-index:10; background:#fff;
+      flex-wrap: nowrap;
     }
     .btn {
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+      font-size:13px;
+      padding:10px 10px;
+      white-space: nowrap;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* Pulsante female only: sfondo fucsia + testo nero */
     .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
     }
+
+    .btn.lgbt { background:#fff; color:#000; }
+    .lgbt .L { color:#ff0000; }
+    .lgbt .G { color:#ffcc00; }
+    .lgbt .B { color:#00aa00; }
+    .lgbt .T { color:#8a2be2; }
 
     .chat {
       flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
@@ -92,7 +99,7 @@
     .str { }
 
     .input-wrap {
-      position:sticky; bottom:60px; /* spazio inferiore + padding */
+      position:sticky; bottom:60px;
       background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
     }
     .input-wrap input {
@@ -100,12 +107,16 @@
     }
     .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
 
-    /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+    dialog#lgbtModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+
     .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
     .modal-body { padding:14px; }
     .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
     .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    .radio-row { display:flex; gap:14px; align-items:center; margin:10px 0 12px; font-size:14px; }
+    .radio-row label { display:flex; gap:6px; align-items:center; cursor:pointer; }
 
     @supports (height: 100svh) {
       main { height: calc(100svh - 0px); }
@@ -114,24 +125,25 @@
 </head>
 <body>
   <header>
-    <!-- 1) Titolo header: link testuale (nuova scheda) -->
-    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">Chat casuale con sconosciuti (gratis)</a>
+    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">
+        Chat casuale con sconosciuti (gratis)
+    </a>
 
-	  <a class="link" 
-   href="https://www.2048global.com/IT" 
-   target="_blank" 
-   rel="noopener"
-   style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
-    Game
-</a>
-	  
+    <a class="link" 
+      href="https://www.2048global.com" 
+      target="_blank" 
+      rel="noopener"
+      style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
+      Gioco
+    </a>
+
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
-      <nav id="menu" class="menu" role="menu" aria-label="Collegamenti rapidi">
-        <a href="https://2048global.com/IT" target="_blank" rel="noopener">Gioca</a>
-        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Gruppo TG amici dal mondo</a>
-        <a href="https://2048global.com/IT/vpn" target="_blank" rel="noopener">Esplora il mondo in anonimo</a>
-        <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Trading di criptovalute</a>
+      <nav id="menu" class="menu" role="menu" aria-label="Quick links">
+        <a href="https://2048global.com/IT" target="_blank" rel="noopener">Gioca al gioco</a>
+        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Gruppo TG amici globali</a>
+        <a href="https://2048global.com/IT/vpn" target="_blank" rel="noopener">esplora il mondo in anonimato</a>
+        <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">Trading crypto</a>
         <a href="https://otieu.com/4/10321811" target="_blank" rel="noopener">Incontra nuove ragazze</a>
       </nav>
     </div>
@@ -140,48 +152,72 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">nuova chat</button>
-      <!-- 2) Pulsante female only + flusso pagamento -->
-      <button class="btn female" id="femaleBtn">Abbina solo con donne</button>
+
+      <button class="btn female" id="femaleBtn">Abbina donne</button>
+
+      <button class="btn secondary lgbt" id="lgbtBtn" aria-haspopup="dialog">
+        <span class="L">L</span><span class="G">G</span><span class="B">B</span><span class="T">T</span>
+      </button>
+
       <button class="btn secondary" id="shareBtn">condividi</button>
     </div>
 
-	
-	  
-    <div id="chat" class="chat" aria-live="polite" aria-label="Finestra di chat">
-      <!-- lines appear here -->
+    <div id="chat" class="chat" aria-live="polite" aria-label="Finestra chat">
     </div>
 
-    <!-- (Banner 468x60 rimosso) -->
-
     <div class="input-wrap">
-      <input id="msg" type="text" placeholder="Scrivi qui…" enterkeyhint="send" />
+      <input id="msg" type="text" placeholder="Scrivi qui..." enterkeyhint="send" />
       <button id="sendBtn">Invia</button>
     </div>
   </main>
 
-  <!-- (footer rimosso con tutto il contenuto) -->
+  <!-- Modal Femmina -->
+  <dialog id="payModal">
+    <div class="modal-head">
+      Chat illimitate con donne adulte +18 per sexting. (Solo $6.9)
+    </div>
+    <div class="modal-body">
+      <div id="paypal-buttons">Ragazze eccitate ti stanno aspettando…</div>
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        Una volta pagato solo $6.9, verrai verificato automaticamente come adulto e riceverai un link permanente che potrai usare PER SEMPRE.
+      </p>
+      <p>Goditi chat esplicite illimitate con donne adulte flirtanti</p>
+      <p>Non preoccuparti, apparirà come “learning language” sull’estratto conto.</p>
+      <p>Ti piacerà da morire. Te lo prometto.</p>
+      <p>Inizia adesso.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closePay">Chiudi</button>
+    </div>
+  </dialog>
 
-  <!-- Modal PayPal -->
-<dialog id="payModal">
-  <div class="modal-head">
-    Match solo con donne +18 per sexting. ($6.9)
-  </div>
-  <div class="modal-body">
-    <div id="paypal-buttons">Le ragazze ti stanno aspettando…</div>
-    <p style="font-size:15px;opacity:.7;margin-top:12px">
-      Una volta effettuato il pagamento, verrai automaticamente verificato come adulto e riceverai un link permanente che potrai usare per sempre.
-    </p>
-    <p>Puoi chattare senza limiti con ragazze +18 provocanti</p>
-    <p>Non preoccuparti, sull’estratto conto apparirà come “apprendimento delle lingue”.</p>
-    <p>Ti piacerà tantissimo. Te lo giuro. Goditelo subito.</p>
-  </div>
-  <div class="modal-foot">
-    <button class="close-btn" id="closePay">Chiudi</button>
-  </div>
-</dialog>
+  <!-- Modal LGBT -->
+  <dialog id="lgbtModal">
+    <div class="modal-head">
+      Chat illimitate con persone LGBT. (Solo $6.9)
+    </div>
+    <div class="modal-body">
+      <div class="radio-row" role="radiogroup" aria-label="LGBT type">
+        <label><input type="radio" name="lgbtType" value="gay" checked /> Solo Gay</label>
+        <label><input type="radio" name="lgbtType" value="lesbian" /> Solo Lesbiche</label>
+      </div>
+
+      <div id="paypal-buttons-lgbt">Sext disponibile</div>
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        Una volta pagato solo $6.9, verrai verificato automaticamente come adulto e riceverai un link permanente che potrai usare PER SEMPRE.
+      </p>
+      <p>Goditi chat esplicite illimitate con persone LGBT flirtanti</p>
+      <p>Gay per gay, lesbiche per lesbiche.</p>
+      <p>Non preoccuparti, apparirà come “learning language” sull’estratto conto.</p>
+      <p>Ti piacerà da impazzire. Te lo prometto.</p>
+      <p>Inizia ora.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closeLgbt">Chiudi</button>
+    </div>
+  </dialog>
 
   <script>
-    // ------- helpers
     const lang = 'IT';
     const chatEl = document.getElementById('chat');
     const msgEl = document.getElementById('msg');
@@ -189,28 +225,26 @@
     const newChatBtn = document.getElementById('newChatBtn');
     const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
+    const lgbtBtn = document.getElementById('lgbtBtn');
 
-    const history = []; // {role:'user'|'assistant', content:string} list
+    const history = [];
 
     function addLine(who, text) {
       const line = document.createElement('div');
-      line.className = 'line ' + (who === 'You' ? 'me' : 'str');
+      line.className = 'line ' + (who === 'Tu' ? 'me' : 'str');
       line.textContent = who + ' : ' + text;
       chatEl.appendChild(line);
       chatEl.scrollTop = chatEl.scrollHeight;
     }
 
-    // ------- initial: 50% AI starts
     window.addEventListener('load', async () => {
       setTimeout(() => {
-        // handle mobile keyboard: ensure input visible
         msgEl.addEventListener('focus', () => setTimeout(() => {
           document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 80));
       }, 0);
 
       if (Math.random() < 0.5) {
-        // AI starts
         try {
           const r = await fetch('/api/chat', {
             method: 'POST',
@@ -221,21 +255,20 @@
           const text = (data.reply || '').trim();
           if (text) {
             history.push({ role: 'assistant', content: text });
-            addLine('stranger', text);
+            addLine('sconosciuto', text);
           }
         } catch (e) {
-        console.error(e);
+          console.error(e);
         }
       }
     });
 
-    // ------- send
     async function sendMessage() {
       const text = msgEl.value.trim();
       if (!text) return;
       msgEl.value = '';
       history.push({ role: 'user', content: text });
-      addLine('You', text);
+      addLine('Tu', text);
 
       try {
         const r = await fetch('/api/chat', {
@@ -247,11 +280,11 @@
         const reply = (data.reply || '').trim();
         if (reply) {
           history.push({ role: 'assistant', content: reply });
-          addLine('stranger', reply);
+          addLine('sconosciuto', reply);
         }
       } catch (e) {
         console.error(e);
-        addLine('stranger', '…connessione persa, riprova');
+        addLine('sconosciuto', '…connessione persa, riprova');
       }
     }
 
@@ -262,14 +295,12 @@
       }
     });
 
-    // ------- toolbar buttons
     newChatBtn.addEventListener('click', () => location.reload());
 
-    // 3) share: dominio base
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'Chat casuale con sconosciuti',
-        text: 'Entra e chatta con uno sconosciuto a caso.',
+        text: 'Entra e chatta con uno sconosciuto casuale.',
         url: 'https://chat-with-stranger.com'
       };
       if (navigator.share) {
@@ -282,7 +313,6 @@
       }
     });
 
-    // ------- hamburger menu
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('menu');
     menuBtn.addEventListener('click', () => {
@@ -294,57 +324,69 @@
       if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
     });
 
-    // ------- PayPal modal
     const payModal = document.getElementById('payModal');
     const closePay = document.getElementById('closePay');
-
     closePay.addEventListener('click', () => payModal.close());
 
-    // female only: apri modale + dopo il pagamento reindirizza a /IT/female
-    let nextRedirect = 'https://chat-with-stranger.com'; // fallback
+    let nextRedirect = 'https://chat-with-stranger.com';
     femaleBtn.addEventListener('click', () => {
       nextRedirect = 'https://chat-with-stranger.com/IT/female';
       payModal.showModal();
     });
 
-    // PayPal Buttons render
+    const lgbtModal = document.getElementById('lgbtModal');
+    const closeLgbt = document.getElementById('closeLgbt');
+    closeLgbt.addEventListener('click', () => lgbtModal.close());
+    lgbtBtn.addEventListener('click', () => {
+      lgbtModal.showModal();
+    });
+
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'apprendimento delle lingue' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Learning language' }]
             });
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect; // → /IT/female
+              location.href = nextRedirect;
             });
           }
         }).render('#paypal-buttons');
       }
     });
+
+    window.addEventListener('load', () => {
+      if (window.paypal && document.getElementById('paypal-buttons-lgbt')) {
+        window.paypal.Buttons({
+          style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+          createOrder: function(data, actions) {
+            const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+            const desc = (choice === 'lesbian') ? 'learning L language' : 'learning G language';
+            return actions.order.create({
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: desc }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+              const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+              location.href = (choice === 'lesbian')
+                ? 'https://chat-with-stranger.com/IT/les'
+                : 'https://chat-with-stranger.com/IT/g4g';
+            });
+          }
+        }).render('#paypal-buttons-lgbt');
+      }
+    });
   </script>
 
-	<footer style="text-align:center;">
-  <a href="https://2048global.com/IT/vpn" target="_blank" rel="noopener" style="color:#000;">
-Esplora il mondo in anonimo
-</a>
-</footer>
-
+  <footer style="text-align:center;">
+    <a href="https://2048global.com/IT/vpn" target="_blank" rel="noopener" style="color:#000;">
+      esplora il mondo in anonimato
+    </a>
+  </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
