@@ -89,6 +89,14 @@
       min-height:50px;
       width:100%;
     }
+
+    /* ✅ Safety banner line */
+    .safety-line {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin: 12px 0 24px;
+    }
   </style>
 </head>
 <body>
@@ -97,6 +105,9 @@
     <section class="card" role="region" aria-labelledby="title-rc">
       <h1 id="title-rc">Random Chat</h1>
       <h2 id="subtitle-rc">with stranger</h2>
+
+      <!-- ✅ New safety banner line -->
+      <p id="safe-line" class="safety-line">100% Safe / Anonymous / No Log-in</p>
 
       <div class="row">
         <div>
@@ -156,6 +167,7 @@
         labelLanguage: "Language", labelGender: "Your gender (optional)", labelAge: "Age",
         enter: "Enter",
         genderMale: "👨 male", genderFemale: "👩 female", genderNA: "🙈 prefer not to say",
+        safeLine: "100% Safe / Anonymous / No Log-in",
         dir: "ltr", htmlLang: "en"
       },
       CN: {
@@ -163,6 +175,7 @@
         labelLanguage: "语言", labelGender: "性别（可选）", labelAge: "年龄",
         enter: "进入",
         genderMale: "👨 男", genderFemale: "👩 女", genderNA: "🙈 不愿透露",
+        safeLine: "100% 安全 / 匿名 / 无需登录",
         dir: "ltr", htmlLang: "zh-CN"
       },
       ES: {
@@ -170,6 +183,7 @@
         labelLanguage: "Idioma", labelGender: "Tu género (opcional)", labelAge: "Edad",
         enter: "Entrar",
         genderMale: "👨 hombre", genderFemale: "👩 mujer", genderNA: "🙈 prefiero no decirlo",
+        safeLine: "100% seguro / anónimo / sin inicio de sesión",
         dir: "ltr", htmlLang: "es"
       },
       KO: {
@@ -177,6 +191,7 @@
         labelLanguage: "언어", labelGender: "성별(선택)", labelAge: "나이",
         enter: "입장",
         genderMale: "👨 남성", genderFemale: "👩 여성", genderNA: "🙈 밝히지 않음",
+        safeLine: "100% 안전 / 익명 / 로그인 필요 없음",
         dir: "ltr", htmlLang: "ko"
       },
       JA: {
@@ -184,6 +199,7 @@
         labelLanguage: "言語", labelGender: "性別（任意）", labelAge: "年齢",
         enter: "入る",
         genderMale: "👨 男性", genderFemale: "👩 女性", genderNA: "🙈 言いたくない",
+        safeLine: "100％安全 / 匿名 / ログイン不要",
         dir: "ltr", htmlLang: "ja"
       },
       FR: {
@@ -191,6 +207,7 @@
         labelLanguage: "Langue", labelGender: "Votre genre (facultatif)", labelAge: "Âge",
         enter: "Entrer",
         genderMale: "👨 homme", genderFemale: "👩 femme", genderNA: "🙈 préfère ne pas le dire",
+        safeLine: "100 % sécurisé / anonyme / sans connexion",
         dir: "ltr", htmlLang: "fr"
       },
       IT: {
@@ -198,6 +215,7 @@
         labelLanguage: "Lingua", labelGender: "Il tuo genere (opzionale)", labelAge: "Età",
         enter: "Entra",
         genderMale: "👨 uomo", genderFemale: "👩 donna", genderNA: "🙈 preferisco non dirlo",
+        safeLine: "100% sicuro / anonimo / senza accesso",
         dir: "ltr", htmlLang: "it"
       },
       NL: {
@@ -205,6 +223,7 @@
         labelLanguage: "Taal", labelGender: "Je gender (optioneel)", labelAge: "Leeftijd",
         enter: "Ga verder",
         genderMale: "👨 man", genderFemale: "👩 vrouw", genderNA: "🙈 zeg ik liever niet",
+        safeLine: "100% veilig / anoniem / geen login nodig",
         dir: "ltr", htmlLang: "nl"
       },
       PT: {
@@ -212,6 +231,7 @@
         labelLanguage: "Idioma", labelGender: "Seu gênero (opcional)", labelAge: "Idade",
         enter: "Entrar",
         genderMale: "👨 masculino", genderFemale: "👩 feminino", genderNA: "🙈 prefiro não dizer",
+        safeLine: "100% seguro / anônimo / sem login",
         dir: "ltr", htmlLang: "pt"
       },
       HI: {
@@ -219,6 +239,7 @@
         labelLanguage: "भाषा", labelGender: "आपका लिंग (वैकल्पिक)", labelAge: "आयु",
         enter: "प्रवेश करें",
         genderMale: "👨 पुरुष", genderFemale: "👩 महिला", genderNA: "🙈 नहीं बताना",
+        safeLine: "100% सुरक्षित / गुमनाम / लॉगिन की ज़रूरत नहीं",
         dir: "ltr", htmlLang: "hi"
       },
       AR: {
@@ -226,6 +247,7 @@
         labelLanguage: "اللغة", labelGender: "جنسك (اختياري)", labelAge: "العمر",
         enter: "ادخل",
         genderMale: "👨 ذكر", genderFemale: "👩 أنثى", genderNA: "🙈 أفضل عدم القول",
+        safeLine: "٪100 آمن / مجهول / بدون تسجيل دخول",
         dir: "rtl", htmlLang: "ar"
       },
       BN: {
@@ -233,6 +255,7 @@
         labelLanguage: "ভাষা", labelGender: "আপনার লিঙ্গ (ঐচ্ছিক)", labelAge: "বয়স",
         enter: "প্রবেশ করুন",
         genderMale: "👨 পুরুষ", genderFemale: "👩 নারী", genderNA: "🙈 বলতে চাই না",
+        safeLine: "১০০% নিরাপদ / গোপনীয় / লগইন প্রয়োজন নেই",
         dir: "ltr", htmlLang: "bn"
       },
       RU: {
@@ -240,6 +263,7 @@
         labelLanguage: "Язык", labelGender: "Ваш пол (необязательно)", labelAge: "Возраст",
         enter: "Войти",
         genderMale: "👨 мужчина", genderFemale: "👩 женщина", genderNA: "🙈 предпочитаю не говорить",
+        safeLine: "100% безопасно / анонимно / без входа",
         dir: "ltr", htmlLang: "ru"
       },
       VI: {
@@ -247,6 +271,7 @@
         labelLanguage: "Ngôn ngữ", labelGender: "Giới tính của bạn (tuỳ chọn)", labelAge: "Tuổi",
         enter: "Vào",
         genderMale: "👨 nam", genderFemale: "👩 nữ", genderNA: "🙈 không tiết lộ",
+        safeLine: "100% an toàn / ẩn danh / không cần đăng nhập",
         dir: "ltr", htmlLang: "vi"
       },
       ID: {
@@ -254,6 +279,7 @@
         labelLanguage: "Bahasa", labelGender: "Jenis kelamin Anda (opsional)", labelAge: "Usia",
         enter: "Masuk",
         genderMale: "👨 pria", genderFemale: "👩 wanita", genderNA: "🙈 tidak ingin menyebutkan",
+        safeLine: "100% aman / anonim / tanpa login",
         dir: "ltr", htmlLang: "id"
       },
       TH: {
@@ -261,13 +287,15 @@
         labelLanguage: "ภาษา", labelGender: "เพศของคุณ (ไม่บังคับ)", labelAge: "อายุ",
         enter: "เข้าสู่",
         genderMale: "👨 ชาย", genderFemale: "👩 หญิง", genderNA: "🙈 ไม่ระบุ",
+        safeLine: "ปลอดภัย 100% / ไม่ระบุตัวตน / ไม่ต้องล็อกอิน",
         dir: "ltr", htmlLang: "th"
       },
       MY: {
         title: "ကျပန်းချတ်", subtitle: "မသိကြသူများနှင့်",
         labelLanguage: "ဘာသာစကား", labelGender: "လိင်အမျိုးအစား (ရွေးချယ်နိုင်)", labelAge: "အသက်",
         enter: "ဝင်မည်",
-        genderMale: "👨 အမျိုးသား", genderFemale: "👩 အမျိုးသမီး", genderNA: "🙈 မဖေါ်ပြချင်",
+        genderMale: "👨 အမျိုးသား", genderFemale: "👩 အမျိုးသမီး", genderNA: "🙈 မဖော်ပြချင်",
+        safeLine: "၁၀၀% လုံခြုံ / အမည်မဖော်ဖြစ် / လော့ဂ်အင် မလိုအပ်",
         dir: "ltr", htmlLang: "my"
       }
     };
@@ -300,7 +328,8 @@
       labelGender: document.getElementById('label-gender'),
       labelAge: document.getElementById('label-age'),
       enterBtn: document.getElementById('enterBtn'),
-      genderSelect: document.getElementById('gender')
+      genderSelect: document.getElementById('gender'),
+      safeLine: document.getElementById('safe-line')
     };
 
     function applyI18n(code) {
@@ -312,6 +341,7 @@
       els.labelGender.textContent = t.labelGender;
       els.labelAge.textContent = t.labelAge;
       els.enterBtn.textContent = t.enter;
+      els.safeLine.textContent = t.safeLine;
 
       const [o1, o2, o3] = els.genderSelect.options;
       o1.textContent = t.genderMale;
