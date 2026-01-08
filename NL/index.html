@@ -170,7 +170,6 @@
       top:52px;
       z-index:10;
       background:#fff;
-      /* ✅ added: keep 4 buttons in one row (only affects layout, not behavior) */
       flex-wrap: nowrap;
     }
 
@@ -181,10 +180,8 @@
       color:#fff;
       border-radius:10px;
       font-weight:700;
-      font-size:14px;
-      cursor:pointer;
-      /* ✅ added: slight shrink to fit 4 buttons */
       font-size:13px;
+      cursor:pointer;
       padding:10px 10px;
       white-space: nowrap;
     }
@@ -201,7 +198,7 @@
       border-color: var(--hotpink);
     }
 
-    /* ✅ added: LGBT button (share와 동일 UI = secondary) + colored letters */
+    /* LGBT button + colored letters */
     .btn.lgbt {
       background:#fff;
       color:#000;
@@ -269,7 +266,7 @@
       padding:0;
     }
 
-    /* ✅ added: LGBT modal uses same styling */
+    /* LGBT modal uses same styling */
     dialog#lgbtModal {
       width:min(480px, 94vw);
       border:1px solid #000;
@@ -301,7 +298,7 @@
       cursor:pointer;
     }
 
-    /* ✅ added: radio UI */
+    /* radio UI */
     .radio-row {
       display:flex;
       gap:14px;
@@ -326,12 +323,12 @@
 </head>
 <body>
 <header>
-  <!-- 1) Header title: text link (new tab) -->
+  <!-- Header title: text link (new tab) -->
   <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">
     Random chat met een vreemde (gratis)
   </a>
 
-  <!-- 추가된 링크: 오른쪽에 표시됨 -->
+  <!-- 오른쪽 링크 -->
   <a class="link" href="https://www.2048global.com" target="_blank" rel="noopener"
      style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
     Spel
@@ -351,11 +348,9 @@
 
 <main>
   <div class="toolbar">
-    <button class="btn" id="newChatBtn">nieuw gesprek</button>
-    <!-- 2) female only button style & payment flow -->
+    <button class="btn" id="newChatBtn">nieuw</button>
     <button class="btn female" id="femaleBtn">Match met vrouw</button>
 
-    <!-- ✅ added: LGBT button between female and share -->
     <button class="btn secondary lgbt" id="lgbtBtn" aria-haspopup="dialog">
       <span class="L">L</span><span class="G">G</span><span class="B">B</span><span class="T">T</span>
     </button>
@@ -373,7 +368,7 @@
   </div>
 </main>
 
-<!-- PayPal Modal (Female) : 기존 그대로 유지 -->
+<!-- PayPal Modal (Female) -->
 <dialog id="payModal">
   <div class="modal-head">
     Maak onbeperkt matches met +18 flirterige vrouwen alleen voor sekschat. (Slechts $6.9)
@@ -398,13 +393,12 @@
   </div>
 </dialog>
 
-<!-- ✅ added: PayPal Modal (LGBT) : female 모달과 분리 -->
+<!-- PayPal Modal (LGBT) -->
 <dialog id="lgbtModal">
   <div class="modal-head">
     Maak onbeperkt matches met alleen LGBT-vreemden. (Slechts $6.9)
   </div>
   <div class="modal-body">
-    <!-- ✅ Gay/Lesbian radio -->
     <div class="radio-row" role="radiogroup" aria-label="LGBT-type">
       <label><input type="radio" name="lgbtType" value="gay" checked /> Alleen homo</label>
       <label><input type="radio" name="lgbtType" value="lesbian" /> Alleen lesbisch</label>
@@ -439,7 +433,6 @@
   const newChatBtn = document.getElementById('newChatBtn');
   const femaleBtn = document.getElementById('femaleBtn');
   const shareBtn = document.getElementById('shareBtn');
-  // ✅ added
   const lgbtBtn = document.getElementById('lgbtBtn');
 
   const history = []; // {role:'user'|'assistant', content:string} list
@@ -535,7 +528,7 @@
       } catch {}
     } else {
       try {
-        await navigator.clipboard.writeText(${shareData.text} ${shareData.url});
+        await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
         alert('Link gekopieerd!');
       } catch {
         alert('Kopieer deze link: ' + shareData.url);
@@ -557,7 +550,7 @@
     if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
   });
 
-  // ------- PayPal modal (female) : 기존 그대로
+  // ------- PayPal modal (female)
   const payModal = document.getElementById('payModal');
   const closePay = document.getElementById('closePay');
 
@@ -570,7 +563,7 @@
     payModal.showModal();
   });
 
-  // ✅ added: PayPal modal (LGBT) : female와 분리
+  // ------- PayPal modal (LGBT)
   const lgbtModal = document.getElementById('lgbtModal');
   const closeLgbt = document.getElementById('closeLgbt');
 
@@ -580,7 +573,7 @@
     lgbtModal.showModal();
   });
 
-  // PayPal Buttons render (female) : 기존 그대로
+  // PayPal Buttons render (female)
   window.addEventListener('load', () => {
     if (window.paypal && document.getElementById('paypal-buttons')) {
       window.paypal.Buttons({
@@ -610,7 +603,7 @@
     }
   });
 
-  // ✅ added: PayPal Buttons render (LGBT) : 라디오 선택에 따라 description/redirect 변경
+  // PayPal Buttons render (LGBT)
   window.addEventListener('load', () => {
     if (window.paypal && document.getElementById('paypal-buttons-lgbt')) {
       window.paypal.Buttons({
