@@ -11,33 +11,32 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-E9H56PTQKX');
 </script>
 
-  <!-- AdSense -->
+  <!-- AdSense (Auto Ads) 추가 -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9891583086388017"
           crossorigin="anonymous"></script>
   
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>見知らぬ人とチャット – 無料ランダムチャット＆匿名トーク</title>
-  <meta name="description" content="見知らぬ人とチャットでは無料ランダムチャットができ、匿名で会話可能。語学学習にも最適で17言語対応。" />
+  <title>Chat With Stranger – 無料ランダムチャット・見知らぬ人とオンラインでおしゃべり</title>
+  <meta name="description" content="匿名で見知らぬ人とランダムチャットができる無料サービス。17言語に対応し、語学学習にも最適。今すぐチャットを開始しよう。" />
 
   <!-- Favicon & Preview -->
   <link rel="icon" type="image/x-icon" href="https://chat-with-stranger.com/favicon.ico" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="知らない人とランダムチャット" />
-  <meta property="og:description" content="知らない人とランダムチャット" />
+  <meta property="og:title" content="見知らぬ人とのランダムチャット" />
+  <meta property="og:description" content="見知らぬ人とのランダムチャット" />
   <meta property="og:image" content="https://chat-with-stranger.com/preview.jpg" />
   <meta property="og:url" content="https://chat-with-stranger.com/" />
   <meta property="og:site_name" content="chat-with-stranger.com" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="知らない人とランダムチャット" />
-  <meta name="twitter:description" content="知らない人とランダムチャット" />
+  <meta name="twitter:title" content="見知らぬ人とのランダムチャット" />
+  <meta name="twitter:description" content="見知らぬ人とのランダムチャット" />
   <meta name="twitter:image" content="https://chat-with-stranger.com/preview.jpg" />
 
-  <!-- PayPal SDK (클라이언트 ID 입력 필수) -->
+  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AW41UQ3EzJV10FZHqYPy8yqdlDbklB4VjuT6hzu7DVoS-G9cJgKx9nHfxCRZpVSgs1dczhkPj4oM0VXv&currency=USD" defer></script>
 
   <style>
@@ -48,7 +47,6 @@
       position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
     }
-    /* 헤ッダータイトル: 텍스트링크 */
     .site-title {
       font-weight:800; letter-spacing:-0.01em; font-size:16px; text-decoration:none; color:#000;
       padding:0; border:none; background:transparent; cursor:pointer;
@@ -71,28 +69,34 @@
     .toolbar {
       display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border);
       position:sticky; top:52px; z-index:10; background:#fff;
+      flex-wrap: nowrap;
     }
     .btn {
       padding:10px 12px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer;
+      font-size:13px;
+      padding:10px 10px;
+      white-space: nowrap;
     }
     .btn.secondary { background:#fff; color:#000; }
-    /* 女性限定ボタン: ホットピンク背景 + 黒文字 */
     .btn.female {
       background: var(--hotpink);
       color: #000;
       border-color: var(--hotpink);
     }
+    .btn.lgbt { background:#fff; color:#000; }
+    .lgbt .L { color:#ff0000; }
+    .lgbt .G { color:#ffcc00; }
+    .lgbt .B { color:#00aa00; }
+    .lgbt .T { color:#8a2be2; }
 
     .chat {
       flex:1; overflow:auto; padding:14px; line-height:1.5; font-size:15px; white-space:pre-wrap;
     }
     .line { margin:6px 0; }
     .who { font-weight:700; }
-    .me { }
-    .str { }
 
     .input-wrap {
-      position:sticky; bottom:60px; /* banner 50 + padding */
+      position:sticky; bottom:60px;
       background:#fff; border-top:1px solid var(--border); padding:8px 10px; display:flex; gap:8px; z-index:9;
     }
     .input-wrap input {
@@ -100,12 +104,16 @@
     }
     .input-wrap button { padding:12px 14px; border:1px solid #000; background:#000; color:#fff; border-radius:10px; font-weight:700; }
 
-    /* PayPal modal */
     dialog#payModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+    dialog#lgbtModal { width:min(480px, 94vw); border:1px solid #000; border-radius:12px; padding:0; }
+
     .modal-head { padding:12px 14px; border-bottom:1px solid #000; font-weight:800; }
     .modal-body { padding:14px; }
     .modal-foot { padding:12px 14px; border-top:1px solid #000; text-align:right; }
     .close-btn { border:1px solid #000; background:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    .radio-row { display:flex; gap:14px; align-items:center; margin:10px 0 12px; font-size:14px; }
+    .radio-row label { display:flex; gap:6px; align-items:center; cursor:pointer; }
 
     @supports (height: 100svh) {
       main { height: calc(100svh - 0px); }
@@ -114,23 +122,24 @@
 </head>
 <body>
   <header>
-    <!-- 1) ヘッダータイトル: テキストリンク（新しいタブ） -->
-    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">知らない人とランダムチャット（無料）</a>
+    <a class="site-title" href="https://chat-with-stranger.com" target="_blank" rel="noopener">
+        ランダムチャット（無料）
+    </a>
 
-	  <a class="link" 
-   href="https://www.2048global.com/JA" 
-   target="_blank" 
-   rel="noopener"
-   style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
-    Game
-</a>
-	  
+    <a class="link" 
+      href="https://www.2048global.com" 
+      target="_blank" 
+      rel="noopener"
+      style="margin-left: 8px; color:#ffb94f; font-weight:700; text-decoration:none;">
+      Game
+    </a>
+
     <div style="position:relative">
       <button id="menuBtn" class="hamburger" aria-haspopup="menu" aria-expanded="false"><span></span></button>
-      <nav id="menu" class="menu" role="menu" aria-label="クイックリンク">
-        <a href="https://2048global.com/JA" target="_blank" rel="noopener">ゲームで遊ぶ</a>
-        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">グローバル友達 TG グループ</a>
-        <a href="https://2048global.com/JA/vpn" target="_blank" rel="noopener">匿名で世界を探索</a>
+      <nav id="menu" class="menu" role="menu" aria-label="Quick links">
+        <a href="https://2048global.com" target="_blank" rel="noopener">ゲームをプレイ</a>
+        <a href="https://t.me/lookingforglobalfriends" target="_blank" rel="noopener">Global friends TG グループ</a>
+        <a href="https://2048global.com/vpn" target="_blank" rel="noopener">匿名で世界を探索する</a>
         <a href="https://partner.bitget.com/bg/J6RM1E" target="_blank" rel="noopener">暗号資産トレード</a>
         <a href="https://otieu.com/4/10321811" target="_blank" rel="noopener">新しい女の子と出会う</a>
       </nav>
@@ -140,17 +149,17 @@
   <main>
     <div class="toolbar">
       <button class="btn" id="newChatBtn">新しいチャット</button>
-      <!-- 2) 女性限定ボタンと決済フロー -->
-      <button class="btn female" id="femaleBtn">女性のみとマッチ</button>
-      <button class="btn secondary" id="shareBtn">共有</button>
+      <button class="btn female" id="femaleBtn">女性とマッチング</button>
+
+      <button class="btn secondary lgbt" id="lgbtBtn" aria-haspopup="dialog">
+        <span class="L">L</span><span class="G">G</span><span class="B">B</span><span class="T">T</span>
+      </button>
+
+      <button class="btn secondary" id="shareBtn">シェア</button>
     </div>
 
-	 	  
-    <div id="chat" class="chat" aria-live="polite" aria-label="チャットウィンドウ">
-      <!-- lines appear here -->
+    <div id="chat" class="chat" aria-live="polite" aria-label="Chat window">
     </div>
-
-    <!-- （468x60 バナー削除） -->
 
     <div class="input-wrap">
       <input id="msg" type="text" placeholder="ここに入力..." enterkeyhint="send" />
@@ -158,29 +167,61 @@
     </div>
   </main>
 
-  <!-- （footer全削除） -->
+  <!-- PayPal Modal (Female) -->
+  <dialog id="payModal">
+    <div class="modal-head">
+      +18 の大人の女性と無制限にマッチングできます（わずか $6.9）
+    </div>
+    <div class="modal-body">
+		<div style="font-weight:700; text-align:center; margin-bottom:12px;">
+  100% 安全 / 匿名 / ログイン不要
+</div>
+		<div id="paypal-buttons">大人の女性があなたを待っています…</div>
+		
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        $6.9 をお支払いいただくと、成人として自動認証され、永続的に使えるアクセスリンクを受け取れます。
+      </p>
+      <p>大人の女性と無制限にエッチなチャットを楽しめます。</p>
+      <p>支払い明細には「語学学習」と表示されるので安心してください。</p>
+      <p>きっと気に入ります。本当に。</p>
+      <p>今すぐ始めましょう。</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closePay">閉じる</button>
+    </div>
+  </dialog>
 
-  <!-- PayPal モーダル -->
-<dialog id="payModal">
-  <div class="modal-head">
-    +18の女性のみとセクスティングでマッチ。($6.9)
-  </div>
-  <div class="modal-body">
-    <div id="paypal-buttons">女の子たちがあなたを待っています…</div>
-    <p style="font-size:15px;opacity:.7;margin-top:12px">
-      お支払い後、自動的に成人確認が行われ、永久に使える専用リンクを取得できます。
-    </p>
-    <p>+18の魅力的な女性と無制限にチャットできます</p>
-    <p>ご安心ください。支払い明細には「語学学習」と表示されます。</p>
-    <p>きっと気に入ります。保証します。今すぐお楽しみください。</p>
-  </div>
-  <div class="modal-foot">
-    <button class="close-btn" id="closePay">閉じる</button>
-  </div>
-</dialog>
-	
+  <!-- LGBT Modal -->
+  <dialog id="lgbtModal">
+    <div class="modal-head">
+      LGBT の相手と無制限にマッチングできます（わずか $6.9）
+    </div>
+    <div class="modal-body">
+      <div class="radio-row" role="radiogroup" aria-label="LGBT type">
+        <label><input type="radio" name="lgbtType" value="gay" checked /> ゲイのみ</label>
+        <label><input type="radio" name="lgbtType" value="lesbian" /> レズビアンのみ</label>
+      </div>
+
+		<div style="font-weight:700; text-align:center; margin-bottom:12px;">
+  100% 安全 / 匿名 / ログイン不要
+</div>
+      <div id="paypal-buttons-lgbt">セクスト可</div>
+		
+      <p style="font-size:15px;opacity:.7;margin-top:12px">
+        $6.9 をお支払いいただくと、成人として自動認証され、永続的に使えるアクセスリンクを受け取れます。
+      </p>
+      <p>LGBT の相手と無制限にエッチなチャットを楽しめます。</p>
+      <p>ゲイはゲイ同士、レズビアンはレズビアン同士でマッチングします。</p>
+      <p>支払い明細には「語学学習」と表示されるので安心してください。</p>
+      <p>きっと気に入ります。本当に。</p>
+      <p>今すぐ始めましょう。</p>
+    </div>
+    <div class="modal-foot">
+      <button class="close-btn" id="closeLgbt">閉じる</button>
+    </div>
+  </dialog>
+
   <script>
-    // ------- helpers
     const lang = 'JA';
     const chatEl = document.getElementById('chat');
     const msgEl = document.getElementById('msg');
@@ -189,7 +230,9 @@
     const femaleBtn = document.getElementById('femaleBtn');
     const shareBtn = document.getElementById('shareBtn');
 
-    const history = []; // {role:'user'|'assistant', content:string} list
+    const lgbtBtn = document.getElementById('lgbtBtn');
+
+    const history = [];
 
     function addLine(who, text) {
       const line = document.createElement('div');
@@ -199,17 +242,14 @@
       chatEl.scrollTop = chatEl.scrollHeight;
     }
 
-    // ------- initial: 50% AI starts
     window.addEventListener('load', async () => {
       setTimeout(() => {
-        // モバイル入力欄の可視化
         msgEl.addEventListener('focus', () => setTimeout(() => {
           document.scrollingElement?.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }, 80));
       }, 0);
 
       if (Math.random() < 0.5) {
-        // AI starts
         try {
           const r = await fetch('/api/chat', {
             method: 'POST',
@@ -228,7 +268,6 @@
       }
     });
 
-    // ------- send
     async function sendMessage() {
       const text = msgEl.value.trim();
       if (!text) return;
@@ -261,14 +300,12 @@
       }
     });
 
-    // ------- toolbar buttons
     newChatBtn.addEventListener('click', () => location.reload());
 
-    // 3) 共有
     shareBtn.addEventListener('click', async () => {
       const shareData = {
-        title: '知らない人とランダムチャット',
-        text: '今すぐ飛び込んで、ランダムにチャットしよう。',
+        title: '見知らぬ人とのランダムチャット',
+        text: 'ランダムチャットに参加しよう。',
         url: 'https://chat-with-stranger.com'
       };
       if (navigator.share) {
@@ -277,11 +314,10 @@
         try {
           await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
           alert('リンクをコピーしました！');
-        } catch { alert('このリンクをコピーしてください: ' + shareData.url); }
+        } catch { alert('リンクをコピーしてください: ' + shareData.url); }
       }
     });
 
-    // ------- hamburger menu
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('menu');
     menuBtn.addEventListener('click', () => {
@@ -293,55 +329,70 @@
       if (!menu.contains(e.target) && e.target !== menuBtn) menu.style.display = 'none';
     });
 
-    // ------- PayPal modal
     const payModal = document.getElementById('payModal');
     const closePay = document.getElementById('closePay');
-
     closePay.addEventListener('click', () => payModal.close());
 
-    // 女性限定クリック時：モーダルを開く + 決済後 /JA/female へ
-    let nextRedirect = 'https://chat-with-stranger.com'; // 予備
+    let nextRedirect = 'https://chat-with-stranger.com';
     femaleBtn.addEventListener('click', () => {
       nextRedirect = 'https://chat-with-stranger.com/JA/female';
       payModal.showModal();
     });
 
-    // PayPal Buttons
+    const lgbtModal = document.getElementById('lgbtModal');
+    const closeLgbt = document.getElementById('closeLgbt');
+    closeLgbt.addEventListener('click', () => lgbtModal.close());
+
+    lgbtBtn.addEventListener('click', () => {
+      lgbtModal.showModal();
+    });
+
     window.addEventListener('load', () => {
       if (window.paypal && document.getElementById('paypal-buttons')) {
         window.paypal.Buttons({
           style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: '語学学習' }]
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: 'Learning language' }]
             });
           },
           onApprove: function(data, actions) {
             return actions.order.capture().then(function() {
-              location.href = nextRedirect; // → /JA/female
+              location.href = nextRedirect;
             });
           }
         }).render('#paypal-buttons');
       }
     });
+
+    window.addEventListener('load', () => {
+      if (window.paypal && document.getElementById('paypal-buttons-lgbt')) {
+        window.paypal.Buttons({
+          style: { layout: 'vertical', shape: 'rect', label: 'pay', color: 'black' },
+          createOrder: function(data, actions) {
+            const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+            const desc = (choice === 'lesbian') ? 'learning L language' : 'learning G language';
+            return actions.order.create({
+              purchase_units: [{ amount: { value: '6.9', currency_code: 'USD' }, description: desc }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+              const choice = document.querySelector('input[name="lgbtType"]:checked')?.value || 'gay';
+              location.href = (choice === 'lesbian')
+                ? 'https://chat-with-stranger.com/JA/les'
+                : 'https://chat-with-stranger.com/JA/g4g';
+            });
+          }
+        }).render('#paypal-buttons-lgbt');
+      }
+    });
   </script>
 
-<footer style="text-align:center;">
-  <a href="https://2048global.com/JA/vpn" target="_blank" rel="noopener" style="color:#000;">
-匿名で世界を探索
-</a>
-</footer>
-	
+  <footer style="text-align:center;">
+    <a href="https://2048global.com/vpn" target="_blank" rel="noopener" style="color:#000;">
+      匿名で世界を探索する
+    </a>
+  </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
