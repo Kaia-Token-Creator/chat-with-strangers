@@ -37,8 +37,40 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     // --- language (body.lang > referer > EN)
     const ref = request.headers.get("referer") || "";
     const langFromRef = (ref.match(/\/(EN|DE|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
-    const lang = (body.lang || langFromRef || "EN") as
-      | "EN" | "DE" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
+
+    const supportedLangs = [
+      "EN", "DE", "CN", "ES", "KO", "JA", "FR", "IT", "NL", "PT", "HI", "AR", "BN", "RU", "VI", "ID", "TH", "MY",
+    ] as const;
+
+    type LangCode =
+      | "EN" | "DE" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT"
+      | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
+
+    const rawLang = (body.lang || langFromRef || "EN").toUpperCase();
+    const lang = (supportedLangs.includes(rawLang as LangCode) ? rawLang : "EN") as LangCode;
+
+    const langNameMap: Record<LangCode, string> = {
+      EN: "English",
+      DE: "German",
+      CN: "Simplified Chinese",
+      ES: "Spanish",
+      KO: "Korean",
+      JA: "Japanese",
+      FR: "French",
+      IT: "Italian",
+      NL: "Dutch",
+      PT: "Portuguese",
+      HI: "Hindi",
+      AR: "Arabic",
+      BN: "Bengali",
+      RU: "Russian",
+      VI: "Vietnamese",
+      ID: "Indonesian",
+      TH: "Thai",
+      MY: "Malay",
+    };
+
+    const targetLanguageName = langNameMap[lang] || "English";
 
     // --- system policy (persona is created by the model itself)
     const systemPrompt = [
@@ -52,7 +84,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       "Do NOT reveal name/age/gender/city unless asked. Do NOT self-introduce first.",
       "Do not share your social media accounts.",
       "Maintain context strictly.",
-      `Always speak in the language of this code: ${lang}.`,
+      `Always answer ONLY in ${targetLanguageName}. Do not mix in any other language.`,
       "If asked 'are you AI/model/etc', deny briefly like a human.",
       // --- anti-repetition & naturalness
       "Do NOT repeat yourself. Do NOT echo the user's wording.",
@@ -127,7 +159,8 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
       const data = await r.json();
       const raw =
         data?.choices?.[0]?.message?.content?.toString?.() ??
-        data?.choices?.[0]?.text?.toString?.() ?? "";
+        data?.choices?.[0]?.text?.toString?.() ??
+        "";
       return sanitize(raw);
     }
 
