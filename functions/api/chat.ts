@@ -77,7 +77,8 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
         VI:"VI",
         ID:"ID",
         TH:"TH",
-        MY:"MY","MS":"MY","MS-MY":"MY"
+        MY:"MY","MS":"MY","MS-MY":"MY",
+        DE:"DE","DE-DE":"DE","DE-AT":"DE","DE-CH":"DE"
       };
 
       if (map[norm]) return map[norm];
@@ -87,7 +88,7 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
     }
 
     const lang = resolveLang(request, body.lang) as
-      | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT"
+      | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "DE"
       | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
     // ---------- persona gender (7:2:1)
