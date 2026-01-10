@@ -1,4 +1,3 @@
-
 // /functions/api/chat.ts
 export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (ctx) => {
   const { request, env } = ctx;
@@ -37,9 +36,9 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
 
     // --- language (body.lang > referer > EN)
     const ref = request.headers.get("referer") || "";
-    const langFromRef = (ref.match(/\/(EN|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
+    const langFromRef = (ref.match(/\/(EN|DE|CN|ES|KO|JA|FR|IT|NL|PT|HI|AR|BN|RU|VI|ID|TH|MY)(\/|$)/i)?.[1] || "").toUpperCase();
     const lang = (body.lang || langFromRef || "EN") as
-      | "EN" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
+      | "EN" | "DE" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
     // --- system policy (persona is created by the model itself)
     const systemPrompt = [
