@@ -177,7 +177,7 @@ export const onRequestPost: PagesFunction<{ DEEPSEEK_API_KEY: string }> = async 
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "deepseek-chat",
+          model: "deepseek-v4-flash",
           temperature: 1.5,
           top_p: 0.9,
           frequency_penalty: 0.8,
