@@ -144,7 +144,7 @@ const personaName =
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "e2ee-qwen3-30b-a3b-p",
+          model: "venice-uncensored-1-2",
           temperature: 0.6,
           top_p: 0.9,
           frequency_penalty: 0.8,
