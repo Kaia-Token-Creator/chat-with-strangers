@@ -114,7 +114,7 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "e2ee-venice-uncensored-24b-p",
+          model: "gemma-4-uncensored",
           temperature: 0.6,
           top_p: 0.9,
           frequency_penalty: 0.8,
