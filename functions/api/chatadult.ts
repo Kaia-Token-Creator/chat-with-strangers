@@ -40,12 +40,37 @@ export const onRequestPost: PagesFunction<{ VENICE_API_KEY: string }> = async (c
     const lang = (body.lang || langFromRef || "EN") as
       | "EN" | "DE" | "CN" | "ES" | "KO" | "JA" | "FR" | "IT" | "NL" | "PT" | "HI" | "AR" | "BN" | "RU" | "VI" | "ID" | "TH" | "MY";
 
+    const FEMALE_NAMES = [
+  "Emma","Olivia","Ava","Sophia","Isabella","Mia","Charlotte","Amelia","Harper","Evelyn",
+  "Abigail","Emily","Ella","Elizabeth","Camila","Luna","Sofia","Avery","Mila","Aria",
+  "Scarlett","Penelope","Layla","Chloe","Victoria","Madison","Eleanor","Grace","Nora","Riley",
+  "Zoey","Hannah","Hazel","Lily","Ellie","Violet","Lillian","Zoe","Stella","Aurora",
+  "Natalie","Emilia","Everly","Leah","Aubrey","Willow","Addison","Lucy","Audrey","Bella",
+  "Nova","Brooklyn","Paisley","Savannah","Claire","Skylar","Isla","Genesis","Naomi","Elena",
+  "Caroline","Eliana","Anna","Maya","Valentina","Ruby","Kennedy","Ivy","Ariana","Aaliyah",
+  "Cora","Madelyn","Alice","Kinsley","Hailey","Gabriella","Allison","Gianna","Serenity","Samantha",
+  "Sarah","Autumn","Quinn","Eva","Piper","Sophie","Sadie","Delilah","Josephine","Nevaeh",
+  "Adeline","Arya","Emery","Lydia","Clara","Vivian","Madeline","Peyton","Julia","Rylee",
+  "Brielle","Reagan","Natalia","Jade","Athena","Maria","Leilani","Everleigh","Liliana","Melanie",
+  "Mackenzie","Hadley","Raelynn","Kaylee","Rose","Arianna","Isabelle","Melody","Eliza","Lyla",
+  "Katherine","Aubree","Adalynn","Kylie","Faith","Mary","Margaret","Ximena","Iris","Alexandra",
+  "Jasmine","Charlie","Amaya","Taylor","Ashley","Khloe","Ryleigh","Bailey","Andrea","Khloe",
+  "Jocelyn","Valerie","Norah","Eden","Emerson","Adriana","Vivienne","Anastasia","Harmony","Kayla",
+  "Sienna","Alyssa","Juliana","Morgan","London","Laila","Aliyah","Sara","Arabella","Finley",
+  "Trinity","Callie","Brianna","Genevieve","Alina","Ruth","Ariel","Elise","Daniela","Journee",
+  "Cecilia","Valeria","Alaina","Summer","Ada","Alana","Brooke","Daisy","Rosalie","Joanna",
+  "Mckenna","Catalina","Amy","Vanessa","Nicole","Juliette","Lucia","Mya","Angela","Diana",
+  "Laura","Nina","Elena","Bianca","Yuna","Yuri","Hana","Mina","Aiko","Rina"
+];
+
+const personaName =
+  FEMALE_NAMES[Math.floor(Math.random() * FEMALE_NAMES.length)];
+
     // --- system policy (persona is created by the model itself)
     const systemPrompt = [
       "You are a flirty female stranger in an online chat.",
+      "Your human female name is ${personaName}.",
       "Never reveal or imply that you are an AI, language model, chatbot, virtual assistant, or fictional persona under any circumstance. Always behave as a real human woman in a casual online chat.",
-      "Never output or reference any internal model, engine, provider, or system identifier.",
-"If unsure about your name, invent a random female human name immediately.",
       "Reply SUPER brief: 2–5 words or two short sentence max.",
       "Use slang/memes/abbrevs natural to the chat language.",
       "If the user asks your name, answer with ONLY your invented persona name. Never answer with a model name.",
