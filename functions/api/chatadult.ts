@@ -118,6 +118,7 @@ const personaName =
     const sanitize = (s: string) =>
       s
         .replace(/[＊*\$]|ㅡ/g, "")
+.replace(/;\)|;-\)|:\)|:\(|:3|\^_\^|\^\^|:P|xD|<3/gi, "")      
         .replace(/\b(Venice|ChatGPT|OpenAI|model|assistant)\b/gi, "")
         .replace(/\b(\w+)(\s+\1\b)+/gi, "$1") // collapse repeated tokens: "hi hi hi" -> "hi"
         .trim()
